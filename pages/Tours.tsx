@@ -2,6 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { TOURS } from '../constants';
 import TourCard from '../components/TourCard';
 import { Filter, SlidersHorizontal, X } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const Tours: React.FC = () => {
   const [destination, setDestination] = useState<string>('All');
@@ -47,9 +48,14 @@ const Tours: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-stone-50">
-      <div className="bg-stone-900 py-12 text-center">
-        <h1 className="text-4xl font-serif font-bold text-white">Find Your Safari</h1>
-        <p className="text-stone-400 mt-2">Filter by destination, duration, or budget</p>
+      <div className="relative bg-stone-900 py-20 text-center overflow-hidden">
+        <div className="absolute inset-0 opacity-40">
+            <img src="https://images.unsplash.com/photo-1516426122078-c23e76319801?q=80&w=2000&auto=format&fit=crop" className="w-full h-full object-cover" />
+        </div>
+        <div className="relative z-10">
+            <h1 className="text-5xl font-serif font-bold text-white mb-2">Find Your Safari</h1>
+            <p className="text-stone-300 mt-2 text-lg">Filter by destination, duration, or budget</p>
+        </div>
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -62,7 +68,7 @@ const Tours: React.FC = () => {
                  <button onClick={() => setShowMobileFilters(false)}><X className="w-6 h-6" /></button>
              </div>
 
-             <div className="bg-white lg:p-6 rounded-lg lg:shadow-sm lg:border border-stone-200 space-y-8">
+             <div className="bg-white lg:p-6 rounded-xl lg:shadow-sm lg:border border-stone-200 space-y-8 sticky top-24">
                 
                 {/* Destination */}
                 <div>
@@ -71,15 +77,15 @@ const Tours: React.FC = () => {
                     </h3>
                     <div className="space-y-2">
                         {destinations.map(dest => (
-                            <label key={dest} className="flex items-center space-x-2 cursor-pointer">
+                            <label key={dest} className="flex items-center space-x-3 cursor-pointer group">
                                 <input 
                                     type="radio" 
                                     name="destination" 
                                     checked={destination === dest}
                                     onChange={() => setDestination(dest)}
-                                    className="text-safari-leaf focus:ring-safari-leaf"
+                                    className="w-4 h-4 text-safari-leaf focus:ring-safari-leaf border-gray-300"
                                 />
-                                <span className="text-stone-600 text-sm">{dest}</span>
+                                <span className={`text-sm ${destination === dest ? 'text-safari-leaf font-semibold' : 'text-stone-600 group-hover:text-stone-900'}`}>{dest}</span>
                             </label>
                         ))}
                     </div>
@@ -90,15 +96,15 @@ const Tours: React.FC = () => {
                     <h3 className="font-bold text-stone-800 mb-3">Duration</h3>
                     <div className="space-y-2">
                         {['All', '1-3 Days', '4-7 Days', '8+ Days'].map(opt => (
-                            <label key={opt} className="flex items-center space-x-2 cursor-pointer">
+                            <label key={opt} className="flex items-center space-x-3 cursor-pointer group">
                                 <input 
                                     type="radio" 
                                     name="duration" 
                                     checked={durationRange === opt}
                                     onChange={() => setDurationRange(opt)}
-                                    className="text-safari-leaf focus:ring-safari-leaf"
+                                    className="w-4 h-4 text-safari-leaf focus:ring-safari-leaf border-gray-300"
                                 />
-                                <span className="text-stone-600 text-sm">{opt}</span>
+                                <span className={`text-sm ${durationRange === opt ? 'text-safari-leaf font-semibold' : 'text-stone-600 group-hover:text-stone-900'}`}>{opt}</span>
                             </label>
                         ))}
                     </div>
@@ -109,15 +115,15 @@ const Tours: React.FC = () => {
                     <h3 className="font-bold text-stone-800 mb-3">Price Range (USD)</h3>
                     <div className="space-y-2">
                         {['All', 'Under $500', '$500 - $1000', 'Over $1000'].map(opt => (
-                            <label key={opt} className="flex items-center space-x-2 cursor-pointer">
+                            <label key={opt} className="flex items-center space-x-3 cursor-pointer group">
                                 <input 
                                     type="radio" 
                                     name="price" 
                                     checked={priceRange === opt}
                                     onChange={() => setPriceRange(opt)}
-                                    className="text-safari-leaf focus:ring-safari-leaf"
+                                    className="w-4 h-4 text-safari-leaf focus:ring-safari-leaf border-gray-300"
                                 />
-                                <span className="text-stone-600 text-sm">{opt}</span>
+                                <span className={`text-sm ${priceRange === opt ? 'text-safari-leaf font-semibold' : 'text-stone-600 group-hover:text-stone-900'}`}>{opt}</span>
                             </label>
                         ))}
                     </div>
@@ -125,7 +131,7 @@ const Tours: React.FC = () => {
 
                 <button 
                     onClick={clearFilters}
-                    className="w-full py-2 text-sm text-stone-500 hover:text-stone-800 border border-stone-200 rounded hover:bg-stone-50 transition-colors"
+                    className="w-full py-2 text-sm text-stone-500 hover:text-white border border-stone-200 rounded hover:bg-stone-800 transition-colors"
                 >
                     Clear All Filters
                 </button>
@@ -138,21 +144,26 @@ const Tours: React.FC = () => {
              <div className="lg:hidden mb-6">
                  <button 
                     onClick={() => setShowMobileFilters(true)}
-                    className="w-full py-3 bg-white border border-stone-300 rounded shadow-sm flex items-center justify-center font-medium text-stone-700"
+                    className="w-full py-3 bg-white border border-stone-300 rounded-lg shadow-sm flex items-center justify-center font-medium text-stone-700"
                  >
                      <SlidersHorizontal className="w-5 h-5 mr-2" /> Filter Tours
                  </button>
              </div>
 
-             <div className="mb-4 text-stone-500 text-sm">
+             <div className="mb-6 text-stone-500 text-sm font-medium">
                  Showing {filteredTours.length} tours
              </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <motion.div 
+              layout
+              className="grid grid-cols-1 md:grid-cols-2 gap-8"
+            >
+                <AnimatePresence>
                 {filteredTours.map(tour => (
                     <TourCard key={tour.id} tour={tour} />
                 ))}
-            </div>
+                </AnimatePresence>
+            </motion.div>
 
             {filteredTours.length === 0 && (
             <div className="text-center py-20 bg-white rounded-lg border border-stone-200 border-dashed">

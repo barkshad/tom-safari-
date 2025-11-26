@@ -1,6 +1,7 @@
 import React from 'react';
 import { Calendar, User } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
 
 const BLOG_POSTS = [
   {
@@ -35,43 +36,71 @@ const BLOG_POSTS = [
 const Blog: React.FC = () => {
   return (
     <div className="min-h-screen bg-stone-50">
-      <div className="bg-stone-900 py-16 text-center">
-        <h1 className="text-4xl font-serif font-bold text-white">Safari Stories</h1>
-        <p className="text-stone-400 mt-2">Tips, news, and inspiration for your next adventure</p>
+      <div className="bg-stone-900 py-20 text-center relative overflow-hidden">
+         <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
+        <motion.div 
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="relative z-10"
+        >
+            <h1 className="text-5xl font-serif font-bold text-white">Safari Stories</h1>
+            <p className="text-stone-400 mt-2 text-lg">Tips, news, and inspiration for your next adventure</p>
+        </motion.div>
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <motion.div 
+            initial="hidden"
+            animate="visible"
+            variants={{
+                hidden: { opacity: 0 },
+                visible: {
+                    opacity: 1,
+                    transition: {
+                        staggerChildren: 0.15
+                    }
+                }
+            }}
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+        >
           {BLOG_POSTS.map((post) => (
-            <div key={post.id} className="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow border border-stone-100 flex flex-col">
-              <div className="h-48 overflow-hidden">
+            <motion.div 
+                key={post.id} 
+                variants={{
+                    hidden: { opacity: 0, y: 30 },
+                    visible: { opacity: 1, y: 0, transition: { duration: 0.6 } }
+                }}
+                className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-stone-100 flex flex-col group"
+            >
+              <div className="h-56 overflow-hidden">
                 <img 
                   src={post.image} 
                   alt={post.title} 
-                  className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                 />
               </div>
-              <div className="p-6 flex flex-col flex-grow">
-                <div className="flex items-center text-xs text-stone-500 mb-3 space-x-3">
-                    <span className="bg-safari-sand text-safari-earth px-2 py-1 rounded font-medium">{post.category}</span>
+              <div className="p-8 flex flex-col flex-grow">
+                <div className="flex items-center text-xs text-stone-500 mb-4 space-x-3">
+                    <span className="bg-safari-sand text-safari-earth px-2 py-1 rounded font-bold uppercase tracking-wide">{post.category}</span>
                     <span className="flex items-center"><Calendar className="w-3 h-3 mr-1" /> {post.date}</span>
                 </div>
-                <h3 className="text-xl font-serif font-bold text-stone-800 mb-3 leading-tight">
-                  <Link to="#" className="hover:text-safari-sunset transition-colors">{post.title}</Link>
+                <h3 className="text-2xl font-serif font-bold text-stone-800 mb-4 leading-tight group-hover:text-safari-sunset transition-colors">
+                  <Link to="#">{post.title}</Link>
                 </h3>
-                <p className="text-stone-600 text-sm mb-4 line-clamp-3 flex-grow">
+                <p className="text-stone-600 text-sm mb-6 line-clamp-3 flex-grow leading-relaxed">
                   {post.excerpt}
                 </p>
-                <div className="border-t border-stone-100 pt-4 mt-auto">
-                    <Link to="#" className="text-safari-sunset font-bold text-sm hover:underline">Read Full Article &rarr;</Link>
+                <div className="border-t border-stone-100 pt-6 mt-auto">
+                    <Link to="#" className="text-safari-sunset font-bold text-sm hover:underline uppercase tracking-wide">Read Full Article &rarr;</Link>
                 </div>
               </div>
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
 
         {/* Pagination Placeholder */}
-        <div className="mt-12 flex justify-center space-x-2">
+        <div className="mt-16 flex justify-center space-x-2">
             <button className="px-4 py-2 border border-stone-300 rounded bg-white text-stone-600 hover:bg-stone-50 disabled:opacity-50" disabled>Previous</button>
             <button className="px-4 py-2 bg-safari-earth text-white rounded hover:bg-stone-800">1</button>
             <button className="px-4 py-2 border border-stone-300 rounded bg-white text-stone-600 hover:bg-stone-50">2</button>

@@ -3,6 +3,7 @@ import { useLocation } from 'react-router-dom';
 import { Mail, Phone, MapPin, Send } from 'lucide-react';
 import { COMPANY_INFO, TOURS } from '../constants';
 import { InquiryForm } from '../types';
+import { motion } from 'framer-motion';
 
 const Contact: React.FC = () => {
   const location = useLocation();
@@ -40,58 +41,71 @@ const Contact: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-stone-50">
-      <div className="bg-stone-900 py-16 text-center">
-        <h1 className="text-4xl font-serif font-bold text-white">Contact Us</h1>
-        <p className="text-stone-400 mt-2">Start planning your Kenyan adventure today</p>
+      <div className="bg-stone-900 py-20 text-center relative overflow-hidden">
+        <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
+        <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="relative z-10"
+        >
+            <h1 className="text-5xl font-serif font-bold text-white">Contact Us</h1>
+            <p className="text-stone-400 mt-2 text-lg">Start planning your Kenyan adventure today</p>
+        </motion.div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           
           {/* Contact Information */}
-          <div className="space-y-8">
+          <motion.div 
+             initial={{ opacity: 0, x: -30 }}
+             animate={{ opacity: 1, x: 0 }}
+             transition={{ duration: 0.8 }}
+             className="space-y-8"
+          >
             <div>
-                <h2 className="text-2xl font-serif font-bold text-stone-800 mb-4">Get in Touch</h2>
-                <p className="text-stone-600 leading-relaxed">
+                <h2 className="text-3xl font-serif font-bold text-stone-800 mb-4">Get in Touch</h2>
+                <p className="text-stone-600 leading-relaxed text-lg">
                 Whether you have a question about our tours, pricing, accommodation, or just want some travel advice, our team is ready to answer all your questions.
                 </p>
             </div>
 
-            <div className="bg-white rounded-xl shadow-sm border border-stone-100 p-6 space-y-6">
-              <div className="flex items-start">
-                <div className="bg-safari-sand p-3 rounded-full mr-4">
-                  <Phone className="w-6 h-6 text-safari-earth" />
+            <div className="bg-white rounded-2xl shadow-lg shadow-stone-200/50 border border-stone-100 p-8 space-y-8">
+              <div className="flex items-start group">
+                <div className="bg-safari-sand p-4 rounded-full mr-5 group-hover:bg-safari-gold group-hover:text-white transition-colors">
+                  <Phone className="w-6 h-6 text-safari-earth group-hover:text-white" />
                 </div>
                 <div>
-                  <h3 className="font-bold text-stone-800">Phone</h3>
-                  <a href={`tel:${COMPANY_INFO.phone}`} className="text-lg text-safari-sunset font-medium hover:underline">{COMPANY_INFO.phone}</a>
-                  <p className="text-xs text-stone-500 mt-1">Mon-Sun 8am-8pm</p>
+                  <h3 className="font-bold text-stone-800 text-lg">Phone</h3>
+                  <a href={`tel:${COMPANY_INFO.phone}`} className="text-xl text-safari-sunset font-medium hover:underline">{COMPANY_INFO.phone}</a>
+                  <p className="text-sm text-stone-500 mt-1">Mon-Sun 8am-8pm</p>
                 </div>
               </div>
 
-              <div className="flex items-start">
-                <div className="bg-safari-sand p-3 rounded-full mr-4">
-                  <Mail className="w-6 h-6 text-safari-earth" />
+              <div className="flex items-start group">
+                <div className="bg-safari-sand p-4 rounded-full mr-5 group-hover:bg-safari-gold group-hover:text-white transition-colors">
+                  <Mail className="w-6 h-6 text-safari-earth group-hover:text-white" />
                 </div>
                 <div>
-                  <h3 className="font-bold text-stone-800">Email</h3>
-                  <a href={`mailto:${COMPANY_INFO.email}`} className="text-stone-600 hover:text-safari-sunset">{COMPANY_INFO.email}</a>
+                  <h3 className="font-bold text-stone-800 text-lg">Email</h3>
+                  <a href={`mailto:${COMPANY_INFO.email}`} className="text-lg text-stone-600 hover:text-safari-sunset transition-colors">{COMPANY_INFO.email}</a>
                 </div>
               </div>
 
-              <div className="flex items-start">
-                <div className="bg-safari-sand p-3 rounded-full mr-4">
-                  <MapPin className="w-6 h-6 text-safari-earth" />
+              <div className="flex items-start group">
+                <div className="bg-safari-sand p-4 rounded-full mr-5 group-hover:bg-safari-gold group-hover:text-white transition-colors">
+                  <MapPin className="w-6 h-6 text-safari-earth group-hover:text-white" />
                 </div>
                 <div>
-                  <h3 className="font-bold text-stone-800">Location</h3>
-                  <p className="text-stone-600">{COMPANY_INFO.location}</p>
+                  <h3 className="font-bold text-stone-800 text-lg">Location</h3>
+                  <p className="text-lg text-stone-600">{COMPANY_INFO.location}</p>
                 </div>
               </div>
             </div>
 
             {/* Google Map */}
-            <div className="rounded-xl overflow-hidden shadow-sm border border-stone-200 h-80">
+            <div className="rounded-2xl overflow-hidden shadow-md border border-stone-200 h-80">
                 <iframe 
                     src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d255281.30296942958!2d36.70730722883313!3d-1.3028617833621437!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x182f1172d84d49a7%3A0xf7cf0254b297924c!2sNairobi%2C%20Kenya!5e0!3m2!1sen!2sus!4v1652174523991!5m2!1sen!2sus" 
                     width="100%" 
@@ -103,53 +117,62 @@ const Contact: React.FC = () => {
                     title="Nairobi Map"
                 ></iframe>
             </div>
-          </div>
+          </motion.div>
 
           {/* Form */}
-          <div className="bg-white rounded-xl shadow-lg p-8 border-t-4 border-safari-leaf">
+          <motion.div 
+             initial={{ opacity: 0, x: 30 }}
+             animate={{ opacity: 1, x: 0 }}
+             transition={{ duration: 0.8, delay: 0.2 }}
+             className="bg-white rounded-2xl shadow-xl p-8 md:p-10 border-t-8 border-safari-leaf"
+          >
             {submitted ? (
-              <div className="h-full flex flex-col items-center justify-center text-center py-12">
-                <div className="w-20 h-20 bg-green-100 text-green-600 rounded-full flex items-center justify-center mb-6">
-                  <Send className="w-10 h-10" />
+              <motion.div 
+                initial={{ scale: 0.8, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                className="h-full flex flex-col items-center justify-center text-center py-12"
+              >
+                <div className="w-24 h-24 bg-green-100 text-green-600 rounded-full flex items-center justify-center mb-6">
+                  <Send className="w-12 h-12" />
                 </div>
-                <h3 className="text-2xl font-bold text-stone-800 mb-2">Inquiry Received!</h3>
-                <p className="text-stone-600 mb-6">Thank you for your interest in Tom Safaris. Our team has received your details and will get back to you within 24 hours.</p>
+                <h3 className="text-3xl font-bold text-stone-800 mb-4">Inquiry Received!</h3>
+                <p className="text-stone-600 mb-8 text-lg">Thank you for your interest in Tom Safaris. Our team has received your details and will get back to you within 24 hours.</p>
                 <button 
                   onClick={() => setSubmitted(false)}
-                  className="px-6 py-2 border border-safari-leaf text-safari-leaf font-medium rounded hover:bg-safari-sand"
+                  className="px-8 py-3 border-2 border-safari-leaf text-safari-leaf font-bold rounded-full hover:bg-safari-sand transition-colors"
                 >
                   Send another message
                 </button>
-              </div>
+              </motion.div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div>
                     <h2 className="text-2xl font-serif font-bold text-stone-800">Booking Inquiry</h2>
-                    <p className="text-stone-500 text-sm">Tell us about your dream trip.</p>
+                    <p className="text-stone-500">Tell us about your dream trip.</p>
                 </div>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <label htmlFor="name" className="block text-sm font-bold text-stone-700 mb-1">Full Name</label>
+                    <label htmlFor="name" className="block text-sm font-bold text-stone-700 mb-2">Full Name</label>
                     <input
                       type="text"
                       id="name"
                       name="name"
                       required
-                      className="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded focus:ring-2 focus:ring-safari-leaf focus:border-transparent outline-none transition-shadow"
+                      className="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-lg focus:ring-2 focus:ring-safari-leaf focus:border-transparent outline-none transition-all"
                       placeholder="John Doe"
                       value={formData.name}
                       onChange={handleChange}
                     />
                   </div>
                   <div>
-                    <label htmlFor="email" className="block text-sm font-bold text-stone-700 mb-1">Email Address</label>
+                    <label htmlFor="email" className="block text-sm font-bold text-stone-700 mb-2">Email Address</label>
                     <input
                       type="email"
                       id="email"
                       name="email"
                       required
-                      className="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded focus:ring-2 focus:ring-safari-leaf focus:border-transparent outline-none transition-shadow"
+                      className="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-lg focus:ring-2 focus:ring-safari-leaf focus:border-transparent outline-none transition-all"
                       placeholder="john@example.com"
                       value={formData.email}
                       onChange={handleChange}
@@ -159,25 +182,25 @@ const Contact: React.FC = () => {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <label htmlFor="phone" className="block text-sm font-bold text-stone-700 mb-1">Phone Number</label>
+                    <label htmlFor="phone" className="block text-sm font-bold text-stone-700 mb-2">Phone Number</label>
                     <input
                       type="tel"
                       id="phone"
                       name="phone"
-                      className="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded focus:ring-2 focus:ring-safari-leaf focus:border-transparent outline-none transition-shadow"
+                      className="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-lg focus:ring-2 focus:ring-safari-leaf focus:border-transparent outline-none transition-all"
                       placeholder="+254..."
                       value={formData.phone}
                       onChange={handleChange}
                     />
                   </div>
                   <div>
-                    <label htmlFor="travelers" className="block text-sm font-bold text-stone-700 mb-1">No. of Travelers</label>
+                    <label htmlFor="travelers" className="block text-sm font-bold text-stone-700 mb-2">No. of Travelers</label>
                     <input
                       type="number"
                       id="travelers"
                       name="travelers"
                       min="1"
-                      className="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded focus:ring-2 focus:ring-safari-leaf focus:border-transparent outline-none transition-shadow"
+                      className="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-lg focus:ring-2 focus:ring-safari-leaf focus:border-transparent outline-none transition-all"
                       value={formData.travelers}
                       onChange={handleChange}
                     />
@@ -185,11 +208,11 @@ const Contact: React.FC = () => {
                 </div>
 
                 <div>
-                  <label htmlFor="tourId" className="block text-sm font-bold text-stone-700 mb-1">Interested Tour Package</label>
+                  <label htmlFor="tourId" className="block text-sm font-bold text-stone-700 mb-2">Interested Tour Package</label>
                   <select
                     id="tourId"
                     name="tourId"
-                    className="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded focus:ring-2 focus:ring-safari-leaf focus:border-transparent outline-none transition-shadow"
+                    className="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-lg focus:ring-2 focus:ring-safari-leaf focus:border-transparent outline-none transition-all"
                     value={formData.tourId}
                     onChange={handleChange}
                   >
@@ -201,43 +224,45 @@ const Contact: React.FC = () => {
                 </div>
 
                 <div>
-                  <label htmlFor="date" className="block text-sm font-bold text-stone-700 mb-1">Preferred Travel Date</label>
+                  <label htmlFor="date" className="block text-sm font-bold text-stone-700 mb-2">Preferred Travel Date</label>
                   <input
                     type="date"
                     id="date"
                     name="date"
-                    className="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded focus:ring-2 focus:ring-safari-leaf focus:border-transparent outline-none transition-shadow"
+                    className="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-lg focus:ring-2 focus:ring-safari-leaf focus:border-transparent outline-none transition-all"
                     value={formData.date}
                     onChange={handleChange}
                   />
                 </div>
 
                 <div>
-                  <label htmlFor="message" className="block text-sm font-bold text-stone-700 mb-1">Special Requests / Message</label>
+                  <label htmlFor="message" className="block text-sm font-bold text-stone-700 mb-2">Special Requests / Message</label>
                   <textarea
                     id="message"
                     name="message"
                     rows={4}
                     placeholder="Tell us about your interests, dietary requirements, or any questions you have..."
-                    className="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded focus:ring-2 focus:ring-safari-leaf focus:border-transparent outline-none transition-shadow"
+                    className="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-lg focus:ring-2 focus:ring-safari-leaf focus:border-transparent outline-none transition-all"
                     value={formData.message}
                     onChange={handleChange}
                   ></textarea>
                 </div>
 
-                <button
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
                   type="submit"
-                  className="w-full py-4 bg-safari-leaf text-white font-bold rounded hover:bg-green-900 transition-colors shadow-md text-lg"
+                  className="w-full py-4 bg-safari-leaf text-white font-bold rounded-lg hover:bg-green-900 transition-colors shadow-lg text-lg uppercase tracking-wide"
                 >
                   Submit Inquiry
-                </button>
+                </motion.button>
                 
                 <p className="text-xs text-stone-400 text-center mt-4">
                   We respect your privacy. Your details are safe with us.
                 </p>
               </form>
             )}
-          </div>
+          </motion.div>
 
         </div>
       </div>

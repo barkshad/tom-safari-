@@ -1,7 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Clock, DollarSign } from 'lucide-react';
+import { Clock, DollarSign, ArrowRight } from 'lucide-react';
 import { Tour } from '../types';
+import { motion } from 'framer-motion';
 
 interface TourCardProps {
   tour: Tour;
@@ -9,14 +10,22 @@ interface TourCardProps {
 
 const TourCard: React.FC<TourCardProps> = ({ tour }) => {
   return (
-    <div className="group bg-white rounded-xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden border border-stone-100 flex flex-col h-full">
-      <div className="relative h-56 overflow-hidden">
-        <img 
+    <motion.div 
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-50px" }}
+      whileHover={{ y: -8, transition: { type: "spring", stiffness: 300 } }}
+      className="group bg-white rounded-xl shadow-sm hover:shadow-2xl transition-shadow duration-300 overflow-hidden border border-stone-100 flex flex-col h-full"
+    >
+      <div className="relative h-64 overflow-hidden">
+        <motion.img 
+          whileHover={{ scale: 1.1 }}
+          transition={{ duration: 0.6 }}
           src={tour.image} 
           alt={tour.name} 
-          className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500"
+          className="w-full h-full object-cover"
         />
-        <div className="absolute top-4 right-4 bg-safari-leaf text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">
+        <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm text-safari-leaf text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider shadow-sm">
           {tour.category}
         </div>
       </div>
@@ -26,30 +35,33 @@ const TourCard: React.FC<TourCardProps> = ({ tour }) => {
           {tour.name}
         </h3>
         
-        <p className="text-stone-600 text-sm mb-4 line-clamp-2 flex-grow">
+        <p className="text-stone-600 text-sm mb-4 line-clamp-2 flex-grow leading-relaxed">
           {tour.shortDescription}
         </p>
         
         <div className="flex items-center justify-between text-sm text-stone-500 border-t border-stone-100 pt-4 mb-4">
-          <div className="flex items-center">
-            <Clock className="w-4 h-4 mr-1 text-safari-gold" />
+          <div className="flex items-center bg-stone-50 px-2 py-1 rounded">
+            <Clock className="w-3.5 h-3.5 mr-1.5 text-safari-gold" />
             <span>{tour.durationDays} Days</span>
           </div>
-          <div className="flex items-center font-semibold text-stone-800">
-            <DollarSign className="w-4 h-4 text-safari-gold" />
+          <div className="flex items-center font-bold text-stone-800">
+            <DollarSign className="w-3.5 h-3.5 text-safari-gold" />
             <span>{tour.priceUsd.toLocaleString()}</span>
-            <span className="text-xs text-stone-400 font-normal ml-1">/ person</span>
           </div>
         </div>
 
         <Link 
           to={`/tours/${tour.id}`}
-          className="block w-full text-center py-2 bg-stone-100 hover:bg-safari-earth hover:text-white text-stone-800 font-medium rounded transition-colors"
+          className="relative w-full text-center py-3 bg-stone-900 text-white font-medium rounded overflow-hidden group/btn"
         >
-          View Details & Book
+          <span className="relative z-10 flex items-center justify-center">
+            View Details & Book
+            <ArrowRight className="w-4 h-4 ml-2 opacity-0 group-hover/btn:opacity-100 group-hover/btn:translate-x-1 transition-all" />
+          </span>
+          <div className="absolute inset-0 bg-safari-sunset transform scale-x-0 group-hover/btn:scale-x-100 transition-transform origin-left duration-300"></div>
         </Link>
       </div>
-    </div>
+    </motion.div>
   );
 };
 
