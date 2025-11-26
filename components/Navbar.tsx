@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, Phone, Compass } from 'lucide-react';
+import { Menu, X, Phone, Compass, MessageCircle } from 'lucide-react';
 import { COMPANY_INFO } from '../constants';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -55,7 +55,7 @@ const Navbar: React.FC = () => {
           </div>
 
           {/* Desktop Menu */}
-          <div className="hidden md:flex items-center space-x-8">
+          <div className="hidden md:flex items-center space-x-6">
             {navLinks.map((link) => (
               <Link
                 key={link.name}
@@ -75,15 +75,31 @@ const Navbar: React.FC = () => {
                 )}
               </Link>
             ))}
-            <motion.a
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              href={`tel:${COMPANY_INFO.phone}`}
-              className="flex items-center px-4 py-2 bg-safari-leaf text-white rounded shadow-lg hover:shadow-xl hover:bg-green-900 transition-all"
-            >
-              <Phone className="w-4 h-4 mr-2" />
-              <span>Call Us</span>
-            </motion.a>
+            
+            <div className="flex items-center space-x-3 ml-4">
+              <motion.a
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                href={COMPANY_INFO.social.whatsapp}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center px-4 py-2 bg-green-600 text-white rounded shadow-lg hover:shadow-xl hover:bg-green-700 transition-all"
+                title="Chat on WhatsApp"
+              >
+                <MessageCircle className="w-4 h-4 mr-2" />
+                <span>WhatsApp</span>
+              </motion.a>
+
+              <motion.a
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                href={`tel:${COMPANY_INFO.phone}`}
+                className="flex items-center px-4 py-2 bg-safari-leaf text-white rounded shadow-lg hover:shadow-xl hover:bg-green-900 transition-all"
+              >
+                <Phone className="w-4 h-4 mr-2" />
+                <span>Call Us</span>
+              </motion.a>
+            </div>
           </div>
 
           {/* Mobile Menu Button */}
@@ -122,12 +138,22 @@ const Navbar: React.FC = () => {
                   {link.name}
                 </Link>
               ))}
-              <a
-                href={`tel:${COMPANY_INFO.phone}`}
-                className="block w-full text-center mt-4 px-4 py-3 bg-safari-leaf text-white rounded hover:bg-green-900"
-              >
-                Book via Phone
-              </a>
+              <div className="pt-4 space-y-2">
+                <a
+                  href={COMPANY_INFO.social.whatsapp}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-center w-full px-4 py-3 bg-green-600 text-white rounded hover:bg-green-700 font-bold"
+                >
+                  <MessageCircle className="w-5 h-5 mr-2" /> WhatsApp Us
+                </a>
+                <a
+                  href={`tel:${COMPANY_INFO.phone}`}
+                  className="flex items-center justify-center w-full px-4 py-3 bg-safari-leaf text-white rounded hover:bg-green-900 font-bold"
+                >
+                  <Phone className="w-5 h-5 mr-2" /> Call Us
+                </a>
+              </div>
             </div>
           </motion.div>
         )}

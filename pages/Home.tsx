@@ -33,11 +33,16 @@ const Home: React.FC = () => {
       
       {/* Cinematic Hero Section */}
       <section className="relative h-screen flex items-center justify-center overflow-hidden">
-        <div className="absolute inset-0">
+        <div className="absolute inset-0 z-0">
           <motion.div
-            initial={{ scale: 1.1 }}
-            animate={{ scale: 1.0 }}
-            transition={{ duration: 20, ease: "linear", repeat: Infinity, repeatType: "mirror" }}
+            initial={{ scale: 1.0 }}
+            animate={{ scale: 1.15 }}
+            transition={{ 
+              duration: 25, 
+              ease: "linear", 
+              repeat: Infinity, 
+              repeatType: "mirror" 
+            }}
             className="w-full h-full"
           >
             <img 
@@ -46,14 +51,16 @@ const Home: React.FC = () => {
               className="w-full h-full object-cover"
             />
           </motion.div>
-          <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/20 to-stone-900/90"></div>
+          {/* Layered gradients for text legibility and mood */}
+          <div className="absolute inset-0 bg-black/20"></div>
+          <div className="absolute inset-0 bg-gradient-to-t from-stone-900/90 via-transparent to-black/30"></div>
         </div>
         
-        <div className="relative z-10 text-center px-4 max-w-5xl mx-auto">
+        <div className="relative z-10 text-center px-4 max-w-5xl mx-auto pt-20">
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
+            initial={{ opacity: 0, y: 50, filter: "blur(10px)" }}
+            animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+            transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }} // Custom "cinematic" easing
           >
             <h1 className="text-4xl md:text-7xl font-serif font-black text-white mb-6 leading-tight drop-shadow-2xl">
               {COMPANY_INFO.slogan}
@@ -61,11 +68,17 @@ const Home: React.FC = () => {
             <p className="text-lg md:text-2xl text-stone-200 mb-10 font-light max-w-3xl mx-auto drop-shadow-md">
               Experience the thrill of the wild with Kenya's premier safari experts.
             </p>
-            <div className="flex flex-col sm:flex-row justify-center gap-6">
+            
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4, duration: 0.8 }}
+              className="flex flex-col sm:flex-row justify-center gap-6"
+            >
               <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                 <Link 
                   to="/contact" 
-                  className="px-8 py-4 bg-safari-sunset text-white font-bold rounded-full hover:bg-orange-700 transition-all shadow-lg shadow-orange-900/20 flex items-center justify-center uppercase tracking-wide border-2 border-transparent"
+                  className="px-8 py-4 bg-safari-sunset text-white font-bold rounded-full hover:bg-orange-700 transition-all shadow-lg shadow-orange-900/40 flex items-center justify-center uppercase tracking-wide border-2 border-transparent"
                 >
                   Book Now
                 </Link>
@@ -78,14 +91,15 @@ const Home: React.FC = () => {
                   View All Tours
                 </Link>
               </motion.div>
-            </div>
+            </motion.div>
           </motion.div>
         </div>
         
         {/* Scroll Indicator */}
         <motion.div 
-          animate={{ y: [0, 10, 0] }}
-          transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1, y: [0, 10, 0] }}
+          transition={{ delay: 1.5, duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
           className="absolute bottom-10 left-1/2 transform -translate-x-1/2 text-white/50"
         >
           <div className="w-6 h-10 border-2 border-white/50 rounded-full flex justify-center">

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Facebook, Instagram, Mail, MapPin, Phone } from 'lucide-react';
+import { Facebook, Instagram, Mail, MapPin, Phone, MessageCircle } from 'lucide-react';
 import { COMPANY_INFO } from '../constants';
 
 const Footer: React.FC = () => {
@@ -16,8 +16,9 @@ const Footer: React.FC = () => {
               {COMPANY_INFO.slogan}
             </p>
             <div className="flex space-x-4">
-              <a href="#" className="hover:text-safari-gold transition-colors"><Facebook className="w-5 h-5" /></a>
-              <a href="#" className="hover:text-safari-gold transition-colors"><Instagram className="w-5 h-5" /></a>
+              <a href={COMPANY_INFO.social.facebook} target="_blank" rel="noopener noreferrer" className="hover:text-safari-gold transition-colors"><Facebook className="w-5 h-5" /></a>
+              <a href={COMPANY_INFO.social.instagram} target="_blank" rel="noopener noreferrer" className="hover:text-safari-gold transition-colors"><Instagram className="w-5 h-5" /></a>
+              <a href={COMPANY_INFO.social.whatsapp} target="_blank" rel="noopener noreferrer" className="hover:text-safari-gold transition-colors"><MessageCircle className="w-5 h-5" /></a>
             </div>
           </div>
 
@@ -44,6 +45,10 @@ const Footer: React.FC = () => {
               <li className="flex items-center">
                 <Phone className="w-5 h-5 mr-3 text-safari-gold flex-shrink-0" />
                 <a href={`tel:${COMPANY_INFO.phone}`} className="hover:text-white">{COMPANY_INFO.phone}</a>
+              </li>
+              <li className="flex items-center">
+                <MessageCircle className="w-5 h-5 mr-3 text-safari-gold flex-shrink-0" />
+                <a href={COMPANY_INFO.social.whatsapp} target="_blank" rel="noopener noreferrer" className="hover:text-white">WhatsApp Us</a>
               </li>
               <li className="flex items-center">
                 <Mail className="w-5 h-5 mr-3 text-safari-gold flex-shrink-0" />

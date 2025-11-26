@@ -8,7 +8,8 @@ export const COMPANY_INFO = {
   slogan: "Turning your travel dreams into extraordinary experiences",
   social: {
     facebook: "#",
-    instagram: "#"
+    instagram: "https://www.instagram.com/madeda_thomas?igsh=eTA0czUxejI2ZnZp",
+    whatsapp: "https://wa.me/254721787589"
   }
 };
 
