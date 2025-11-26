@@ -27,3 +27,16 @@ export interface InquiryForm {
   travelers: number;
   message: string;
 }
+
+export interface CompanyInfo {
+  name: string;
+  email: string;
+  phone: string;
+  location: string;
+  slogan: string;
+  social: {
+    facebook: string;
+    instagram: string;
+    whatsapp: string;
+  };
+}

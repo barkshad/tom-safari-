@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X, Phone, Compass, MessageCircle } from 'lucide-react';
-import { COMPANY_INFO } from '../constants';
+import { useData } from '../context/DataContext';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const Navbar: React.FC = () => {
+  const { companyInfo } = useData();
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
@@ -80,7 +81,7 @@ const Navbar: React.FC = () => {
               <motion.a
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                href={COMPANY_INFO.social.whatsapp}
+                href={companyInfo.social.whatsapp}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center px-4 py-2 bg-green-600 text-white rounded shadow-lg hover:shadow-xl hover:bg-green-700 transition-all"
@@ -93,7 +94,7 @@ const Navbar: React.FC = () => {
               <motion.a
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                href={`tel:${COMPANY_INFO.phone}`}
+                href={`tel:${companyInfo.phone}`}
                 className="flex items-center px-4 py-2 bg-safari-leaf text-white rounded shadow-lg hover:shadow-xl hover:bg-green-900 transition-all"
               >
                 <Phone className="w-4 h-4 mr-2" />
@@ -140,7 +141,7 @@ const Navbar: React.FC = () => {
               ))}
               <div className="pt-4 space-y-2">
                 <a
-                  href={COMPANY_INFO.social.whatsapp}
+                  href={companyInfo.social.whatsapp}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center justify-center w-full px-4 py-3 bg-green-600 text-white rounded hover:bg-green-700 font-bold"
@@ -148,7 +149,7 @@ const Navbar: React.FC = () => {
                   <MessageCircle className="w-5 h-5 mr-2" /> WhatsApp Us
                 </a>
                 <a
-                  href={`tel:${COMPANY_INFO.phone}`}
+                  href={`tel:${companyInfo.phone}`}
                   className="flex items-center justify-center w-full px-4 py-3 bg-safari-leaf text-white rounded hover:bg-green-900 font-bold"
                 >
                   <Phone className="w-5 h-5 mr-2" /> Call Us

@@ -1,8 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { useData } from '../context/DataContext';
 
 const About: React.FC = () => {
+  const { companyInfo } = useData();
+  
   return (
     <div className="bg-white">
       {/* Header */}
@@ -47,11 +50,11 @@ const About: React.FC = () => {
         >
           <h2 className="text-3xl font-serif font-bold text-stone-900 mb-8">Our Philosophy</h2>
           <div className="bg-safari-sand/30 border-l-4 border-safari-gold p-8 rounded-r-lg italic text-xl text-stone-700 mb-10">
-            "At Tom Safaris and Adventure, we are passionate about creating unforgettable experiences in the heart of nature. With years of expertise in guiding thrilling safaris and outdoor adventures, our dedicated team prioritizes safety, sustainability, and exceptional service."
+            "At {companyInfo.name}, we are passionate about creating unforgettable experiences in the heart of nature. With years of expertise in guiding thrilling safaris and outdoor adventures, our dedicated team prioritizes safety, sustainability, and exceptional service."
           </div>
 
           <p className="mb-8 leading-relaxed text-stone-600">
-            Tom Safaris and Adventure Kenya is a Nairobi-based safari and adventure tour operator. We specialize in organizing wildlife safaris, coastal getaways, and adventure tours across Kenya and nearby regions. Our goal is to share the breathtaking beauty of East Africa with the world while ensuring the preservation of these natural wonders for future generations.
+            {companyInfo.name} is a Nairobi-based safari and adventure tour operator. We specialize in organizing wildlife safaris, coastal getaways, and adventure tours across Kenya and nearby regions. Our goal is to share the breathtaking beauty of East Africa with the world while ensuring the preservation of these natural wonders for future generations.
           </p>
 
           <h3 className="text-2xl font-serif font-bold text-stone-900 mt-16 mb-6">What Distinguishes Us</h3>

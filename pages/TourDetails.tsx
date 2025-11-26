@@ -1,20 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { TOURS } from '../constants';
+import { useData } from '../context/DataContext';
 import { Clock, CheckCircle, ArrowLeft, Camera, XCircle, MapPin } from 'lucide-react';
 import { Tour } from '../types';
 import { motion } from 'framer-motion';
 
 const TourDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();
+  const { tours } = useData();
   const [tour, setTour] = useState<Tour | null>(null);
 
   useEffect(() => {
-    const foundTour = TOURS.find(t => t.id === id);
+    const foundTour = tours.find(t => t.id === id);
     if (foundTour) {
       setTour(foundTour);
     }
-  }, [id]);
+  }, [id, tours]);
 
   if (!tour) {
     return (

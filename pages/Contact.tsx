@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Mail, Phone, MapPin, Send } from 'lucide-react';
-import { COMPANY_INFO, TOURS } from '../constants';
+import { useData } from '../context/DataContext';
 import { InquiryForm } from '../types';
 import { motion } from 'framer-motion';
 
 const Contact: React.FC = () => {
+  const { companyInfo, tours } = useData();
   const location = useLocation();
   const [formData, setFormData] = useState<InquiryForm>({
     name: '',
@@ -78,7 +79,7 @@ const Contact: React.FC = () => {
                 </div>
                 <div>
                   <h3 className="font-bold text-stone-800 text-lg">Phone</h3>
-                  <a href={`tel:${COMPANY_INFO.phone}`} className="text-xl text-safari-sunset font-medium hover:underline">{COMPANY_INFO.phone}</a>
+                  <a href={`tel:${companyInfo.phone}`} className="text-xl text-safari-sunset font-medium hover:underline">{companyInfo.phone}</a>
                   <p className="text-sm text-stone-500 mt-1">Mon-Sun 8am-8pm</p>
                 </div>
               </div>
@@ -89,7 +90,7 @@ const Contact: React.FC = () => {
                 </div>
                 <div>
                   <h3 className="font-bold text-stone-800 text-lg">Email</h3>
-                  <a href={`mailto:${COMPANY_INFO.email}`} className="text-lg text-stone-600 hover:text-safari-sunset transition-colors">{COMPANY_INFO.email}</a>
+                  <a href={`mailto:${companyInfo.email}`} className="text-lg text-stone-600 hover:text-safari-sunset transition-colors">{companyInfo.email}</a>
                 </div>
               </div>
 
@@ -99,7 +100,7 @@ const Contact: React.FC = () => {
                 </div>
                 <div>
                   <h3 className="font-bold text-stone-800 text-lg">Location</h3>
-                  <p className="text-lg text-stone-600">{COMPANY_INFO.location}</p>
+                  <p className="text-lg text-stone-600">{companyInfo.location}</p>
                 </div>
               </div>
             </div>
@@ -136,7 +137,7 @@ const Contact: React.FC = () => {
                   <Send className="w-12 h-12" />
                 </div>
                 <h3 className="text-3xl font-bold text-stone-800 mb-4">Inquiry Received!</h3>
-                <p className="text-stone-600 mb-8 text-lg">Thank you for your interest in Tom Safaris. Our team has received your details and will get back to you within 24 hours.</p>
+                <p className="text-stone-600 mb-8 text-lg">Thank you for your interest in {companyInfo.name}. Our team has received your details and will get back to you within 24 hours.</p>
                 <button 
                   onClick={() => setSubmitted(false)}
                   className="px-8 py-3 border-2 border-safari-leaf text-safari-leaf font-bold rounded-full hover:bg-safari-sand transition-colors"
@@ -217,7 +218,7 @@ const Contact: React.FC = () => {
                     onChange={handleChange}
                   >
                     <option value="">-- I'm not sure yet / General Inquiry --</option>
-                    {TOURS.map(tour => (
+                    {tours.map(tour => (
                       <option key={tour.id} value={tour.id}>{tour.name} - {tour.durationDays} Days (${tour.priceUsd})</option>
                     ))}
                   </select>

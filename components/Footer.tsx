@@ -1,9 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Facebook, Instagram, Mail, MapPin, Phone, MessageCircle } from 'lucide-react';
-import { COMPANY_INFO } from '../constants';
+import { useData } from '../context/DataContext';
 
 const Footer: React.FC = () => {
+  const { companyInfo } = useData();
+
   return (
     <footer className="bg-stone-900 text-stone-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -13,12 +15,12 @@ const Footer: React.FC = () => {
           <div>
             <h3 className="text-2xl font-serif text-safari-gold mb-4">Tom Safaris</h3>
             <p className="text-sm leading-relaxed mb-6">
-              {COMPANY_INFO.slogan}
+              {companyInfo.slogan}
             </p>
             <div className="flex space-x-4">
-              <a href={COMPANY_INFO.social.facebook} target="_blank" rel="noopener noreferrer" className="hover:text-safari-gold transition-colors"><Facebook className="w-5 h-5" /></a>
-              <a href={COMPANY_INFO.social.instagram} target="_blank" rel="noopener noreferrer" className="hover:text-safari-gold transition-colors"><Instagram className="w-5 h-5" /></a>
-              <a href={COMPANY_INFO.social.whatsapp} target="_blank" rel="noopener noreferrer" className="hover:text-safari-gold transition-colors"><MessageCircle className="w-5 h-5" /></a>
+              <a href={companyInfo.social.facebook} target="_blank" rel="noopener noreferrer" className="hover:text-safari-gold transition-colors"><Facebook className="w-5 h-5" /></a>
+              <a href={companyInfo.social.instagram} target="_blank" rel="noopener noreferrer" className="hover:text-safari-gold transition-colors"><Instagram className="w-5 h-5" /></a>
+              <a href={companyInfo.social.whatsapp} target="_blank" rel="noopener noreferrer" className="hover:text-safari-gold transition-colors"><MessageCircle className="w-5 h-5" /></a>
             </div>
           </div>
 
@@ -40,26 +42,26 @@ const Footer: React.FC = () => {
             <ul className="space-y-3 text-sm">
               <li className="flex items-start">
                 <MapPin className="w-5 h-5 mr-3 text-safari-gold flex-shrink-0" />
-                <span>{COMPANY_INFO.location}</span>
+                <span>{companyInfo.location}</span>
               </li>
               <li className="flex items-center">
                 <Phone className="w-5 h-5 mr-3 text-safari-gold flex-shrink-0" />
-                <a href={`tel:${COMPANY_INFO.phone}`} className="hover:text-white">{COMPANY_INFO.phone}</a>
+                <a href={`tel:${companyInfo.phone}`} className="hover:text-white">{companyInfo.phone}</a>
               </li>
               <li className="flex items-center">
                 <MessageCircle className="w-5 h-5 mr-3 text-safari-gold flex-shrink-0" />
-                <a href={COMPANY_INFO.social.whatsapp} target="_blank" rel="noopener noreferrer" className="hover:text-white">WhatsApp Us</a>
+                <a href={companyInfo.social.whatsapp} target="_blank" rel="noopener noreferrer" className="hover:text-white">WhatsApp Us</a>
               </li>
               <li className="flex items-center">
                 <Mail className="w-5 h-5 mr-3 text-safari-gold flex-shrink-0" />
-                <a href={`mailto:${COMPANY_INFO.email}`} className="hover:text-white">{COMPANY_INFO.email}</a>
+                <a href={`mailto:${companyInfo.email}`} className="hover:text-white">{companyInfo.email}</a>
               </li>
             </ul>
           </div>
         </div>
 
         <div className="border-t border-stone-800 mt-12 pt-8 text-center text-xs text-stone-500">
-          <p>&copy; {new Date().getFullYear()} {COMPANY_INFO.name}. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} {companyInfo.name}. All rights reserved.</p>
         </div>
       </div>
     </footer>

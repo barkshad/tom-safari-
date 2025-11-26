@@ -1,13 +1,14 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, CheckCircle, Map, Shield } from 'lucide-react';
-import { TOURS, COMPANY_INFO } from '../constants';
+import { useData } from '../context/DataContext';
 import TourCard from '../components/TourCard';
 import { motion } from 'framer-motion';
 
 const Home: React.FC = () => {
+  const { tours, companyInfo } = useData();
   // Show up to 6 featured tours as per design brief
-  const featuredTours = TOURS.filter(t => t.featured).slice(0, 6);
+  const featuredTours = tours.filter(t => t.featured).slice(0, 6);
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -63,7 +64,7 @@ const Home: React.FC = () => {
             transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }} // Custom "cinematic" easing
           >
             <h1 className="text-4xl md:text-7xl font-serif font-black text-white mb-6 leading-tight drop-shadow-2xl">
-              {COMPANY_INFO.slogan}
+              {companyInfo.slogan}
             </h1>
             <p className="text-lg md:text-2xl text-stone-200 mb-10 font-light max-w-3xl mx-auto drop-shadow-md">
               Experience the thrill of the wild with Kenya's premier safari experts.
@@ -119,7 +120,7 @@ const Home: React.FC = () => {
             className="text-center max-w-3xl mx-auto mb-20"
           >
             <motion.h2 variants={itemVariants} className="text-4xl font-serif font-bold text-stone-900 mb-4">
-              Welcome to Tom Safaris
+              Welcome to {companyInfo.name}
             </motion.h2>
             <motion.div variants={itemVariants} className="w-24 h-1 bg-safari-gold mx-auto mb-8"></motion.div>
             <motion.p variants={itemVariants} className="text-xl text-stone-600 leading-relaxed font-light">
@@ -207,7 +208,7 @@ const Home: React.FC = () => {
                {[1, 2, 3, 4, 5].map(i => <span key={i} className="text-3xl">★</span>)}
              </div>
             <blockquote className="text-2xl italic font-serif font-light mb-8 leading-relaxed">
-              "We had the most amazing time with Tom Safaris. The driver was knowledgeable, the lodges were beautiful, and seeing the lions in Maasai Mara was a dream come true!"
+              "We had the most amazing time with {companyInfo.name}. The driver was knowledgeable, the lodges were beautiful, and seeing the lions in Maasai Mara was a dream come true!"
             </blockquote>
             <cite className="font-bold not-italic text-safari-sunset block text-lg tracking-wide uppercase">- Sarah J., United Kingdom</cite>
           </div>

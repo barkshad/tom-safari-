@@ -8,6 +8,8 @@ import Tours from './pages/Tours';
 import TourDetails from './pages/TourDetails';
 import Blog from './pages/Blog';
 import Contact from './pages/Contact';
+import Admin from './pages/Admin';
+import { DataProvider } from './context/DataContext';
 
 // Scroll to top wrapper
 const ScrollToTop: React.FC = () => {
@@ -22,23 +24,32 @@ const ScrollToTop: React.FC = () => {
 
 function App() {
   return (
-    <Router>
-      <ScrollToTop />
-      <div className="flex flex-col min-h-screen bg-stone-50 font-sans">
-        <Navbar />
-        <main className="flex-grow">
+    <DataProvider>
+      <Router>
+        <ScrollToTop />
+        <div className="flex flex-col min-h-screen bg-stone-50 font-sans">
           <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/tours" element={<Tours />} />
-            <Route path="/tours/:id" element={<TourDetails />} />
-            <Route path="/blog" element={<Blog />} />
-            <Route path="/contact" element={<Contact />} />
+            <Route path="/admin" element={<Admin />} />
+            <Route path="*" element={
+              <>
+                <Navbar />
+                <main className="flex-grow">
+                  <Routes>
+                    <Route path="/" element={<Home />} />
+                    <Route path="/about" element={<About />} />
+                    <Route path="/tours" element={<Tours />} />
+                    <Route path="/tours/:id" element={<TourDetails />} />
+                    <Route path="/blog" element={<Blog />} />
+                    <Route path="/contact" element={<Contact />} />
+                  </Routes>
+                </main>
+                <Footer />
+              </>
+            } />
           </Routes>
-        </main>
-        <Footer />
-      </div>
-    </Router>
+        </div>
+      </Router>
+    </DataProvider>
   );
 }
 

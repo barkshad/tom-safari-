@@ -1,20 +1,21 @@
 import React, { useState, useMemo } from 'react';
-import { TOURS } from '../constants';
+import { useData } from '../context/DataContext';
 import TourCard from '../components/TourCard';
 import { Filter, SlidersHorizontal, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const Tours: React.FC = () => {
+  const { tours } = useData();
   const [destination, setDestination] = useState<string>('All');
   const [durationRange, setDurationRange] = useState<string>('All');
   const [priceRange, setPriceRange] = useState<string>('All');
   const [showMobileFilters, setShowMobileFilters] = useState(false);
 
   // Extract unique destinations (categories in this context, or could be expanded)
-  const destinations = ['All', ...Array.from(new Set(TOURS.map(t => t.category)))];
+  const destinations = ['All', ...Array.from(new Set(tours.map(t => t.category)))];
 
   const filteredTours = useMemo(() => {
-    return TOURS.filter(tour => {
+    return tours.filter(tour => {
       // Filter by Destination/Category
       if (destination !== 'All' && tour.category !== destination) return false;
 
@@ -38,7 +39,7 @@ const Tours: React.FC = () => {
 
       return true;
     });
-  }, [destination, durationRange, priceRange]);
+  }, [destination, durationRange, priceRange, tours]);
 
   const clearFilters = () => {
     setDestination('All');
