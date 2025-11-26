@@ -34,7 +34,7 @@ const Home: React.FC = () => {
               to="/contact" 
               className="px-8 py-4 bg-safari-sunset text-white font-bold rounded-md hover:bg-orange-700 transition-colors shadow-lg flex items-center justify-center uppercase tracking-wide"
             >
-              Inquire Now
+              Book Now
             </Link>
             <Link 
               to="/tours" 
@@ -114,7 +114,7 @@ const Home: React.FC = () => {
       <section className="py-20 bg-safari-leaf text-white relative overflow-hidden">
         <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"></div>
         <div className="max-w-4xl mx-auto px-4 text-center relative z-10">
-          <h2 className="text-3xl font-serif font-bold mb-10">What Our Travelers Say</h2>
+          <h2 className="text-3xl font-serif font-bold mb-10">Why Travelers Choose Us</h2>
           
           <div className="bg-white/10 backdrop-blur-sm p-8 rounded-xl border border-white/20">
              <div className="flex justify-center mb-4 text-safari-gold">

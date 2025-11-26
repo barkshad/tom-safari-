@@ -46,7 +46,7 @@ const TourCard: React.FC<TourCardProps> = ({ tour }) => {
           to={`/tours/${tour.id}`}
           className="block w-full text-center py-2 bg-stone-100 hover:bg-safari-earth hover:text-white text-stone-800 font-medium rounded transition-colors"
         >
-          View Itinerary
+          View Details & Book
         </Link>
       </div>
     </div>

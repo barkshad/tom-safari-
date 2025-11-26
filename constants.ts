@@ -82,7 +82,7 @@ export const TOURS: Tour[] = [
     name: "Maasai Mara Express",
     durationDays: 2,
     priceUsd: 890,
-    image: "https://picsum.photos/id/237/800/600", // Dog placeholder but effectively wildlife
+    image: "https://picsum.photos/id/237/800/600", 
     category: 'Safari',
     featured: true,
     shortDescription: "The ultimate quick safari to witness the Big Five in the world-famous Mara.",
@@ -98,7 +98,7 @@ export const TOURS: Tour[] = [
     name: "Maasai Mara Explorer",
     durationDays: 3,
     priceUsd: 1050,
-    image: "https://picsum.photos/id/1003/800/600", // Deer placeholder
+    image: "https://picsum.photos/id/1003/800/600",
     category: 'Safari',
     featured: true,
     shortDescription: "An immersive 3-day safari allowing deep exploration of the Mara ecosystem.",
