@@ -15,7 +15,7 @@ const Home: React.FC = () => {
       <section className="relative h-[85vh] flex items-center justify-center">
         <div className="absolute inset-0 overflow-hidden">
           <img 
-            src="https://picsum.photos/id/1016/1600/900" 
+            src="https://images.unsplash.com/photo-1493963246502-1e779e577cc4?q=80&w=2000&auto=format&fit=crop" 
             alt="Safari Landscape" 
             className="w-full h-full object-cover transform scale-105"
           />

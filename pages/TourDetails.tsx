@@ -26,12 +26,12 @@ const TourDetails: React.FC = () => {
     );
   }
 
-  // Placeholder images for gallery (since we don't have multiple real images per tour in constants)
+  // Use the main tour image + some nice generic safari shots for the gallery
   const galleryImages = [
     tour.image,
-    "https://picsum.photos/id/1018/800/600",
-    "https://picsum.photos/id/1074/800/600",
-    "https://picsum.photos/id/1039/800/600"
+    "https://images.unsplash.com/photo-1516426122078-c23e76319801?q=80&w=800&auto=format&fit=crop", // Jeep/Safari
+    "https://images.unsplash.com/photo-1551009175-8a68da93d5f9?q=80&w=800&auto=format&fit=crop", // Giraffes
+    "https://images.unsplash.com/photo-1493963246502-1e779e577cc4?q=80&w=800&auto=format&fit=crop"  // Landscape
   ];
 
   return (

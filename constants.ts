@@ -18,7 +18,8 @@ export const TOURS: Tour[] = [
     name: "Tsavo East & Salt Lick",
     durationDays: 3,
     priceUsd: 545,
-    image: "https://picsum.photos/id/1074/800/600",
+    // Elephants / Red Dust
+    image: "https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?q=80&w=1000&auto=format&fit=crop",
     category: 'Safari',
     featured: true,
     shortDescription: "Experience the famous Red Elephants of Tsavo and the unique stilt lodge at Salt Lick.",
@@ -35,7 +36,8 @@ export const TOURS: Tour[] = [
     name: "Shimba Hills Day Trip",
     durationDays: 1,
     priceUsd: 195,
-    image: "https://picsum.photos/id/1039/800/600",
+    // Forest / Antelope vibe
+    image: "https://images.unsplash.com/photo-1484406566174-9da000ce6478?q=80&w=1000&auto=format&fit=crop",
     category: 'Day Trip',
     featured: true,
     shortDescription: "A perfect day escape to the coastal rainforests featuring the sable antelope.",
@@ -50,7 +52,8 @@ export const TOURS: Tour[] = [
     name: "Lamu Cultural Escape",
     durationDays: 2,
     priceUsd: 650,
-    image: "https://picsum.photos/id/1047/800/600",
+    // Lamu Architecture / Dhow
+    image: "https://images.unsplash.com/photo-1590523741831-ab7e8b8f9c7f?q=80&w=1000&auto=format&fit=crop",
     category: 'Coastal',
     featured: true,
     shortDescription: "Step back in time in the UNESCO World Heritage site of Lamu Old Town.",
@@ -66,7 +69,8 @@ export const TOURS: Tour[] = [
     name: "Zanzibar Spice Tour",
     durationDays: 2,
     priceUsd: 570,
-    image: "https://picsum.photos/id/1015/800/600",
+    // Zanzibar beach / water
+    image: "https://images.unsplash.com/photo-1589973320357-160368a7d515?q=80&w=1000&auto=format&fit=crop",
     category: 'Coastal',
     featured: true,
     shortDescription: "A quick getaway to the Spice Island with historic Stone Town tours.",
@@ -82,7 +86,8 @@ export const TOURS: Tour[] = [
     name: "Maasai Mara Express",
     durationDays: 2,
     priceUsd: 890,
-    image: "https://picsum.photos/id/237/800/600", 
+    // Lion
+    image: "https://images.unsplash.com/photo-1615966650071-855cd69f6a02?q=80&w=1000&auto=format&fit=crop", 
     category: 'Safari',
     featured: true,
     shortDescription: "The ultimate quick safari to witness the Big Five in the world-famous Mara.",
@@ -98,7 +103,8 @@ export const TOURS: Tour[] = [
     name: "Maasai Mara Explorer",
     durationDays: 3,
     priceUsd: 1050,
-    image: "https://picsum.photos/id/1003/800/600",
+    // Safari Vehicle / Landscape
+    image: "https://images.unsplash.com/photo-1516426122078-c23e76319801?q=80&w=1000&auto=format&fit=crop",
     category: 'Safari',
     featured: true,
     shortDescription: "An immersive 3-day safari allowing deep exploration of the Mara ecosystem.",
@@ -115,7 +121,8 @@ export const TOURS: Tour[] = [
     name: "Mt. Kilimanjaro Trek",
     durationDays: 4,
     priceUsd: 1800,
-    image: "https://picsum.photos/id/1036/800/600",
+    // Mountain
+    image: "https://images.unsplash.com/photo-1650635477319-798a77f7962e?q=80&w=1000&auto=format&fit=crop",
     category: 'Trek',
     featured: false,
     shortDescription: "Challenge yourself on the roof of Africa.",

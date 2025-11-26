@@ -7,7 +7,7 @@ const About: React.FC = () => {
       {/* Header */}
       <div className="bg-stone-900 py-20 text-center relative overflow-hidden">
         <div className="absolute inset-0 bg-black/50 z-0">
-            <img src="https://picsum.photos/id/1018/1600/600" alt="Nature" className="w-full h-full object-cover opacity-50" />
+            <img src="https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?q=80&w=2000&auto=format&fit=crop" alt="Nature" className="w-full h-full object-cover opacity-50" />
         </div>
         <div className="relative z-10">
             <h1 className="text-4xl md:text-5xl font-serif font-bold text-white mb-2">About Us</h1>
@@ -44,7 +44,7 @@ const About: React.FC = () => {
 
           <div className="mt-16 bg-stone-100 p-8 rounded-xl flex flex-col md:flex-row items-center gap-8">
             <img 
-                src="https://picsum.photos/id/1025/200/200" 
+                src="https://images.unsplash.com/photo-1544983058-293e50626388?q=80&w=400&auto=format&fit=crop" 
                 alt="Our Team" 
                 className="w-32 h-32 rounded-full object-cover shadow-md border-4 border-white"
             />
