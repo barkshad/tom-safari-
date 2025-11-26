@@ -3,7 +3,7 @@ import { Tour } from './types';
 export const COMPANY_INFO = {
   name: "Tom Safaris and Adventure Kenya",
   email: "info@tomsafaris.co.ke",
-  phone: "+254 700 123 456",
+  phone: "+254 721 787 589",
   location: "Nairobi, Kenya",
   slogan: "Turning your travel dreams into extraordinary experiences",
   social: {
@@ -37,7 +37,7 @@ export const TOURS: Tour[] = [
     priceUsd: 195,
     image: "https://picsum.photos/id/1039/800/600",
     category: 'Day Trip',
-    featured: false,
+    featured: true,
     shortDescription: "A perfect day escape to the coastal rainforests featuring the sable antelope.",
     fullDescription: "Discover the Shimba Hills National Reserve, a coastal rainforest known for its population of Sable Antelope and Sheldrick Falls.",
     highlights: ["Sable Antelope", "Sheldrick Falls Hike", "Tropical Rainforest", "Elephant Habitat"],
@@ -68,7 +68,7 @@ export const TOURS: Tour[] = [
     priceUsd: 570,
     image: "https://picsum.photos/id/1015/800/600",
     category: 'Coastal',
-    featured: false,
+    featured: true,
     shortDescription: "A quick getaway to the Spice Island with historic Stone Town tours.",
     fullDescription: "Explore the magical streets of Stone Town and the white sands of Zanzibar's northern beaches.",
     highlights: ["Stone Town", "Spice Farm Tour", "White Sand Beaches", "Forodhani Gardens"],

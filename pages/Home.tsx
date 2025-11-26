@@ -1,45 +1,46 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, CheckCircle, Map } from 'lucide-react';
-import { TOURS } from '../constants';
+import { ArrowRight, CheckCircle, Map, Shield } from 'lucide-react';
+import { TOURS, COMPANY_INFO } from '../constants';
 import TourCard from '../components/TourCard';
 
 const Home: React.FC = () => {
-  const featuredTours = TOURS.filter(t => t.featured).slice(0, 3);
+  // Show up to 6 featured tours as per design brief
+  const featuredTours = TOURS.filter(t => t.featured).slice(0, 6);
 
   return (
     <div className="flex flex-col min-h-screen">
       
       {/* Hero Section */}
-      <section className="relative h-[80vh] flex items-center justify-center">
+      <section className="relative h-[85vh] flex items-center justify-center">
         <div className="absolute inset-0 overflow-hidden">
           <img 
             src="https://picsum.photos/id/1016/1600/900" 
-            alt="Kenyan Landscape" 
-            className="w-full h-full object-cover"
+            alt="Safari Landscape" 
+            className="w-full h-full object-cover transform scale-105"
           />
-          <div className="absolute inset-0 bg-black bg-opacity-40"></div>
+          <div className="absolute inset-0 bg-black/40"></div>
         </div>
         
-        <div className="relative z-10 text-center px-4 max-w-4xl mx-auto">
+        <div className="relative z-10 text-center px-4 max-w-5xl mx-auto">
           <h1 className="text-4xl md:text-6xl font-serif font-black text-white mb-6 leading-tight drop-shadow-lg">
-            Wild, Authentic, <span className="text-safari-gold">Unforgettable.</span>
+            {COMPANY_INFO.slogan}
           </h1>
-          <p className="text-lg md:text-2xl text-stone-100 mb-8 font-light">
-            Turning your travel dreams into extraordinary Kenyan experiences.
+          <p className="text-lg md:text-2xl text-stone-100 mb-10 font-light max-w-3xl mx-auto">
+            Experience the thrill of the wild with Kenya's premier safari experts.
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-4">
             <Link 
-              to="/tours" 
-              className="px-8 py-3 bg-safari-sunset text-white font-bold rounded-full hover:bg-orange-700 transition-colors shadow-lg flex items-center justify-center"
+              to="/contact" 
+              className="px-8 py-4 bg-safari-sunset text-white font-bold rounded-md hover:bg-orange-700 transition-colors shadow-lg flex items-center justify-center uppercase tracking-wide"
             >
-              Explore Tours <ArrowRight className="ml-2 w-5 h-5" />
+              Inquire Now
             </Link>
             <Link 
-              to="/contact" 
-              className="px-8 py-3 bg-white text-stone-900 font-bold rounded-full hover:bg-stone-100 transition-colors shadow-lg"
+              to="/tours" 
+              className="px-8 py-4 bg-white text-stone-900 font-bold rounded-md hover:bg-stone-100 transition-colors shadow-lg uppercase tracking-wide"
             >
-              Enquire Now
+              View All Tours
             </Link>
           </div>
         </div>
@@ -57,26 +58,26 @@ const Home: React.FC = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-            <div className="p-6 bg-stone-50 rounded-xl">
-              <div className="w-12 h-12 bg-safari-leaf text-white rounded-full flex items-center justify-center mx-auto mb-4">
-                <CheckCircle className="w-6 h-6" />
+            <div className="p-8 bg-stone-50 rounded-xl hover:shadow-md transition-shadow">
+              <div className="w-16 h-16 bg-safari-leaf text-white rounded-full flex items-center justify-center mx-auto mb-6">
+                <Shield className="w-8 h-8" />
               </div>
-              <h3 className="text-xl font-bold mb-2">Safety First</h3>
-              <p className="text-stone-600">Expert guides and well-maintained vehicles ensuring a secure journey.</p>
+              <h3 className="text-xl font-bold mb-3 text-stone-800">Safety First</h3>
+              <p className="text-stone-600">Our dedicated team prioritizes safety with expert guides and well-maintained vehicles for a secure journey.</p>
             </div>
-            <div className="p-6 bg-stone-50 rounded-xl">
-              <div className="w-12 h-12 bg-safari-leaf text-white rounded-full flex items-center justify-center mx-auto mb-4">
-                <Map className="w-6 h-6" />
+            <div className="p-8 bg-stone-50 rounded-xl hover:shadow-md transition-shadow">
+              <div className="w-16 h-16 bg-safari-leaf text-white rounded-full flex items-center justify-center mx-auto mb-6">
+                <Map className="w-8 h-8" />
               </div>
-              <h3 className="text-xl font-bold mb-2">Local Expertise</h3>
-              <p className="text-stone-600">Deep knowledge of the terrain, wildlife habits, and cultural nuances.</p>
+              <h3 className="text-xl font-bold mb-3 text-stone-800">Local Expertise</h3>
+              <p className="text-stone-600">With years of expertise, we know the hidden gems, wildlife patterns, and cultural nuances of Kenya.</p>
             </div>
-            <div className="p-6 bg-stone-50 rounded-xl">
-              <div className="w-12 h-12 bg-safari-leaf text-white rounded-full flex items-center justify-center mx-auto mb-4">
-                <CheckCircle className="w-6 h-6" />
+            <div className="p-8 bg-stone-50 rounded-xl hover:shadow-md transition-shadow">
+              <div className="w-16 h-16 bg-safari-leaf text-white rounded-full flex items-center justify-center mx-auto mb-6">
+                <CheckCircle className="w-8 h-8" />
               </div>
-              <h3 className="text-xl font-bold mb-2">Curated Experiences</h3>
-              <p className="text-stone-600">Itineraries designed to maximize your time and budget for the best value.</p>
+              <h3 className="text-xl font-bold mb-3 text-stone-800">Authentic Experiences</h3>
+              <p className="text-stone-600">We are passionate about creating unforgettable experiences in the heart of nature.</p>
             </div>
           </div>
         </div>
@@ -85,12 +86,12 @@ const Home: React.FC = () => {
       {/* Featured Tours */}
       <section className="py-20 bg-stone-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-end mb-12">
+          <div className="flex flex-col md:flex-row justify-between items-end mb-12">
             <div>
               <h2 className="text-3xl font-serif font-bold text-stone-800 mb-2">Featured Adventures</h2>
               <p className="text-stone-600">Our most popular safari packages picked just for you.</p>
             </div>
-            <Link to="/tours" className="hidden md:flex items-center text-safari-sunset font-medium hover:text-orange-800">
+            <Link to="/tours" className="hidden md:flex items-center text-safari-sunset font-bold uppercase tracking-wider hover:text-orange-800 mt-4 md:mt-0">
               View All Tours <ArrowRight className="ml-1 w-4 h-4" />
             </Link>
           </div>
@@ -101,22 +102,29 @@ const Home: React.FC = () => {
             ))}
           </div>
           
-          <div className="mt-8 text-center md:hidden">
-            <Link to="/tours" className="inline-block px-6 py-3 bg-white border border-stone-300 rounded font-medium text-stone-700 hover:bg-stone-50">
+          <div className="mt-12 text-center md:hidden">
+            <Link to="/tours" className="inline-block px-8 py-3 bg-safari-earth text-white rounded font-medium hover:bg-stone-800 transition-colors">
               View All Tours
             </Link>
           </div>
         </div>
       </section>
 
-      {/* Testimonials / Trust */}
-      <section className="py-20 bg-safari-leaf text-white">
-        <div className="max-w-4xl mx-auto px-4 text-center">
-          <h2 className="text-3xl font-serif font-bold mb-8">Why Travelers Choose Us</h2>
-          <blockquote className="text-xl italic font-light mb-6 opacity-90">
-            "We had the most amazing time with Tom Safaris. The driver was knowledgeable, the lodges were beautiful, and seeing the lions in Maasai Mara was a dream come true!"
-          </blockquote>
-          <cite className="font-bold not-italic text-safari-gold">- Sarah J., United Kingdom</cite>
+      {/* Why Choose Us / Testimonial Placeholder */}
+      <section className="py-20 bg-safari-leaf text-white relative overflow-hidden">
+        <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"></div>
+        <div className="max-w-4xl mx-auto px-4 text-center relative z-10">
+          <h2 className="text-3xl font-serif font-bold mb-10">What Our Travelers Say</h2>
+          
+          <div className="bg-white/10 backdrop-blur-sm p-8 rounded-xl border border-white/20">
+             <div className="flex justify-center mb-4 text-safari-gold">
+               {[1, 2, 3, 4, 5].map(i => <span key={i} className="text-2xl">★</span>)}
+             </div>
+            <blockquote className="text-xl italic font-light mb-6 opacity-95 leading-relaxed">
+              "We had the most amazing time with Tom Safaris. The driver was knowledgeable, the lodges were beautiful, and seeing the lions in Maasai Mara was a dream come true!"
+            </blockquote>
+            <cite className="font-bold not-italic text-safari-gold block">- Sarah J., United Kingdom</cite>
+          </div>
         </div>
       </section>
     </div>
