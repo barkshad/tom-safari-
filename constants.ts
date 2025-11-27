@@ -4,7 +4,7 @@ export const COMPANY_INFO = {
   name: "Tom Safaris and Adventure Kenya",
   email: "info@tomsafaris.co.ke",
   phone: "+254 721 787 589",
-  location: "Titanic Plaza, Kilifi Town, Kenya",
+  location: "Titanic Plaza, Kilifi, Kenya",
   slogan: "Turning your travel dreams into extraordinary experiences",
   social: {
     facebook: "#",
