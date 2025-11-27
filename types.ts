@@ -1,3 +1,4 @@
+
 export interface Tour {
   id: string;
   name: string;
@@ -28,6 +29,23 @@ export interface InquiryForm {
   date: string;
   travelers: number;
   message: string;
+}
+
+export interface Inquiry extends InquiryForm {
+  id: string;
+  tourName?: string;
+  status: 'New' | 'In Progress' | 'Closed';
+  submittedAt: string;
+}
+
+export interface PageContent {
+  home: {
+    heroTitle: string;
+    heroSubtitle: string;
+  };
+  about: {
+    philosophy: string;
+  };
 }
 
 export interface CompanyInfo {

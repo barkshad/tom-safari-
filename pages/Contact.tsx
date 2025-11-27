@@ -1,3 +1,4 @@
+
 // @ts-nocheck
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
@@ -7,7 +8,7 @@ import { InquiryForm } from '../types';
 import { motion } from 'framer-motion';
 
 const Contact: React.FC = () => {
-  const { companyInfo, tours } = useData();
+  const { companyInfo, tours, addInquiry } = useData();
   const location = useLocation();
   const [formData, setFormData] = useState<InquiryForm>({
     name: '',
@@ -36,9 +37,9 @@ const Contact: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Simulation of API call
-    console.log('Form Submitted', formData);
+    addInquiry(formData);
     setSubmitted(true);
+    // Reset form after submission if needed, or keep for user to see what they sent
   };
 
   return (
@@ -148,7 +149,18 @@ const Contact: React.FC = () => {
                 <h3 className="text-3xl font-bold text-stone-800 mb-4">Inquiry Received!</h3>
                 <p className="text-stone-600 mb-8 text-lg">Thank you for your interest in {companyInfo.name}. Our team has received your details and will get back to you within 24 hours.</p>
                 <button 
-                  onClick={() => setSubmitted(false)}
+                  onClick={() => {
+                    setSubmitted(false);
+                    setFormData({
+                        name: '',
+                        email: '',
+                        phone: '',
+                        tourId: '',
+                        date: '',
+                        travelers: 2,
+                        message: ''
+                    });
+                  }}
                   className="px-8 py-3 border-2 border-safari-leaf text-safari-leaf font-bold rounded-full hover:bg-safari-sand transition-colors"
                 >
                   Send another message

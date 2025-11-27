@@ -1,4 +1,5 @@
-import { Tour } from './types';
+
+import { Tour, PageContent } from './types';
 
 export const COMPANY_INFO = {
   name: "Tom Safaris and Adventure Kenya",
@@ -10,6 +11,16 @@ export const COMPANY_INFO = {
     facebook: "#",
     instagram: "https://www.instagram.com/madeda_thomas?igsh=eTA0czUxejI2ZnZp",
     whatsapp: "https://wa.me/254721787589"
+  }
+};
+
+export const DEFAULT_PAGE_CONTENT: PageContent = {
+  home: {
+    heroTitle: "Turning your travel dreams into extraordinary experiences",
+    heroSubtitle: "Experience the thrill of the wild with Kenya's premier safari experts."
+  },
+  about: {
+    philosophy: "At Tom Safaris and Adventure Kenya, we are passionate about creating unforgettable experiences in the heart of nature. With years of expertise in guiding thrilling safaris and outdoor adventures, our dedicated team prioritizes safety, sustainability, and exceptional service."
   }
 };
 
@@ -349,7 +360,7 @@ export const TOURS: Tour[] = [
     group: 'Road Safari',
     featured: false,
     shortDescription: "Sanctuary hopping safari. Min 4 Pax.",
-    fullDescription: "Experience two of the best sanctuaries in the region: Ngutuni and Taita Hills (Salt Lick).",
+    fullDescription: "Experience the best of Taita Hills and Ngutuni in this combined safari.",
     highlights: ["Salt Lick Lodge", "Ngutuni", "Exclusive Viewing"],
     itinerary: [
       { day: 1, title: "Ngutuni", description: "Drive to Ngutuni. Game drive. Overnight." },

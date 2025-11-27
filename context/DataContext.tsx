@@ -1,16 +1,22 @@
+
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { Tour, CompanyInfo } from '../types';
-import { TOURS, COMPANY_INFO } from '../constants';
+import { Tour, CompanyInfo, Inquiry, InquiryForm, PageContent } from '../types';
+import { TOURS, COMPANY_INFO, DEFAULT_PAGE_CONTENT } from '../constants';
 
 interface DataContextType {
   companyInfo: CompanyInfo;
   tours: Tour[];
+  inquiries: Inquiry[];
+  pageContent: PageContent;
   updateCompanyInfo: (info: CompanyInfo) => void;
   updateTour: (updatedTour: Tour) => void;
   addTour: (newTour: Tour) => void;
   deleteTour: (id: string) => void;
+  addInquiry: (form: InquiryForm) => void;
+  updatePageContent: (content: PageContent) => void;
   isAuthenticated: boolean;
   login: (password: string) => boolean;
+  changePassword: (newPassword: string) => void;
   logout: () => void;
   resetData: () => void;
 }
@@ -29,6 +35,21 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return saved ? JSON.parse(saved) : TOURS;
   });
 
+  const [inquiries, setInquiries] = useState<Inquiry[]>(() => {
+    const saved = localStorage.getItem('inquiries');
+    return saved ? JSON.parse(saved) : [];
+  });
+
+  const [pageContent, setPageContent] = useState<PageContent>(() => {
+    const saved = localStorage.getItem('pageContent');
+    return saved ? JSON.parse(saved) : DEFAULT_PAGE_CONTENT;
+  });
+
+  const [adminPassword, setAdminPassword] = useState<string>(() => {
+    const saved = localStorage.getItem('adminPassword');
+    return saved || '12345';
+  });
+
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => {
     return localStorage.getItem('isAdmin') === 'true';
   });
@@ -43,8 +64,20 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, [tours]);
 
   useEffect(() => {
+    localStorage.setItem('inquiries', JSON.stringify(inquiries));
+  }, [inquiries]);
+
+  useEffect(() => {
+    localStorage.setItem('pageContent', JSON.stringify(pageContent));
+  }, [pageContent]);
+
+  useEffect(() => {
     localStorage.setItem('isAdmin', String(isAuthenticated));
   }, [isAuthenticated]);
+  
+  useEffect(() => {
+    localStorage.setItem('adminPassword', adminPassword);
+  }, [adminPassword]);
 
   const updateCompanyInfo = (info: CompanyInfo) => {
     setCompanyInfo(info);
@@ -62,12 +95,32 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setTours(prev => prev.filter(t => t.id !== id));
   };
 
+  const addInquiry = (form: InquiryForm) => {
+    const tour = tours.find(t => t.id === form.tourId);
+    const newInquiry: Inquiry = {
+      ...form,
+      id: `inq-${Date.now()}`,
+      tourName: tour ? tour.name : undefined,
+      status: 'New',
+      submittedAt: new Date().toISOString()
+    };
+    setInquiries(prev => [newInquiry, ...prev]);
+  };
+
+  const updatePageContent = (content: PageContent) => {
+    setPageContent(content);
+  };
+
   const login = (password: string) => {
-    if (password === '12345') {
+    if (password === adminPassword) {
       setIsAuthenticated(true);
       return true;
     }
     return false;
+  };
+
+  const changePassword = (newPassword: string) => {
+    setAdminPassword(newPassword);
   };
 
   const logout = () => {
@@ -77,8 +130,13 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const resetData = () => {
     setCompanyInfo(COMPANY_INFO);
     setTours(TOURS);
+    setPageContent(DEFAULT_PAGE_CONTENT);
+    setAdminPassword('12345');
+    // Keep inquiries but clear other data
     localStorage.removeItem('companyInfo');
     localStorage.removeItem('tours');
+    localStorage.removeItem('pageContent');
+    localStorage.removeItem('adminPassword');
     window.location.reload();
   };
 
@@ -86,12 +144,17 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
     <DataContext.Provider value={{
       companyInfo,
       tours,
+      inquiries,
+      pageContent,
       updateCompanyInfo,
       updateTour,
       addTour,
       deleteTour,
+      addInquiry,
+      updatePageContent,
       isAuthenticated,
       login,
+      changePassword,
       logout,
       resetData
     }}>

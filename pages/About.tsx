@@ -1,3 +1,4 @@
+
 // @ts-nocheck
 import React from 'react';
 import { Link } from 'react-router-dom';
@@ -5,7 +6,7 @@ import { motion } from 'framer-motion';
 import { useData } from '../context/DataContext';
 
 const About: React.FC = () => {
-  const { companyInfo } = useData();
+  const { companyInfo, pageContent } = useData();
   
   return (
     <div className="bg-white">
@@ -51,7 +52,7 @@ const About: React.FC = () => {
         >
           <h2 className="text-3xl font-serif font-bold text-stone-900 mb-8">Our Philosophy</h2>
           <div className="bg-safari-sand/30 border-l-4 border-safari-gold p-8 rounded-r-lg italic text-xl text-stone-700 mb-10">
-            "At {companyInfo.name}, we are passionate about creating unforgettable experiences in the heart of nature. With years of expertise in guiding thrilling safaris and outdoor adventures, our dedicated team prioritizes safety, sustainability, and exceptional service."
+            "{pageContent?.about?.philosophy || "At " + companyInfo.name + ", we are passionate about creating unforgettable experiences in the heart of nature. With years of expertise in guiding thrilling safaris and outdoor adventures, our dedicated team prioritizes safety, sustainability, and exceptional service."}"
           </div>
 
           <p className="mb-8 leading-relaxed text-stone-600">

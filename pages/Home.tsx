@@ -1,3 +1,4 @@
+
 // @ts-nocheck
 import React from 'react';
 import { Link } from 'react-router-dom';
@@ -7,7 +8,7 @@ import TourCard from '../components/TourCard';
 import { motion } from 'framer-motion';
 
 const Home: React.FC = () => {
-  const { tours, companyInfo } = useData();
+  const { tours, companyInfo, pageContent } = useData();
   // Show up to 6 featured tours as per design brief
   const featuredTours = tours.filter(t => t.featured).slice(0, 6);
 
@@ -65,10 +66,10 @@ const Home: React.FC = () => {
             transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }} // Custom "cinematic" easing
           >
             <h1 className="text-4xl md:text-7xl font-serif font-black text-white mb-6 leading-tight drop-shadow-2xl">
-              {companyInfo.slogan}
+              {pageContent?.home?.heroTitle || companyInfo.slogan}
             </h1>
             <p className="text-lg md:text-2xl text-stone-200 mb-10 font-light max-w-3xl mx-auto drop-shadow-md">
-              Experience the thrill of the wild with Kenya's premier safari experts.
+              {pageContent?.home?.heroSubtitle || "Experience the thrill of the wild with Kenya's premier safari experts."}
             </p>
             
             <motion.div 
