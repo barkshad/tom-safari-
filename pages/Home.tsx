@@ -35,28 +35,29 @@ const Home: React.FC = () => {
     <div className="flex flex-col min-h-screen overflow-x-hidden">
       
       {/* Cinematic Hero Section */}
-      <section className="relative h-screen flex items-center justify-center overflow-hidden">
+      <section className="relative h-screen flex items-center justify-center overflow-hidden bg-black">
         <div className="absolute inset-0 z-0">
           <motion.div
-            initial={{ scale: 1.0 }}
+            initial={{ scale: 1.05 }}
             animate={{ scale: 1.15 }}
             transition={{ 
-              duration: 25, 
+              duration: 20, 
               ease: "linear", 
               repeat: Infinity, 
-              repeatType: "mirror" 
+              repeatType: "reverse" 
             }}
             className="w-full h-full"
           >
+            {/* Using a striking Black Panther/Leopard image as requested */}
             <img 
-              src="https://images.unsplash.com/photo-1493963246502-1e779e577cc4?q=80&w=2000&auto=format&fit=crop" 
-              alt="Safari Landscape" 
-              className="w-full h-full object-cover"
+              src="https://images.unsplash.com/photo-1628151015968-3a4429e9ef04?q=80&w=2560&auto=format&fit=crop" 
+              alt="Black Panther Safari" 
+              className="w-full h-full object-cover opacity-90"
             />
           </motion.div>
           {/* Layered gradients for text legibility and mood */}
+          <div className="absolute inset-0 bg-gradient-to-t from-stone-900 via-transparent to-black/40"></div>
           <div className="absolute inset-0 bg-black/20"></div>
-          <div className="absolute inset-0 bg-gradient-to-t from-stone-900/90 via-transparent to-black/30"></div>
         </div>
         
         <div className="relative z-10 text-center px-4 max-w-5xl mx-auto pt-20">

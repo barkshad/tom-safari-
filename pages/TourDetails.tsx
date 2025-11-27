@@ -1,3 +1,4 @@
+
 // @ts-nocheck
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
@@ -29,12 +30,36 @@ const TourDetails: React.FC = () => {
     );
   }
 
-  const galleryImages = [
-    tour.image,
-    "https://images.unsplash.com/photo-1516426122078-c23e76319801?q=80&w=800&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1551009175-8a68da93d5f9?q=80&w=800&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1493963246502-1e779e577cc4?q=80&w=800&auto=format&fit=crop"
-  ];
+  // Smart Gallery Logic - Returns relevant photos based on category
+  const getCategoryImages = (category: string) => {
+    switch(category) {
+      case 'Coastal':
+      case 'Day Trip': // Often coastal in this context
+        return [
+           "https://images.unsplash.com/photo-1580587771525-78b9dba3b91d?q=80&w=800&auto=format&fit=crop", // Mombasa/Architecture
+           "https://images.unsplash.com/photo-1582967788606-a171f1080ca8?q=80&w=800&auto=format&fit=crop", // Ocean/Dolphin
+           "https://images.unsplash.com/photo-1544550581-5f7ceaf7f992?q=80&w=800&auto=format&fit=crop", // Dhow
+           "https://images.unsplash.com/photo-1590523741831-ab7e8b8f9c7f?q=80&w=800&auto=format&fit=crop"  // Beach/Mangrove
+        ];
+      case 'Trek':
+        return [
+            "https://images.unsplash.com/photo-1650635477319-798a77f7962e?q=80&w=800&auto=format&fit=crop", // Mountain
+            "https://images.unsplash.com/photo-1519904981063-b0cf448d479e?q=80&w=800&auto=format&fit=crop", // Hiking
+            "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=800&auto=format&fit=crop" // View
+        ];
+      default: // Safari / Road Safari
+        return [
+            "https://images.unsplash.com/photo-1516426122078-c23e76319801?q=80&w=800&auto=format&fit=crop", // Lion
+            "https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?q=80&w=800&auto=format&fit=crop", // Elephants
+            "https://images.unsplash.com/photo-1534449733088-02456488a032?q=80&w=800&auto=format&fit=crop", // Kilimanjaro/Elephants
+            "https://images.unsplash.com/photo-1547970810-dc1eac37d174?q=80&w=800&auto=format&fit=crop"  // Zebra/Wildebeest
+        ];
+    }
+  };
+
+  const categoryImages = getCategoryImages(tour.category);
+  // Mix the tour's main image with the category images, remove duplicates if any, and slice to 4
+  const galleryImages = [tour.image, ...categoryImages].filter((item, index, self) => self.indexOf(item) === index).slice(0, 4);
 
   return (
     <div className="bg-stone-50 min-h-screen pb-20">
@@ -71,7 +96,7 @@ const TourDetails: React.FC = () => {
                 <div className="flex flex-wrap gap-8 text-white text-base">
                 <div className="flex items-center bg-white/10 backdrop-blur-md px-4 py-2 rounded-lg border border-white/10">
                     <Clock className="w-5 h-5 mr-3 text-safari-gold" />
-                    <span className="font-medium">{tour.durationDays} Days / {tour.durationDays - 1} Nights</span>
+                    <span className="font-medium">{tour.durationDays} Days / {Math.max(1, tour.durationDays - 1)} Nights</span>
                 </div>
                 <div className="flex items-center bg-white/10 backdrop-blur-md px-4 py-2 rounded-lg border border-white/10">
                     <span className="text-safari-gold font-bold text-2xl mr-2">${tour.priceUsd}</span>
