@@ -1,12 +1,12 @@
 // @ts-nocheck
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, Phone, Compass, MessageCircle } from 'lucide-react';
+import { Menu, X, Phone, Compass, MessageCircle, Settings } from 'lucide-react';
 import { useData } from '../context/DataContext';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const Navbar: React.FC = () => {
-  const { companyInfo } = useData();
+  const { companyInfo, isAuthenticated } = useData();
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
@@ -77,6 +77,12 @@ const Navbar: React.FC = () => {
                 )}
               </Link>
             ))}
+
+            {isAuthenticated && (
+              <Link to="/admin" className="text-sm font-bold text-safari-sunset flex items-center bg-orange-50 px-3 py-1 rounded-full border border-orange-100">
+                <Settings className="w-3 h-3 mr-1" /> Admin
+              </Link>
+            )}
             
             <div className="flex items-center space-x-3 ml-4">
               <motion.a
@@ -140,6 +146,17 @@ const Navbar: React.FC = () => {
                   {link.name}
                 </Link>
               ))}
+              
+              {isAuthenticated && (
+                <Link
+                  to="/admin"
+                  onClick={() => setIsOpen(false)}
+                  className="block px-3 py-2 rounded-md text-base font-bold text-red-600 bg-red-50"
+                >
+                  Admin Dashboard
+                </Link>
+              )}
+
               <div className="pt-4 space-y-2">
                 <a
                   href={companyInfo.social.whatsapp}

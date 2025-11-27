@@ -1,7 +1,7 @@
 // @ts-nocheck
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Facebook, Instagram, Mail, MapPin, Phone, MessageCircle } from 'lucide-react';
+import { Facebook, Instagram, Mail, MapPin, Phone, MessageCircle, Lock } from 'lucide-react';
 import { useData } from '../context/DataContext';
 
 const Footer: React.FC = () => {
@@ -61,8 +61,11 @@ const Footer: React.FC = () => {
           </div>
         </div>
 
-        <div className="border-t border-stone-800 mt-12 pt-8 text-center text-xs text-stone-500">
+        <div className="border-t border-stone-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center text-xs text-stone-500">
           <p>&copy; {new Date().getFullYear()} {companyInfo.name}. All rights reserved.</p>
+          <Link to="/admin" className="mt-2 md:mt-0 flex items-center hover:text-stone-300 transition-colors opacity-50 hover:opacity-100">
+            <Lock className="w-3 h-3 mr-1" /> Admin Login
+          </Link>
         </div>
       </div>
     </footer>
