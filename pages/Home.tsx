@@ -1,4 +1,3 @@
-
 // @ts-nocheck
 import React from 'react';
 import { Link } from 'react-router-dom';
@@ -48,10 +47,10 @@ const Home: React.FC = () => {
             }}
             className="w-full h-full"
           >
-            {/* Using a striking Black Panther/Leopard image as requested */}
+            {/* Using the requested image */}
             <img 
-              src="https://images.unsplash.com/photo-1628151015968-3a4429e9ef04?q=80&w=2560&auto=format&fit=crop" 
-              alt="Black Panther Safari" 
+              src="https://share.google/images/2bwfbvx4i34vzVT0v" 
+              alt="Safari Hero" 
               className="w-full h-full object-cover opacity-90"
             />
           </motion.div>
