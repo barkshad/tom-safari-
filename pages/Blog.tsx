@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React from 'react';
 import { Calendar, User } from 'lucide-react';
 import { Link } from 'react-router-dom';

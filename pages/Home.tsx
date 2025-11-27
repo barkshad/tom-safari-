@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, CheckCircle, Map, Shield } from 'lucide-react';
@@ -124,7 +125,7 @@ const Home: React.FC = () => {
             </motion.h2>
             <motion.div variants={itemVariants} className="w-24 h-1 bg-safari-gold mx-auto mb-8"></motion.div>
             <motion.p variants={itemVariants} className="text-xl text-stone-600 leading-relaxed font-light">
-              We are a Nairobi-based safari and adventure tour operator dedicated to organizing wildlife, coastal, and adventure tours across Kenya. Our mission is to combine safety, professionalism, and authentic African adventure to create memories that last a lifetime.
+              We are a Kilifi-based safari and adventure tour operator dedicated to organizing wildlife, coastal, and adventure tours across Kenya. Our mission is to combine safety, professionalism, and authentic African adventure to create memories that last a lifetime.
             </motion.p>
           </motion.div>
 

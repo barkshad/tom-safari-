@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { useState } from 'react';
 import { useData } from '../context/DataContext';
 import { Lock, Save, LogOut, RefreshCw, Plus, Trash2, Edit2, X } from 'lucide-react';

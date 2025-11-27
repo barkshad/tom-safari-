@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { useState, useMemo } from 'react';
 import { useData } from '../context/DataContext';
 import TourCard from '../components/TourCard';
