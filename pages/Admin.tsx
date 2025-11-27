@@ -209,8 +209,10 @@ const Admin: React.FC = () => {
                         name: "New Adventure",
                         durationDays: 3,
                         priceUsd: 500,
+                        priceGbp: 400,
                         image: "https://images.unsplash.com/photo-1516426122078-c23e76319801?q=80&w=1000",
                         category: "Safari",
+                        group: "Road Safari",
                         featured: false,
                         shortDescription: "Description goes here.",
                         fullDescription: "Full description goes here.",
@@ -254,7 +256,10 @@ const Admin: React.FC = () => {
                             <h3 className="font-bold text-lg mb-1">{tour.name}</h3>
                             <div className="flex justify-between text-sm text-stone-500">
                                 <span>{tour.durationDays} Days</span>
-                                <span className="text-safari-gold font-bold">${tour.priceUsd}</span>
+                                <div className="text-right">
+                                    <div className="text-safari-gold font-bold">${tour.priceUsd}</div>
+                                    <div className="text-stone-400 text-xs">£{tour.priceGbp}</div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -301,6 +306,15 @@ const Admin: React.FC = () => {
                                     onChange={(e) => setEditingTour({...editingTour, priceUsd: parseInt(e.target.value) || 0})}
                                 />
                             </div>
+                             <div>
+                                <label className="block text-sm font-bold mb-1">Price (GBP)</label>
+                                <input 
+                                    type="number" 
+                                    className="w-full border p-2 rounded"
+                                    value={editingTour.priceGbp}
+                                    onChange={(e) => setEditingTour({...editingTour, priceGbp: parseInt(e.target.value) || 0})}
+                                />
+                            </div>
                             <div>
                                 <label className="block text-sm font-bold mb-1">Duration (Days)</label>
                                 <input 
@@ -311,16 +325,16 @@ const Admin: React.FC = () => {
                                 />
                             </div>
                             <div>
-                                <label className="block text-sm font-bold mb-1">Category</label>
+                                <label className="block text-sm font-bold mb-1">Group</label>
                                 <select 
                                     className="w-full border p-2 rounded"
-                                    value={editingTour.category}
-                                    onChange={(e) => setEditingTour({...editingTour, category: e.target.value as any})}
+                                    value={editingTour.group}
+                                    onChange={(e) => setEditingTour({...editingTour, group: e.target.value as any})}
                                 >
-                                    <option value="Safari">Safari</option>
-                                    <option value="Coastal">Coastal</option>
+                                    <option value="Road Safari">Road Safari</option>
+                                    <option value="Excursion">Excursion</option>
+                                    <option value="Flight Safari">Flight Safari</option>
                                     <option value="Trek">Trek</option>
-                                    <option value="Day Trip">Day Trip</option>
                                 </select>
                             </div>
                         </div>

@@ -3,6 +3,7 @@ export interface Tour {
   name: string;
   durationDays: number;
   priceUsd: number;
+  priceGbp: number;
   image: string;
   shortDescription: string;
   fullDescription: string;
@@ -10,6 +11,7 @@ export interface Tour {
   itinerary: ItineraryDay[];
   featured: boolean;
   category: 'Safari' | 'Coastal' | 'Trek' | 'Day Trip';
+  group: 'Excursion' | 'Road Safari' | 'Flight Safari' | 'Trek' | 'Custom';
 }
 
 export interface ItineraryDay {
