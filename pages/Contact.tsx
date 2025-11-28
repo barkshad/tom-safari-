@@ -104,7 +104,7 @@ const Contact: React.FC = () => {
                   <h3 className="font-bold text-stone-800 text-lg">Location</h3>
                   <p className="text-lg text-stone-600">{companyInfo.location}</p>
                   <a 
-                    href="https://maps.app.goo.gl/kGzvoCnVMqoaxL68A" 
+                    href="https://maps.app.goo.gl/yc1JeKD9pwbvb9WM6" 
                     target="_blank" 
                     rel="noopener noreferrer"
                     className="inline-flex items-center mt-2 text-sm text-safari-sunset hover:underline font-bold"
