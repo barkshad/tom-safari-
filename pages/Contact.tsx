@@ -109,14 +109,14 @@ const Contact: React.FC = () => {
                     rel="noopener noreferrer"
                     className="inline-flex items-center mt-2 text-sm text-safari-sunset hover:underline font-bold"
                   >
-                    View on Google Maps <ExternalLink className="w-3 h-3 ml-1" />
+                    View Larger Map <ExternalLink className="w-3 h-3 ml-1" />
                   </a>
                 </div>
               </div>
             </div>
 
             {/* Google Map */}
-            <div className="rounded-2xl overflow-hidden shadow-md border border-stone-200 h-80 relative bg-stone-100">
+            <div className="rounded-2xl overflow-hidden shadow-md border border-stone-200 h-80 relative bg-stone-100 group">
                 <iframe 
                     src="https://maps.google.com/maps?q=Titanic%20Plaza%2C%20Kilifi&t=&z=15&ie=UTF8&iwloc=&output=embed"
                     width="100%" 
@@ -127,6 +127,15 @@ const Contact: React.FC = () => {
                     referrerPolicy="no-referrer-when-downgrade"
                     title="Titanic Plaza Map"
                 ></iframe>
+                {/* Custom Overlay Button */}
+                <a 
+                  href="https://maps.app.goo.gl/yc1JeKD9pwbvb9WM6" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="absolute bottom-4 left-4 bg-white/95 hover:bg-white text-stone-800 text-xs font-bold px-4 py-2 rounded-lg shadow-lg flex items-center backdrop-blur-sm transition-all z-10 border border-stone-200 hover:scale-105"
+                >
+                   <MapPin className="w-4 h-4 mr-2 text-safari-sunset" /> View Larger Map
+                </a>
             </div>
           </motion.div>
 
