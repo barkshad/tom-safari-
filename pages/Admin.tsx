@@ -1,4 +1,3 @@
-
 // @ts-nocheck
 import React, { useState } from 'react';
 import { useData } from '../context/DataContext';
@@ -29,6 +28,9 @@ const Admin: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'dashboard' | 'tours' | 'inquiries' | 'content' | 'settings'>('dashboard');
   const [editingTour, setEditingTour] = useState<Tour | null>(null);
   const [newPassword, setNewPassword] = useState('');
+  
+  // State for image validation
+  const [imageError, setImageError] = useState('');
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
@@ -47,6 +49,16 @@ const Admin: React.FC = () => {
     changePassword(newPassword);
     setNewPassword('');
     alert("Password updated successfully!");
+  };
+
+  const handleHeroImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = e.target.value;
+    if (val && !val.startsWith('http')) {
+        setImageError('URL must start with http or https');
+    } else {
+        setImageError('');
+    }
+    updatePageContent({ ...pageContent, home: { ...pageContent.home, heroImage: val } });
   };
 
   // --- Render Login Screen ---
@@ -367,6 +379,18 @@ const Admin: React.FC = () => {
                                 onChange={(e) => updatePageContent({ ...pageContent, home: { ...pageContent.home, heroSubtitle: e.target.value } })}
                             />
                         </div>
+                        <div>
+                            <label className="block text-sm font-bold text-stone-700 mb-2">Highlight Image URL</label>
+                            <input 
+                                type="text" 
+                                className={`w-full p-3 border rounded focus:ring-2 focus:ring-safari-gold ${imageError ? 'border-red-500 focus:ring-red-500' : ''}`}
+                                value={pageContent.home.heroImage}
+                                onChange={handleHeroImageChange}
+                                placeholder="https://..."
+                            />
+                            {imageError && <p className="text-red-500 text-sm mt-1">{imageError}</p>}
+                            <p className="text-xs text-stone-500 mt-1">Paste a direct link to an image (Unsplash, Google Drive direct link, etc).</p>
+                        </div>
                     </div>
                 </div>
 
@@ -497,106 +521,115 @@ const Admin: React.FC = () => {
                         </button>
                     </div>
                     
-                    <div className="p-6 space-y-6">
+                    <div className="p-6 space-y-4">
+                        <div>
+                            <label className="block text-sm font-bold mb-1">Tour Name</label>
+                            <input 
+                                className="w-full p-3 border rounded" 
+                                value={editingTour.name} 
+                                onChange={(e) => setEditingTour({...editingTour, name: e.target.value})}
+                            />
+                        </div>
                         <div className="grid grid-cols-2 gap-4">
                             <div>
-                                <label className="block text-sm font-bold mb-1">Name</label>
+                                <label className="block text-sm font-bold mb-1">Price USD</label>
                                 <input 
-                                    type="text" 
-                                    className="w-full border p-2 rounded"
-                                    value={editingTour.name}
-                                    onChange={(e) => setEditingTour({...editingTour, name: e.target.value})}
+                                    type="number" 
+                                    className="w-full p-3 border rounded" 
+                                    value={editingTour.priceUsd} 
+                                    onChange={(e) => setEditingTour({...editingTour, priceUsd: Number(e.target.value)})}
                                 />
                             </div>
                             <div>
-                                <label className="block text-sm font-bold mb-1">Featured?</label>
-                                <select 
-                                    className="w-full border p-2 rounded"
-                                    value={editingTour.featured ? "true" : "false"}
-                                    onChange={(e) => setEditingTour({...editingTour, featured: e.target.value === "true"})}
-                                >
-                                    <option value="false">No</option>
-                                    <option value="true">Yes</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label className="block text-sm font-bold mb-1">Price (USD)</label>
+                                <label className="block text-sm font-bold mb-1">Price GBP</label>
                                 <input 
                                     type="number" 
-                                    className="w-full border p-2 rounded"
-                                    value={editingTour.priceUsd}
-                                    onChange={(e) => setEditingTour({...editingTour, priceUsd: parseInt(e.target.value) || 0})}
-                                />
-                            </div>
-                             <div>
-                                <label className="block text-sm font-bold mb-1">Price (GBP)</label>
-                                <input 
-                                    type="number" 
-                                    className="w-full border p-2 rounded"
-                                    value={editingTour.priceGbp}
-                                    onChange={(e) => setEditingTour({...editingTour, priceGbp: parseInt(e.target.value) || 0})}
+                                    className="w-full p-3 border rounded" 
+                                    value={editingTour.priceGbp} 
+                                    onChange={(e) => setEditingTour({...editingTour, priceGbp: Number(e.target.value)})}
                                 />
                             </div>
                             <div>
                                 <label className="block text-sm font-bold mb-1">Duration (Days)</label>
                                 <input 
                                     type="number" 
-                                    className="w-full border p-2 rounded"
-                                    value={editingTour.durationDays}
-                                    onChange={(e) => setEditingTour({...editingTour, durationDays: parseInt(e.target.value) || 0})}
+                                    className="w-full p-3 border rounded" 
+                                    value={editingTour.durationDays} 
+                                    onChange={(e) => setEditingTour({...editingTour, durationDays: Number(e.target.value)})}
                                 />
                             </div>
-                            <div>
-                                <label className="block text-sm font-bold mb-1">Group</label>
+                             <div>
+                                <label className="block text-sm font-bold mb-1">Category</label>
                                 <select 
-                                    className="w-full border p-2 rounded"
-                                    value={editingTour.group}
-                                    onChange={(e) => setEditingTour({...editingTour, group: e.target.value as any})}
+                                    className="w-full p-3 border rounded"
+                                    value={editingTour.category}
+                                    onChange={(e) => setEditingTour({...editingTour, category: e.target.value as any})}
                                 >
-                                    <option value="Road Safari">Road Safari</option>
-                                    <option value="Excursion">Excursion</option>
-                                    <option value="Flight Safari">Flight Safari</option>
-                                    <option value="Trek">Trek</option>
-                                    <option value="Custom">Custom</option>
+                                    <option>Safari</option>
+                                    <option>Coastal</option>
+                                    <option>Trek</option>
+                                    <option>Day Trip</option>
                                 </select>
                             </div>
                         </div>
 
                         <div>
-                            <label className="block text-sm font-bold mb-1">Short Description</label>
-                            <textarea 
-                                className="w-full border p-2 rounded"
-                                rows={2}
-                                value={editingTour.shortDescription}
-                                onChange={(e) => setEditingTour({...editingTour, shortDescription: e.target.value})}
-                            />
+                            <label className="block text-sm font-bold mb-1">Group (Section)</label>
+                            <select 
+                                className="w-full p-3 border rounded"
+                                value={editingTour.group}
+                                onChange={(e) => setEditingTour({...editingTour, group: e.target.value as any})}
+                            >
+                                <option value="Excursion">Excursion</option>
+                                <option value="Road Safari">Road Safari</option>
+                                <option value="Flight Safari">Flight Safari</option>
+                                <option value="Trek">Trek</option>
+                                <option value="Custom">Custom</option>
+                            </select>
                         </div>
 
                         <div>
                             <label className="block text-sm font-bold mb-1">Image URL</label>
                             <input 
-                                type="text" 
-                                className="w-full border p-2 rounded"
-                                value={editingTour.image}
+                                className="w-full p-3 border rounded" 
+                                value={editingTour.image} 
                                 onChange={(e) => setEditingTour({...editingTour, image: e.target.value})}
                             />
                         </div>
 
-                        <div>
+                         <div>
+                            <label className="block text-sm font-bold mb-1">Short Description</label>
+                            <input 
+                                className="w-full p-3 border rounded" 
+                                value={editingTour.shortDescription} 
+                                onChange={(e) => setEditingTour({...editingTour, shortDescription: e.target.value})}
+                            />
+                        </div>
+
+                         <div>
                             <label className="block text-sm font-bold mb-1">Full Description</label>
                             <textarea 
-                                className="w-full border p-2 rounded"
-                                rows={4}
-                                value={editingTour.fullDescription}
+                                className="w-full p-3 border rounded h-24" 
+                                value={editingTour.fullDescription} 
                                 onChange={(e) => setEditingTour({...editingTour, fullDescription: e.target.value})}
                             />
                         </div>
+
+                        <div className="flex items-center space-x-2">
+                            <input 
+                                type="checkbox" 
+                                checked={editingTour.featured} 
+                                onChange={(e) => setEditingTour({...editingTour, featured: e.target.checked})}
+                                id="featured-check"
+                            />
+                            <label htmlFor="featured-check" className="font-bold">Featured on Homepage?</label>
+                        </div>
                     </div>
 
-                    <div className="p-6 border-t bg-stone-50 flex justify-end space-x-4">
+                    <div className="p-6 border-t sticky bottom-0 bg-white z-10 flex justify-end space-x-3">
                         <button 
                             onClick={() => setEditingTour(null)}
-                            className="px-4 py-2 text-stone-600 font-bold hover:text-stone-900"
+                            className="px-6 py-2 border rounded hover:bg-stone-50"
                         >
                             Cancel
                         </button>
@@ -605,7 +638,7 @@ const Admin: React.FC = () => {
                                 updateTour(editingTour);
                                 setEditingTour(null);
                             }}
-                            className="px-6 py-2 bg-safari-sunset text-white font-bold rounded shadow hover:bg-orange-700"
+                            className="px-6 py-2 bg-safari-leaf text-white font-bold rounded hover:bg-green-900"
                         >
                             Save Changes
                         </button>

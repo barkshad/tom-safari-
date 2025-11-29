@@ -47,9 +47,9 @@ const Home: React.FC = () => {
             }}
             className="w-full h-full"
           >
-            {/* Using the requested image */}
+            {/* Using the dynamic hero image from context */}
             <img 
-              src="https://share.google/images/2bwfbvx4i34vzVT0v" 
+              src={pageContent?.home?.heroImage || "https://share.google/images/2bwfbvx4i34vzVT0v"} 
               alt="Safari Hero" 
               className="w-full h-full object-cover opacity-90"
             />
