@@ -7,6 +7,7 @@ export interface Tour {
   priceUsd: number;
   priceGbp: number;
   image: string;
+  gallery?: string[]; // New field for uploaded gallery images
   shortDescription: string;
   fullDescription: string;
   highlights: string[];
