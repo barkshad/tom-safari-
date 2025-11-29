@@ -83,12 +83,21 @@ const Admin: React.FC = () => {
         img.onload = () => {
           const canvas = document.createElement('canvas');
           const MAX_WIDTH = 800; // Resize to max width 800px to save space
-          const scaleSize = MAX_WIDTH / img.width;
-          canvas.width = MAX_WIDTH;
-          canvas.height = img.height * scaleSize;
+          
+          let width = img.width;
+          let height = img.height;
+
+          // Only downscale if the image is larger than MAX_WIDTH
+          if (width > MAX_WIDTH) {
+            height = height * (MAX_WIDTH / width);
+            width = MAX_WIDTH;
+          }
+          
+          canvas.width = width;
+          canvas.height = height;
 
           const ctx = canvas.getContext('2d');
-          ctx?.drawImage(img, 0, 0, canvas.width, canvas.height);
+          ctx?.drawImage(img, 0, 0, width, height);
           
           // Compress to JPEG at 70% quality
           const dataUrl = canvas.toDataURL('image/jpeg', 0.7);
