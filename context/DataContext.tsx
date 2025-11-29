@@ -26,49 +26,77 @@ const DataContext = createContext<DataContextType | undefined>(undefined);
 export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   // Initialize state from LocalStorage or fall back to Constants
   const [companyInfo, setCompanyInfo] = useState<CompanyInfo>(() => {
-    const saved = localStorage.getItem('companyInfo');
-    return saved ? JSON.parse(saved) : COMPANY_INFO;
+    try {
+      const saved = localStorage.getItem('companyInfo');
+      return saved ? JSON.parse(saved) : COMPANY_INFO;
+    } catch {
+      return COMPANY_INFO;
+    }
   });
 
   const [tours, setTours] = useState<Tour[]>(() => {
-    const saved = localStorage.getItem('tours');
-    return saved ? JSON.parse(saved) : TOURS;
+    try {
+      const saved = localStorage.getItem('tours');
+      return saved ? JSON.parse(saved) : TOURS;
+    } catch {
+      return TOURS;
+    }
   });
 
   const [inquiries, setInquiries] = useState<Inquiry[]>(() => {
-    const saved = localStorage.getItem('inquiries');
-    return saved ? JSON.parse(saved) : [];
+    try {
+      const saved = localStorage.getItem('inquiries');
+      return saved ? JSON.parse(saved) : [];
+    } catch {
+      return [];
+    }
   });
 
   const [pageContent, setPageContent] = useState<PageContent>(() => {
-    const saved = localStorage.getItem('pageContent');
-    return saved ? JSON.parse(saved) : DEFAULT_PAGE_CONTENT;
+    try {
+      const saved = localStorage.getItem('pageContent');
+      return saved ? JSON.parse(saved) : DEFAULT_PAGE_CONTENT;
+    } catch {
+      return DEFAULT_PAGE_CONTENT;
+    }
   });
 
   const [adminPassword, setAdminPassword] = useState<string>(() => {
-    const saved = localStorage.getItem('adminPassword');
-    return saved || '12345';
+    return localStorage.getItem('adminPassword') || '12345';
   });
 
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => {
     return localStorage.getItem('isAdmin') === 'true';
   });
 
+  // Helper to safely save to storage
+  const saveToStorage = (key: string, data: any) => {
+    try {
+      localStorage.setItem(key, JSON.stringify(data));
+    } catch (e: any) {
+      if (e.name === 'QuotaExceededError' || e.name === 'NS_ERROR_DOM_QUOTA_REACHED') {
+        alert("⚠️ Storage Limit Reached!\n\nThe website cannot save more data (photos take up a lot of space). Please delete some old tours, gallery photos, or inquiries to make space.");
+      } else {
+        console.error(`Failed to save ${key} to storage:`, e);
+      }
+    }
+  };
+
   // Persist changes
   useEffect(() => {
-    localStorage.setItem('companyInfo', JSON.stringify(companyInfo));
+    saveToStorage('companyInfo', companyInfo);
   }, [companyInfo]);
 
   useEffect(() => {
-    localStorage.setItem('tours', JSON.stringify(tours));
+    saveToStorage('tours', tours);
   }, [tours]);
 
   useEffect(() => {
-    localStorage.setItem('inquiries', JSON.stringify(inquiries));
+    saveToStorage('inquiries', inquiries);
   }, [inquiries]);
 
   useEffect(() => {
-    localStorage.setItem('pageContent', JSON.stringify(pageContent));
+    saveToStorage('pageContent', pageContent);
   }, [pageContent]);
 
   useEffect(() => {
@@ -128,16 +156,18 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const resetData = () => {
-    setCompanyInfo(COMPANY_INFO);
-    setTours(TOURS);
-    setPageContent(DEFAULT_PAGE_CONTENT);
-    setAdminPassword('12345');
-    // Keep inquiries but clear other data
-    localStorage.removeItem('companyInfo');
-    localStorage.removeItem('tours');
-    localStorage.removeItem('pageContent');
-    localStorage.removeItem('adminPassword');
-    window.location.reload();
+    if(window.confirm("This will delete ALL custom tours, photos, and settings. Are you sure?")) {
+      setCompanyInfo(COMPANY_INFO);
+      setTours(TOURS);
+      setPageContent(DEFAULT_PAGE_CONTENT);
+      setAdminPassword('12345');
+      // Keep inquiries but clear other data
+      localStorage.removeItem('companyInfo');
+      localStorage.removeItem('tours');
+      localStorage.removeItem('pageContent');
+      localStorage.removeItem('adminPassword');
+      window.location.reload();
+    }
   };
 
   return (

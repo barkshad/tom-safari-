@@ -1,3 +1,4 @@
+
 // @ts-nocheck
 import React, { useState, useRef } from 'react';
 import { useData } from '../context/DataContext';
@@ -82,7 +83,8 @@ const Admin: React.FC = () => {
         img.src = event.target?.result as string;
         img.onload = () => {
           const canvas = document.createElement('canvas');
-          const MAX_WIDTH = 800; // Resize to max width 800px to save space
+          // Optimized for LocalStorage: Reduced resolution
+          const MAX_WIDTH = 600; 
           
           let width = img.width;
           let height = img.height;
@@ -99,8 +101,8 @@ const Admin: React.FC = () => {
           const ctx = canvas.getContext('2d');
           ctx?.drawImage(img, 0, 0, width, height);
           
-          // Compress to JPEG at 70% quality
-          const dataUrl = canvas.toDataURL('image/jpeg', 0.7);
+          // Compress to JPEG at 60% quality (Visual quality is okay, file size is small)
+          const dataUrl = canvas.toDataURL('image/jpeg', 0.6);
           resolve(dataUrl);
         };
         img.onerror = (err) => reject(err);
@@ -471,10 +473,8 @@ const Admin: React.FC = () => {
                 <h3 className="font-bold text-red-800 mb-2">Danger Zone</h3>
                 <button 
                     onClick={() => {
-                        if(window.confirm("Are you sure? All your changes will be lost.")) {
-                            resetData();
-                            showToast("All data reset to defaults", "error");
-                        }
+                        resetData();
+                        showToast("All data reset to defaults", "error");
                     }} 
                     className="text-red-600 border border-red-200 bg-white hover:bg-red-100 px-4 py-2 rounded text-sm font-bold flex items-center"
                 >
