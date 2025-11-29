@@ -1,4 +1,5 @@
 
+
 export interface Tour {
   id: string;
   name: string;
@@ -42,6 +43,7 @@ export interface PageContent {
   home: {
     heroTitle: string;
     heroSubtitle: string;
+    heroImage: string;
   };
   about: {
     philosophy: string;

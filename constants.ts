@@ -2,7 +2,7 @@
 import { Tour, PageContent } from './types';
 
 export const COMPANY_INFO = {
-  name: "Tom Safaris and Adventure Kenya",
+  name: "Tom Madeda Safari and Adventure Kenya",
   email: "info@tomsafaris.co.ke",
   phone: "+254 721 787 589",
   location: "Titanic Plaza, Kilifi, Kenya",
@@ -17,10 +17,11 @@ export const COMPANY_INFO = {
 export const DEFAULT_PAGE_CONTENT: PageContent = {
   home: {
     heroTitle: "Turning your travel dreams into extraordinary experiences",
-    heroSubtitle: "Experience the thrill of the wild with Kenya's premier safari experts."
+    heroSubtitle: "Experience the thrill of the wild with Kenya's premier safari experts.",
+    heroImage: "https://share.google/images/2bwfbvx4i34vzVT0v"
   },
   about: {
-    philosophy: "At Tom Safaris and Adventure Kenya, we are passionate about creating unforgettable experiences in the heart of nature. With years of expertise in guiding thrilling safaris and outdoor adventures, our dedicated team prioritizes safety, sustainability, and exceptional service."
+    philosophy: "At Tom Madeda Safari and Adventure Kenya, we are passionate about creating unforgettable experiences in the heart of nature. With years of expertise in guiding thrilling safaris and outdoor adventures, our dedicated team prioritizes safety, sustainability, and exceptional service."
   }
 };
 

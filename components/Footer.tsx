@@ -14,7 +14,7 @@ const Footer: React.FC = () => {
           
           {/* Brand Column */}
           <div>
-            <h3 className="text-2xl font-serif text-safari-gold mb-4">Tom Safaris</h3>
+            <h3 className="text-2xl font-serif text-safari-gold mb-4">Tom Madeda Safaris</h3>
             <p className="text-sm leading-relaxed mb-6">
               {companyInfo.slogan}
             </p>

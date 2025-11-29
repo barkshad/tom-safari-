@@ -10,7 +10,7 @@ const BLOG_POSTS = [
     title: "5 Essentials for Your First Kenyan Safari",
     excerpt: "Packing for a safari can be tricky. Here is our guide to the must-have items for a comfortable and exciting adventure in the bush.",
     date: "October 12, 2023",
-    author: "Tom Safaris Team",
+    author: "Tom Madeda Team",
     image: "https://images.unsplash.com/photo-1523393665780-69d6797f1cc5?q=80&w=800&auto=format&fit=crop",
     category: "Travel Tips"
   },
@@ -28,7 +28,7 @@ const BLOG_POSTS = [
     title: "Exploring Lamu: A Journey Back in Time",
     excerpt: "Beyond the wildlife, Kenya's coast offers rich history. Discover the magic of Lamu Old Town and its Swahili heritage.",
     date: "August 20, 2023",
-    author: "Tom Safaris Team",
+    author: "Tom Madeda Team",
     image: "https://images.unsplash.com/photo-1590523741831-ab7e8b8f9c7f?q=80&w=800&auto=format&fit=crop",
     category: "Destinations"
   }

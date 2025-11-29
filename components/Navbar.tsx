@@ -51,7 +51,7 @@ const Navbar: React.FC = () => {
                 <Compass className="h-8 w-8 text-safari-sunset" />
               </motion.div>
               <span className="font-serif font-bold text-xl md:text-2xl text-safari-leaf group-hover:text-safari-earth transition-colors">
-                Tom Safaris
+                Tom Madeda Safaris
               </span>
             </Link>
           </div>
