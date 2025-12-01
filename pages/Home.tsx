@@ -1,7 +1,7 @@
 // @ts-nocheck
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, CheckCircle, Map, Shield } from 'lucide-react';
+import { ArrowRight, CheckCircle, Map, Shield, Cloud, Sun } from 'lucide-react';
 import { useData } from '../context/DataContext';
 import TourCard from '../components/TourCard';
 import { motion } from 'framer-motion';
@@ -31,10 +31,10 @@ const Home: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col min-h-screen overflow-x-hidden">
+    <div className="flex flex-col min-h-screen overflow-x-hidden bg-safari-sand">
       
       {/* Cinematic Hero Section */}
-      <section className="relative h-screen flex items-center justify-center overflow-hidden bg-black">
+      <section className="relative h-screen flex items-center justify-center overflow-hidden bg-stone-900">
         <div className="absolute inset-0 z-0">
           <motion.div
             initial={{ scale: 1.05 }}
@@ -54,8 +54,8 @@ const Home: React.FC = () => {
               className="w-full h-full object-cover opacity-90"
             />
           </motion.div>
-          {/* Layered gradients for text legibility and mood */}
-          <div className="absolute inset-0 bg-gradient-to-t from-stone-900 via-transparent to-black/40"></div>
+          {/* Layered gradients for text legibility and mood - Added blue tint to shadow */}
+          <div className="absolute inset-0 bg-gradient-to-t from-stone-900 via-stone-900/40 to-safari-sky/10"></div>
           <div className="absolute inset-0 bg-black/20"></div>
         </div>
         
@@ -63,8 +63,13 @@ const Home: React.FC = () => {
           <motion.div
             initial={{ opacity: 0, y: 50, filter: "blur(10px)" }}
             animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-            transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }} // Custom "cinematic" easing
+            transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
           >
+            <div className="inline-block mb-4">
+                 <span className="py-1 px-4 border border-safari-sky/50 rounded-full text-safari-sky text-sm font-bold tracking-widest uppercase bg-black/30 backdrop-blur-md">
+                    Discover The Wild
+                 </span>
+            </div>
             <h1 className="text-4xl md:text-7xl font-serif font-black text-white mb-6 leading-tight drop-shadow-2xl">
               {pageContent?.home?.heroTitle || companyInfo.slogan}
             </h1>
@@ -89,7 +94,7 @@ const Home: React.FC = () => {
               <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                 <Link 
                   to="/tours" 
-                  className="glass px-8 py-4 text-white font-bold rounded-full hover:bg-white/20 transition-all shadow-lg flex items-center justify-center uppercase tracking-wide border-2 border-white/30 backdrop-blur-sm"
+                  className="glass px-8 py-4 text-white font-bold rounded-full hover:bg-white/20 transition-all shadow-lg flex items-center justify-center uppercase tracking-wide border-2 border-safari-sky/30 backdrop-blur-sm"
                 >
                   View All Tours
                 </Link>
@@ -98,22 +103,24 @@ const Home: React.FC = () => {
           </motion.div>
         </div>
         
-        {/* Scroll Indicator */}
+        {/* Scroll Indicator with Blue Accent */}
         <motion.div 
           initial={{ opacity: 0 }}
           animate={{ opacity: 1, y: [0, 10, 0] }}
           transition={{ delay: 1.5, duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute bottom-10 left-1/2 transform -translate-x-1/2 text-white/50"
+          className="absolute bottom-10 left-1/2 transform -translate-x-1/2 text-safari-sky"
         >
-          <div className="w-6 h-10 border-2 border-white/50 rounded-full flex justify-center">
-            <div className="w-1 h-2 bg-white rounded-full mt-2"></div>
+          <div className="w-6 h-10 border-2 border-safari-sky/50 rounded-full flex justify-center bg-black/20 backdrop-blur-sm">
+            <div className="w-1 h-2 bg-safari-sky rounded-full mt-2"></div>
           </div>
         </motion.div>
       </section>
 
-      {/* Intro Section */}
-      <section className="py-24 bg-white relative">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* Intro Section - Savanna Background */}
+      <section className="py-24 bg-safari-sand relative">
+        <div className="absolute top-0 right-0 w-64 h-64 bg-safari-sky/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
+        
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <motion.div 
             initial="hidden"
             whileInView="visible"
@@ -121,10 +128,13 @@ const Home: React.FC = () => {
             variants={containerVariants}
             className="text-center max-w-3xl mx-auto mb-20"
           >
+            <motion.div variants={itemVariants} className="flex justify-center mb-4">
+                 <Sun className="w-10 h-10 text-safari-gold" />
+            </motion.div>
             <motion.h2 variants={itemVariants} className="text-4xl font-serif font-bold text-stone-900 mb-4">
               Welcome to {companyInfo.name}
             </motion.h2>
-            <motion.div variants={itemVariants} className="w-24 h-1 bg-safari-gold mx-auto mb-8"></motion.div>
+            <motion.div variants={itemVariants} className="w-24 h-1 bg-gradient-to-r from-safari-gold to-safari-sky mx-auto mb-8"></motion.div>
             <motion.p variants={itemVariants} className="text-xl text-stone-600 leading-relaxed font-light">
               We are a Kilifi-based safari and adventure tour operator dedicated to organizing wildlife, coastal, and adventure tours across Kenya. Our mission is to combine safety, professionalism, and authentic African adventure to create memories that last a lifetime.
             </motion.p>
@@ -145,9 +155,11 @@ const Home: React.FC = () => {
               <motion.div 
                 key={idx}
                 variants={itemVariants}
-                className="p-8 bg-stone-50 rounded-2xl border border-stone-100 hover:shadow-xl transition-shadow duration-300"
+                className="p-8 bg-white rounded-2xl border border-stone-100 hover:shadow-xl hover:border-safari-sky/30 transition-all duration-300 relative overflow-hidden group"
               >
-                <div className="w-20 h-20 bg-safari-leaf/10 text-safari-leaf rounded-full flex items-center justify-center mx-auto mb-6">
+                <div className="absolute top-0 right-0 w-20 h-20 bg-safari-sky/10 rounded-bl-full -mr-4 -mt-4 transition-transform group-hover:scale-150 duration-500"></div>
+                
+                <div className="w-20 h-20 bg-safari-leaf/10 text-safari-leaf rounded-full flex items-center justify-center mx-auto mb-6 relative z-10 group-hover:bg-safari-sky/20 group-hover:text-safari-blue transition-colors">
                   <feature.icon className="w-10 h-10" />
                 </div>
                 <h3 className="text-2xl font-bold mb-4 text-stone-800">{feature.title}</h3>
@@ -159,7 +171,7 @@ const Home: React.FC = () => {
       </section>
 
       {/* Featured Tours */}
-      <section className="py-24 bg-stone-100">
+      <section className="py-24 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div 
              initial={{ opacity: 0, x: -20 }}
@@ -168,6 +180,10 @@ const Home: React.FC = () => {
              className="flex flex-col md:flex-row justify-between items-end mb-16"
           >
             <div>
+              <div className="flex items-center space-x-2 mb-2">
+                 <Cloud className="w-5 h-5 text-safari-sky" />
+                 <span className="text-safari-blue font-bold tracking-widest text-xs uppercase">Unforgettable Journeys</span>
+              </div>
               <h2 className="text-4xl font-serif font-bold text-stone-900 mb-3">Featured Adventures</h2>
               <p className="text-stone-600 text-lg">Our most popular safari packages picked just for you.</p>
             </div>
@@ -194,7 +210,8 @@ const Home: React.FC = () => {
       <section className="py-32 relative overflow-hidden flex items-center justify-center">
         <div className="absolute inset-0 z-0">
              <img src="https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?q=80&w=2000&auto=format&fit=crop" alt="Background" className="w-full h-full object-cover" />
-             <div className="absolute inset-0 bg-safari-leaf/80 mix-blend-multiply"></div>
+             {/* Gradient overlay mixing earth and sky */}
+             <div className="absolute inset-0 bg-gradient-to-r from-safari-leaf/90 to-safari-sky/30 mix-blend-multiply"></div>
         </div>
         
         <motion.div 
@@ -205,14 +222,14 @@ const Home: React.FC = () => {
         >
           <h2 className="text-4xl font-serif font-bold mb-12 text-white">Why Travelers Choose Us</h2>
           
-          <div className="glass text-stone-900 p-12 rounded-2xl shadow-2xl backdrop-blur-md border border-white/20">
+          <div className="glass-blue text-stone-900 p-12 rounded-2xl shadow-2xl backdrop-blur-md border border-white/20 relative">
              <div className="flex justify-center mb-6 text-safari-gold">
-               {[1, 2, 3, 4, 5].map(i => <span key={i} className="text-3xl">★</span>)}
+               {[1, 2, 3, 4, 5].map(i => <span key={i} className="text-3xl drop-shadow-md">★</span>)}
              </div>
-            <blockquote className="text-2xl italic font-serif font-light mb-8 leading-relaxed">
+            <blockquote className="text-2xl italic font-serif font-light mb-8 leading-relaxed text-stone-100">
               "We had the most amazing time with {companyInfo.name}. The driver was knowledgeable, the lodges were beautiful, and seeing the lions in Maasai Mara was a dream come true!"
             </blockquote>
-            <cite className="font-bold not-italic text-safari-sunset block text-lg tracking-wide uppercase">- Sarah J., United Kingdom</cite>
+            <cite className="font-bold not-italic text-safari-sky block text-lg tracking-wide uppercase">- Sarah J., United Kingdom</cite>
           </div>
         </motion.div>
       </section>

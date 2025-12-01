@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useData } from '../context/DataContext';
-import { Clock, CheckCircle, ArrowLeft, Camera, XCircle, MapPin } from 'lucide-react';
+import { Clock, CheckCircle, ArrowLeft, Camera, XCircle, MapPin, CloudSun } from 'lucide-react';
 import { Tour } from '../types';
 import { motion } from 'framer-motion';
 
@@ -21,7 +21,7 @@ const TourDetails: React.FC = () => {
 
   if (!tour) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center bg-safari-sand">
         <div className="text-center">
           <h2 className="text-2xl font-bold text-stone-800">Tour not found</h2>
           <Link to="/tours" className="text-safari-sunset mt-4 inline-block hover:underline">Return to Tours</Link>
@@ -31,8 +31,6 @@ const TourDetails: React.FC = () => {
   }
 
   // Smart Gallery Logic 
-  // 1. Check if the tour has manually uploaded gallery images (from Admin)
-  // 2. If not, fallback to smart category images
   const getDisplayImages = () => {
     if (tour.gallery && tour.gallery.length > 0) {
       return tour.gallery;
@@ -67,7 +65,7 @@ const TourDetails: React.FC = () => {
   const galleryImages = getDisplayImages();
 
   return (
-    <div className="bg-stone-50 min-h-screen pb-20">
+    <div className="bg-safari-sand min-h-screen pb-20">
       
       {/* Header Image */}
       <div className="relative h-[70vh] overflow-hidden">
@@ -79,10 +77,11 @@ const TourDetails: React.FC = () => {
         >
             <img src={tour.image} alt={tour.name} className="w-full h-full object-cover" />
         </motion.div>
-        <div className="absolute inset-0 bg-gradient-to-t from-stone-900 via-stone-900/40 to-transparent"></div>
+        {/* Gradient with pinch of blue at the bottom */}
+        <div className="absolute inset-0 bg-gradient-to-t from-stone-900 via-stone-900/40 to-safari-sky/5"></div>
         
         <div className="absolute top-24 left-0 w-full p-4 md:p-12">
-            <Link to="/tours" className="text-white/80 hover:text-white flex items-center mb-6 text-sm font-medium transition-colors w-fit bg-black/20 backdrop-blur-md px-4 py-2 rounded-full">
+            <Link to="/tours" className="text-white/80 hover:text-white flex items-center mb-6 text-sm font-medium transition-colors w-fit bg-black/20 backdrop-blur-md px-4 py-2 rounded-full border border-white/10 hover:border-safari-sky/50">
                 <ArrowLeft className="w-4 h-4 mr-2" /> Back to Tours
             </Link>
         </div>
@@ -94,16 +93,16 @@ const TourDetails: React.FC = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8 }}
             >
-                <div className="flex items-center space-x-2 text-safari-gold mb-2 font-bold tracking-wider uppercase text-sm">
-                    <MapPin className="w-4 h-4" /> <span>{tour.category} Safari</span>
+                <div className="flex items-center space-x-2 text-safari-sky mb-2 font-bold tracking-wider uppercase text-sm drop-shadow-md">
+                    <CloudSun className="w-4 h-4" /> <span>{tour.category} Safari</span>
                 </div>
-                <h1 className="text-4xl md:text-7xl font-serif font-black text-white mb-6 leading-tight max-w-4xl">{tour.name}</h1>
+                <h1 className="text-4xl md:text-7xl font-serif font-black text-white mb-6 leading-tight max-w-4xl drop-shadow-lg">{tour.name}</h1>
                 <div className="flex flex-wrap gap-8 text-white text-base">
-                <div className="flex items-center bg-white/10 backdrop-blur-md px-4 py-2 rounded-lg border border-white/10">
+                <div className="flex items-center bg-white/10 backdrop-blur-md px-4 py-2 rounded-lg border border-white/10 hover:bg-safari-sky/10 transition-colors">
                     <Clock className="w-5 h-5 mr-3 text-safari-gold" />
                     <span className="font-medium">{tour.durationDays} Days / {Math.max(1, tour.durationDays - 1)} Nights</span>
                 </div>
-                <div className="flex items-center bg-white/10 backdrop-blur-md px-4 py-2 rounded-lg border border-white/10">
+                <div className="flex items-center bg-white/10 backdrop-blur-md px-4 py-2 rounded-lg border border-white/10 hover:bg-safari-sky/10 transition-colors">
                     <span className="text-safari-gold font-bold text-2xl mr-2">${tour.priceUsd}</span>
                     <span className="opacity-80 mt-1 text-sm">per person</span>
                 </div>
@@ -124,15 +123,15 @@ const TourDetails: React.FC = () => {
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                className="bg-white rounded-2xl shadow-sm p-8 md:p-10 border border-stone-100"
+                className="bg-white rounded-2xl shadow-sm p-8 md:p-10 border border-stone-200"
             >
               <h2 className="text-3xl font-serif font-bold text-stone-800 mb-6">Experience Overview</h2>
               <p className="text-stone-600 leading-relaxed mb-10 text-lg font-light">{tour.fullDescription}</p>
               
-              <h3 className="font-bold text-stone-800 mb-6 text-lg uppercase tracking-wide">Highlights</h3>
+              <h3 className="font-bold text-stone-800 mb-6 text-lg uppercase tracking-wide border-b-2 border-safari-sky/30 inline-block pb-1">Highlights</h3>
               <ul className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {tour.highlights.map((highlight, index) => (
-                  <li key={index} className="flex items-center bg-stone-50 p-4 rounded-lg hover:shadow-md transition-shadow">
+                  <li key={index} className="flex items-center bg-safari-sand p-4 rounded-lg hover:shadow-md transition-shadow hover:bg-white">
                     <CheckCircle className="w-5 h-5 text-safari-leaf mr-4 flex-shrink-0" />
                     <span className="text-stone-700 font-medium">{highlight}</span>
                   </li>
@@ -145,16 +144,16 @@ const TourDetails: React.FC = () => {
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                className="bg-white rounded-2xl shadow-sm p-8 md:p-10 border border-stone-100"
+                className="bg-white rounded-2xl shadow-sm p-8 md:p-10 border border-stone-200"
             >
               <h2 className="text-3xl font-serif font-bold text-stone-800 mb-10">Day-by-Day Itinerary</h2>
-              <div className="space-y-12 relative border-l-2 border-stone-200 ml-5 pl-10">
+              <div className="space-y-12 relative border-l-2 border-safari-sand ml-5 pl-10">
                 {tour.itinerary.map((day) => (
                   <div key={day.day} className="relative group">
-                    <span className="absolute -left-[54px] top-0 flex items-center justify-center w-9 h-9 rounded-full bg-safari-earth text-white font-bold border-4 border-white shadow-sm group-hover:scale-110 transition-transform">
+                    <span className="absolute -left-[54px] top-0 flex items-center justify-center w-9 h-9 rounded-full bg-safari-leaf text-white font-bold border-4 border-white shadow-sm group-hover:bg-safari-sky group-hover:scale-110 transition-all">
                       {day.day}
                     </span>
-                    <h3 className="text-xl font-bold text-stone-800 mb-3 group-hover:text-safari-sunset transition-colors">Day {day.day}: {day.title}</h3>
+                    <h3 className="text-xl font-bold text-stone-800 mb-3 group-hover:text-safari-blue transition-colors">Day {day.day}: {day.title}</h3>
                     <p className="text-stone-600 leading-relaxed">{day.description}</p>
                   </div>
                 ))}
@@ -166,14 +165,14 @@ const TourDetails: React.FC = () => {
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                className="bg-white rounded-2xl shadow-sm p-8 md:p-10 border border-stone-100"
+                className="bg-white rounded-2xl shadow-sm p-8 md:p-10 border border-stone-200"
             >
                 <h2 className="text-2xl font-serif font-bold text-stone-800 mb-8 flex items-center">
-                    <Camera className="w-6 h-6 mr-3 text-safari-gold" /> Photo Gallery
+                    <Camera className="w-6 h-6 mr-3 text-safari-sky" /> Photo Gallery
                 </h2>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                     {galleryImages.map((img, idx) => (
-                        <div key={idx} className="aspect-square rounded-xl overflow-hidden cursor-pointer group">
+                        <div key={idx} className="aspect-square rounded-xl overflow-hidden cursor-pointer group shadow-sm">
                             <img 
                                 src={img} 
                                 alt={`Gallery ${idx}`} 
@@ -195,11 +194,11 @@ const TourDetails: React.FC = () => {
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.5 }}
-                className="glass rounded-2xl shadow-xl p-8 sticky top-28 border border-white/40"
+                className="glass-blue rounded-2xl shadow-xl p-8 sticky top-28 border border-white/40 bg-white/50 backdrop-blur-md"
             >
               <h3 className="text-2xl font-bold text-stone-900 mb-2 font-serif">Ready to book?</h3>
               <p className="text-stone-600 mb-8 text-sm">
-                Secure your spot for the <span className="font-semibold text-safari-earth">{tour.name}</span> today.
+                Secure your spot for the <span className="font-semibold text-safari-blue">{tour.name}</span> today.
               </p>
               
               <Link 
@@ -210,7 +209,7 @@ const TourDetails: React.FC = () => {
               </Link>
               
               <div className="space-y-6">
-                <div className="bg-white/50 p-4 rounded-xl border border-white/60">
+                <div className="bg-white p-4 rounded-xl border border-safari-sky/10 shadow-sm">
                     <h4 className="font-bold text-stone-800 mb-3 text-sm flex items-center uppercase tracking-wide"><CheckCircle className="w-4 h-4 mr-2 text-green-600" /> What's Included</h4>
                     <ul className="text-sm text-stone-600 space-y-2">
                     {['Transport in Safari Vehicle', 'Full board accommodation', 'All Park Entrance Fees', 'Professional English speaking guide', 'Game drives as per itinerary'].map(item => (
@@ -219,7 +218,7 @@ const TourDetails: React.FC = () => {
                     </ul>
                 </div>
 
-                <div className="bg-white/50 p-4 rounded-xl border border-white/60">
+                <div className="bg-white p-4 rounded-xl border border-safari-sky/10 shadow-sm">
                     <h4 className="font-bold text-stone-800 mb-3 text-sm flex items-center uppercase tracking-wide"><XCircle className="w-4 h-4 mr-2 text-red-500" /> What's Excluded</h4>
                     <ul className="text-sm text-stone-600 space-y-2">
                     {['International Flights', 'Tips & Gratuities', 'Personal Insurance', 'Alcoholic drinks'].map(item => (

@@ -1,7 +1,7 @@
 // @ts-nocheck
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, Phone, Compass, MessageCircle, Settings } from 'lucide-react';
+import { Menu, X, Phone, Compass, MessageCircle, Settings, CloudSun } from 'lucide-react';
 import { useData } from '../context/DataContext';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -36,8 +36,8 @@ const Navbar: React.FC = () => {
       transition={{ duration: 0.5, ease: "easeOut" }}
       className={`sticky top-0 z-50 transition-all duration-300 ${
         scrolled 
-          ? 'bg-white/80 backdrop-blur-md shadow-sm border-b border-white/20' 
-          : 'bg-white shadow-md border-b-4 border-safari-earth'
+          ? 'bg-white/90 backdrop-blur-md shadow-sm border-b border-safari-sky/20' 
+          : 'bg-safari-sand shadow-md border-b-4 border-safari-leaf'
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -47,12 +47,16 @@ const Navbar: React.FC = () => {
               <motion.div
                 whileHover={{ rotate: 360 }}
                 transition={{ duration: 1, ease: "easeInOut" }}
+                className="bg-safari-sky/10 p-1.5 rounded-full"
               >
                 <Compass className="h-8 w-8 text-safari-sunset" />
               </motion.div>
-              <span className="font-serif font-bold text-xl md:text-2xl text-safari-leaf group-hover:text-safari-earth transition-colors">
-                Tom Madeda Safaris
-              </span>
+              <div className="flex flex-col">
+                <span className="font-serif font-bold text-xl md:text-2xl text-safari-leaf group-hover:text-safari-earth transition-colors leading-none">
+                    Tom Madeda
+                </span>
+                <span className="text-[10px] tracking-widest uppercase text-safari-blue font-bold">Safaris & Adventure</span>
+              </div>
             </Link>
           </div>
 
@@ -65,21 +69,21 @@ const Navbar: React.FC = () => {
                 className="relative group py-2"
               >
                 <span className={`text-sm font-medium transition-colors duration-200 ${
-                  isActive(link.path) ? 'text-safari-sunset' : 'text-stone-600 group-hover:text-safari-earth'
+                  isActive(link.path) ? 'text-safari-blue' : 'text-stone-600 group-hover:text-safari-earth'
                 }`}>
                   {link.name}
                 </span>
                 {isActive(link.path) && (
                   <motion.div 
                     layoutId="underline"
-                    className="absolute bottom-0 left-0 w-full h-0.5 bg-safari-sunset"
+                    className="absolute bottom-0 left-0 w-full h-0.5 bg-safari-sky"
                   />
                 )}
               </Link>
             ))}
 
             {isAuthenticated && (
-              <Link to="/admin" className="text-sm font-bold text-safari-sunset flex items-center bg-orange-50 px-3 py-1 rounded-full border border-orange-100">
+              <Link to="/admin" className="text-sm font-bold text-safari-sunset flex items-center bg-orange-50 px-3 py-1 rounded-full border border-orange-100 hover:bg-orange-100">
                 <Settings className="w-3 h-3 mr-1" /> Admin
               </Link>
             )}
@@ -91,7 +95,7 @@ const Navbar: React.FC = () => {
                 href={companyInfo.social.whatsapp}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center px-4 py-2 bg-green-600 text-white rounded shadow-lg hover:shadow-xl hover:bg-green-700 transition-all"
+                className="flex items-center px-4 py-2 bg-green-600 text-white rounded shadow-lg hover:shadow-xl hover:bg-green-700 transition-all border-b-2 border-green-800"
                 title="Chat on WhatsApp"
               >
                 <MessageCircle className="w-4 h-4 mr-2" />
@@ -102,7 +106,7 @@ const Navbar: React.FC = () => {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 href={`tel:${companyInfo.phone}`}
-                className="flex items-center px-4 py-2 bg-safari-leaf text-white rounded shadow-lg hover:shadow-xl hover:bg-green-900 transition-all"
+                className="flex items-center px-4 py-2 bg-safari-leaf text-white rounded shadow-lg hover:shadow-xl hover:bg-stone-700 transition-all border-b-2 border-stone-800"
               >
                 <Phone className="w-4 h-4 mr-2" />
                 <span>Call Us</span>
@@ -114,7 +118,7 @@ const Navbar: React.FC = () => {
           <div className="flex items-center md:hidden">
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="text-stone-600 hover:text-stone-900 focus:outline-none"
+              className="text-stone-600 hover:text-safari-blue focus:outline-none p-2 bg-safari-sand rounded-md"
             >
               {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
             </button>
@@ -129,7 +133,7 @@ const Navbar: React.FC = () => {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="md:hidden bg-stone-50 border-t border-stone-200 overflow-hidden"
+            className="md:hidden bg-safari-sand border-t border-stone-200 overflow-hidden shadow-xl"
           >
             <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
               {navLinks.map((link) => (
@@ -139,8 +143,8 @@ const Navbar: React.FC = () => {
                   onClick={() => setIsOpen(false)}
                   className={`block px-3 py-2 rounded-md text-base font-medium ${
                     isActive(link.path)
-                      ? 'bg-safari-sand text-safari-sunset'
-                      : 'text-stone-700 hover:bg-stone-200'
+                      ? 'bg-white text-safari-blue border-l-4 border-safari-sky'
+                      : 'text-stone-700 hover:bg-stone-100 hover:text-safari-leaf'
                   }`}
                 >
                   {link.name}
@@ -157,7 +161,7 @@ const Navbar: React.FC = () => {
                 </Link>
               )}
 
-              <div className="pt-4 space-y-2">
+              <div className="pt-4 space-y-2 pb-4">
                 <a
                   href={companyInfo.social.whatsapp}
                   target="_blank"
@@ -168,7 +172,7 @@ const Navbar: React.FC = () => {
                 </a>
                 <a
                   href={`tel:${companyInfo.phone}`}
-                  className="flex items-center justify-center w-full px-4 py-3 bg-safari-leaf text-white rounded hover:bg-green-900 font-bold"
+                  className="flex items-center justify-center w-full px-4 py-3 bg-safari-leaf text-white rounded hover:bg-stone-700 font-bold"
                 >
                   <Phone className="w-5 h-5 mr-2" /> Call Us
                 </a>
