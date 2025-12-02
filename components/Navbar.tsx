@@ -1,4 +1,3 @@
-
 // @ts-nocheck
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
@@ -55,7 +54,7 @@ const Navbar: React.FC = () => {
               </motion.div>
               <div className="flex flex-col">
                 <span className="font-serif font-bold text-xl md:text-2xl text-safari-leaf group-hover:text-safari-earth transition-colors leading-none">
-                    Tom Madeda
+                    Tom "Cruse" Madeda
                 </span>
                 <span className="text-[10px] tracking-widest uppercase text-safari-blue font-bold">Safaris & Adventure</span>
               </div>

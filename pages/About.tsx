@@ -1,4 +1,3 @@
-
 // @ts-nocheck
 import React from 'react';
 import { Link } from 'react-router-dom';
@@ -83,12 +82,13 @@ const About: React.FC = () => {
                 className="w-40 h-40 rounded-full object-cover shadow-lg border-4 border-safari-gold"
             />
             <div className="text-center md:text-left">
-                <h3 className="text-2xl font-bold text-white mb-3">Meet Our Team</h3>
-                <p className="text-stone-300 mb-6 leading-relaxed">
-                    Our drivers and guides are professionally trained and certified, with a deep passion for wildlife conservation. They are your companions, storytellers, and protectors in the bush.
+                <h3 className="text-2xl font-bold text-white mb-2">Meet Our Founder</h3>
+                <h4 className="text-xl text-safari-gold font-serif italic mb-4">Tom "Cruse" Madeda</h4>
+                <p className="text-stone-300 mb-6 leading-relaxed text-sm">
+                    Founder and Head Guide, Tom "Cruse" Madeda, is more than just a tour operator; he is a legend of the Kenyan coast. With over 15 years of navigating the savannahs and coastlines, Tom earned the nickname "Cruse" for his smooth navigation of challenging terrains and his "mission possible" attitude toward finding the Big Five. His passion for wildlife conservation and his charismatic storytelling turn every safari into a blockbuster adventure.
                 </p>
                 <Link to="/contact" className="inline-block px-6 py-3 bg-safari-sunset text-white font-bold rounded hover:bg-orange-600 transition-colors">
-                    Plan your trip with us &rarr;
+                    Plan your trip with "Cruse" &rarr;
                 </Link>
             </div>
           </motion.div>

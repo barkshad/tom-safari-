@@ -1,4 +1,3 @@
-
 // @ts-nocheck
 import React, { useState, useRef } from 'react';
 import { useData } from '../context/DataContext';
@@ -221,8 +220,8 @@ const Admin: React.FC = () => {
       {/* Sidebar */}
       <div className="w-full md:w-64 bg-stone-900 text-white flex-shrink-0">
         <div className="p-6 border-b border-stone-700">
-           <h1 className="text-xl font-bold font-serif flex items-center">
-             <Edit2 className="w-5 h-5 mr-2 text-safari-gold" /> Admin Panel
+           <h1 className="text-lg font-bold font-serif flex items-center">
+             <Edit2 className="w-5 h-5 mr-2 text-safari-gold" /> Admin - Tom (Cruse)
            </h1>
         </div>
         <nav className="p-4 space-y-2">

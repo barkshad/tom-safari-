@@ -1,12 +1,11 @@
-
 import { Tour, PageContent, CurrencyConfig } from './types';
 
 export const COMPANY_INFO = {
-  name: "Tom Madeda Safari and Adventure Kenya",
+  name: "Tom 'Cruse' Madeda Safari and Adventure",
   email: "info@tomsafaris.co.ke",
   phone: "+254 721 787 589",
   location: "Titanic Plaza, Kilifi, Kenya",
-  slogan: "Turning your travel dreams into extraordinary experiences",
+  slogan: "Turning your travel dreams into extraordinary experiences – Hosted by Tom 'Cruse'",
   social: {
     facebook: "#",
     instagram: "https://www.instagram.com/madeda_thomas?igsh=eTA0czUxejI2ZnZp",
@@ -31,17 +30,16 @@ export const SUPPORTED_CURRENCIES: CurrencyConfig[] = [
 
 export const DEFAULT_PAGE_CONTENT: PageContent = {
   home: {
-    heroTitle: "Turning your travel dreams into extraordinary experiences",
-    heroSubtitle: "Experience the thrill of the wild with Kenya's premier safari experts.",
+    heroTitle: "Cruise the Wild with Tom 'Cruse'",
+    heroSubtitle: "Experience the thrill of the wild with Kenya's premier safari expert, Tom 'Cruse' Madeda.",
     heroImage: "https://share.google/images/2bwfbvx4i34vzVT0v"
   },
   about: {
-    philosophy: "At Tom Madeda Safari and Adventure Kenya, we are passionate about creating unforgettable experiences in the heart of nature. With years of expertise in guiding thrilling safaris and outdoor adventures, our dedicated team prioritizes safety, sustainability, and exceptional service."
+    philosophy: "At Tom 'Cruse' Madeda Safari and Adventure, we are passionate about creating unforgettable experiences in the heart of nature. Led by Tom 'Cruse' himself, our dedicated team prioritizes safety, sustainability, and exceptional service to ensure your mission is always possible."
   }
 };
 
 export const TOURS: Tour[] = [
-  // ... (Tours data remains unchanged, just ensuring the export is here. In a real file update, I would include the full array. Assuming previous content is preserved if I don't list it, but the XML requires full content. I will paste the previous TOURS array here.)
   // --- EXCURSIONS FROM MOMBASA ---
   {
     id: "half-day-mombasa",
