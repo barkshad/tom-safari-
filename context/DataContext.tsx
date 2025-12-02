@@ -19,6 +19,8 @@ interface DataContextType {
   changePassword: (newPassword: string) => void;
   logout: () => void;
   resetData: () => void;
+  exchangeRate: number;
+  refreshExchangeRate: () => Promise<void>;
 }
 
 const DataContext = createContext<DataContextType | undefined>(undefined);
@@ -68,6 +70,53 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => {
     return localStorage.getItem('isAdmin') === 'true';
   });
+
+  // Exchange Rate Logic
+  const [exchangeRate, setExchangeRate] = useState<number>(0.79); // Default fallback
+
+  const fetchExchangeRate = async () => {
+    try {
+      const response = await fetch('https://open.er-api.com/v6/latest/USD');
+      const data = await response.json();
+      if (data && data.rates && data.rates.GBP) {
+        const rate = data.rates.GBP;
+        setExchangeRate(rate);
+        localStorage.setItem('exchangeRateData', JSON.stringify({
+          rate: rate,
+          timestamp: Date.now()
+        }));
+        return rate;
+      }
+    } catch (error) {
+      console.error("Failed to fetch exchange rate:", error);
+    }
+    return 0.79;
+  };
+
+  useEffect(() => {
+    const savedRateData = localStorage.getItem('exchangeRateData');
+    if (savedRateData) {
+      try {
+        const parsed = JSON.parse(savedRateData);
+        const twelveHours = 12 * 60 * 60 * 1000;
+        if (Date.now() - parsed.timestamp < twelveHours) {
+          setExchangeRate(parsed.rate);
+        } else {
+          // Cache expired, fetch new
+          fetchExchangeRate();
+        }
+      } catch (e) {
+        fetchExchangeRate();
+      }
+    } else {
+      fetchExchangeRate();
+    }
+  }, []);
+
+  const refreshExchangeRate = async () => {
+    await fetchExchangeRate();
+  };
+
 
   // Helper to safely save to storage
   const saveToStorage = (key: string, data: any) => {
@@ -186,7 +235,9 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
       login,
       changePassword,
       logout,
-      resetData
+      resetData,
+      exchangeRate,
+      refreshExchangeRate
     }}>
       {children}
     </DataContext.Provider>

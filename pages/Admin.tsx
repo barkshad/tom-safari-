@@ -21,7 +21,9 @@ const Admin: React.FC = () => {
     pageContent,
     updatePageContent,
     changePassword,
-    resetData 
+    resetData,
+    exchangeRate,
+    refreshExchangeRate
   } = useData();
 
   const [password, setPassword] = useState('');
@@ -360,7 +362,7 @@ const Admin: React.FC = () => {
                         name: "New Adventure",
                         durationDays: 3,
                         priceUsd: 500,
-                        priceGbp: 400,
+                        priceGbp: Math.round(500 * exchangeRate),
                         image: "https://images.unsplash.com/photo-1516426122078-c23e76319801?q=80&w=1000",
                         gallery: [],
                         category: "Safari",
@@ -623,17 +625,46 @@ const Admin: React.FC = () => {
                                     type="number" 
                                     className="w-full p-3 border rounded" 
                                     value={editingTour.priceUsd} 
-                                    onChange={(e) => setEditingTour({...editingTour, priceUsd: Number(e.target.value)})}
+                                    onChange={(e) => {
+                                        const newUsd = Number(e.target.value);
+                                        setEditingTour({
+                                            ...editingTour, 
+                                            priceUsd: newUsd,
+                                            priceGbp: Math.round(newUsd * exchangeRate)
+                                        });
+                                    }}
                                 />
                             </div>
-                            <div>
-                                <label className="block text-sm font-bold mb-1">Price GBP</label>
-                                <input 
-                                    type="number" 
-                                    className="w-full p-3 border rounded" 
-                                    value={editingTour.priceGbp} 
-                                    onChange={(e) => setEditingTour({...editingTour, priceGbp: Number(e.target.value)})}
-                                />
+                            <div className="relative">
+                                <label className="block text-sm font-bold mb-1 flex items-center">
+                                    Price GBP (Auto) 
+                                </label>
+                                <div className="relative">
+                                    <input 
+                                        type="number" 
+                                        readOnly
+                                        className="w-full p-3 border rounded bg-stone-100 text-stone-500 cursor-not-allowed" 
+                                        value={editingTour.priceGbp} 
+                                    />
+                                    <button 
+                                        onClick={async (e) => {
+                                            e.preventDefault();
+                                            await refreshExchangeRate();
+                                            if(editingTour.priceUsd) {
+                                                 setEditingTour({
+                                                    ...editingTour, 
+                                                    priceGbp: Math.round(editingTour.priceUsd * exchangeRate)
+                                                });
+                                            }
+                                            showToast("Rate refreshed: " + exchangeRate.toFixed(4));
+                                        }}
+                                        className="absolute right-2 top-2 p-1 hover:bg-stone-200 rounded transition-colors"
+                                        title="Refresh Exchange Rate"
+                                    >
+                                        <RefreshCw className="w-5 h-5 text-stone-500" />
+                                    </button>
+                                </div>
+                                <p className="text-xs text-stone-400 mt-1">1 USD = {exchangeRate.toFixed(4)} GBP</p>
                             </div>
                             <div>
                                 <label className="block text-sm font-bold mb-1">Duration (Days)</label>
