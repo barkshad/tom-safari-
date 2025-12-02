@@ -3,11 +3,13 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useData } from '../context/DataContext';
+import PageTransition from '../components/PageTransition';
 
 const About: React.FC = () => {
   const { companyInfo, pageContent } = useData();
   
   return (
+    <PageTransition>
     <div className="bg-white">
       {/* Header */}
       <div className="relative h-[60vh] flex items-center justify-center overflow-hidden">
@@ -50,7 +52,7 @@ const About: React.FC = () => {
             className="prose prose-lg prose-stone mx-auto"
         >
           <h2 className="text-3xl font-serif font-bold text-stone-900 mb-8">Our Philosophy</h2>
-          <div className="bg-safari-sand/30 border-l-4 border-safari-gold p-8 rounded-r-lg italic text-xl text-stone-700 mb-10">
+          <div className="glass-premium border-l-4 border-safari-gold p-8 rounded-r-2xl italic text-xl text-stone-700 mb-10 shadow-sm">
             "{pageContent?.about?.philosophy || "At " + companyInfo.name + ", we are passionate about creating unforgettable experiences in the heart of nature. With years of expertise in guiding thrilling safaris and outdoor adventures, our dedicated team prioritizes safety, sustainability, and exceptional service."}"
           </div>
 
@@ -65,7 +67,7 @@ const About: React.FC = () => {
                 { title: "Curated Tours", desc: "From the vast savannahs of the Maasai Mara to the pristine beaches of Lamu, our itineraries are carefully crafted to maximize your experience." },
                 { title: "Service Quality", desc: "We believe in personal attention. From your first inquiry to your flight home, our team is dedicated to your comfort and safety." }
             ].map((item, idx) => (
-                <li key={idx} className="flex flex-col sm:flex-row sm:items-start p-4 bg-stone-50 rounded-lg hover:shadow-md transition-shadow">
+                <li key={idx} className="glass-card flex flex-col sm:flex-row sm:items-start p-6 rounded-2xl">
                     <span className="font-bold text-safari-sunset min-w-[140px] text-lg mb-2 sm:mb-0">{item.title}</span>
                     <span className="leading-relaxed">{item.desc}</span>
                 </li>
@@ -74,20 +76,21 @@ const About: React.FC = () => {
 
           <motion.div 
              whileHover={{ y: -5 }}
-             className="mt-20 bg-stone-900 text-white p-10 rounded-2xl flex flex-col md:flex-row items-center gap-10 shadow-2xl"
+             className="mt-20 bg-stone-900 text-white p-10 rounded-3xl flex flex-col md:flex-row items-center gap-10 shadow-2xl relative overflow-hidden"
           >
+            <div className="absolute top-0 right-0 w-64 h-64 bg-safari-gold/20 rounded-full blur-[80px]"></div>
             <img 
                 src="https://images.unsplash.com/photo-1544983058-293e50626388?q=80&w=400&auto=format&fit=crop" 
                 alt="Our Team" 
-                className="w-40 h-40 rounded-full object-cover shadow-lg border-4 border-safari-gold"
+                className="w-40 h-40 rounded-full object-cover shadow-lg border-4 border-safari-gold relative z-10"
             />
-            <div className="text-center md:text-left">
+            <div className="text-center md:text-left relative z-10">
                 <h3 className="text-2xl font-bold text-white mb-2">Meet Our Founder</h3>
                 <h4 className="text-xl text-safari-gold font-serif italic mb-4">Tom "Cruse" Madeda</h4>
                 <p className="text-stone-300 mb-6 leading-relaxed text-sm">
-                    Founder and Head Guide, Tom "Cruse" Madeda, is more than just a tour operator; he is a legend of the Kenyan coast. With over 15 years of navigating the savannahs and coastlines, Tom earned the nickname "Cruse" for his smooth navigation of challenging terrains and his "mission possible" attitude toward finding the Big Five. His passion for wildlife conservation and his charismatic storytelling turn every safari into a blockbuster adventure.
+                    Founder and Head Guide, Tom "Cruse" Madeda, is more than just a tour operator; he is a legend of the Kenyan coast. With over 15 years of navigating the savannahs and coastlines, Tom earned the nickname "Cruse" for his smooth navigation of challenging terrains and his "mission possible" attitude toward finding the Big Five.
                 </p>
-                <Link to="/contact" className="inline-block px-6 py-3 bg-safari-sunset text-white font-bold rounded hover:bg-orange-600 transition-colors">
+                <Link to="/contact" className="inline-block px-6 py-3 bg-safari-sunset text-white font-bold rounded-full hover:bg-orange-600 transition-colors shadow-lg">
                     Plan your trip with "Cruse" &rarr;
                 </Link>
             </div>
@@ -95,6 +98,7 @@ const About: React.FC = () => {
         </motion.div>
       </div>
     </div>
+    </PageTransition>
   );
 };
 

@@ -1,4 +1,3 @@
-
 // @ts-nocheck
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
@@ -6,6 +5,7 @@ import { useData } from '../context/DataContext';
 import { Clock, CheckCircle, ArrowLeft, Camera, XCircle, MapPin, CloudSun } from 'lucide-react';
 import { Tour } from '../types';
 import { motion } from 'framer-motion';
+import PageTransition from '../components/PageTransition';
 
 const TourDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -19,224 +19,153 @@ const TourDetails: React.FC = () => {
     }
   }, [id, tours]);
 
-  if (!tour) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-safari-sand">
-        <div className="text-center">
-          <h2 className="text-2xl font-bold text-stone-800">Tour not found</h2>
-          <Link to="/tours" className="text-safari-sunset mt-4 inline-block hover:underline">Return to Tours</Link>
-        </div>
-      </div>
-    );
-  }
+  if (!tour) return <div className="h-screen flex items-center justify-center">Loading...</div>;
 
-  // Get dynamic price
   const price = convertPrice(tour.priceUsd);
-
+  
   // Smart Gallery Logic 
   const getDisplayImages = () => {
-    if (tour.gallery && tour.gallery.length > 0) {
-      return tour.gallery;
-    }
-
-    // Fallback logic
-    switch(tour.category) {
-      case 'Coastal':
-      case 'Day Trip': 
-        return [
-           "https://images.unsplash.com/photo-1580587771525-78b9dba3b91d?q=80&w=800&auto=format&fit=crop", 
-           "https://images.unsplash.com/photo-1582967788606-a171f1080ca8?q=80&w=800&auto=format&fit=crop", 
-           "https://images.unsplash.com/photo-1544550581-5f7ceaf7f992?q=80&w=800&auto=format&fit=crop", 
-           "https://images.unsplash.com/photo-1590523741831-ab7e8b8f9c7f?q=80&w=800&auto=format&fit=crop"  
-        ];
-      case 'Trek':
-        return [
-            "https://images.unsplash.com/photo-1650635477319-798a77f7962e?q=80&w=800&auto=format&fit=crop", 
-            "https://images.unsplash.com/photo-1519904981063-b0cf448d479e?q=80&w=800&auto=format&fit=crop", 
-            "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=800&auto=format&fit=crop" 
-        ];
-      default: 
-        return [
-            "https://images.unsplash.com/photo-1516426122078-c23e76319801?q=80&w=800&auto=format&fit=crop", 
-            "https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?q=80&w=800&auto=format&fit=crop", 
-            "https://images.unsplash.com/photo-1534449733088-02456488a032?q=80&w=800&auto=format&fit=crop", 
-            "https://images.unsplash.com/photo-1547970810-dc1eac37d174?q=80&w=800&auto=format&fit=crop"  
-        ];
-    }
+    if (tour.gallery && tour.gallery.length > 0) return tour.gallery;
+    return [tour.image, tour.image, tour.image]; // Fallback placeholder logic
   };
 
   const galleryImages = getDisplayImages();
 
   return (
-    <div className="bg-safari-sand min-h-screen pb-20">
-      
-      {/* Header Image */}
-      <div className="relative h-[70vh] overflow-hidden">
-        <motion.div 
-            initial={{ scale: 1.1 }}
-            animate={{ scale: 1 }}
-            transition={{ duration: 2 }}
-            className="w-full h-full"
-        >
-            <img src={tour.image} alt={tour.name} className="w-full h-full object-cover" />
-        </motion.div>
-        {/* Gradient with pinch of blue at the bottom */}
-        <div className="absolute inset-0 bg-gradient-to-t from-stone-900 via-stone-900/40 to-safari-sky/5"></div>
+    <PageTransition>
+      <div className="bg-safari-sand min-h-screen pb-20">
         
-        <div className="absolute top-24 left-0 w-full p-4 md:p-12">
-            <Link to="/tours" className="text-white/80 hover:text-white flex items-center mb-6 text-sm font-medium transition-colors w-fit bg-black/20 backdrop-blur-md px-4 py-2 rounded-full border border-white/10 hover:border-safari-sky/50">
-                <ArrowLeft className="w-4 h-4 mr-2" /> Back to Tours
-            </Link>
-        </div>
-
-        <div className="absolute bottom-0 left-0 w-full p-4 md:p-12 pb-20">
-          <div className="max-w-7xl mx-auto">
-            <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8 }}
-            >
-                <div className="flex items-center space-x-2 text-safari-sky mb-2 font-bold tracking-wider uppercase text-sm drop-shadow-md">
-                    <CloudSun className="w-4 h-4" /> <span>{tour.category} Safari</span>
-                </div>
-                <h1 className="text-4xl md:text-7xl font-serif font-black text-white mb-6 leading-tight max-w-4xl drop-shadow-lg">{tour.name}</h1>
-                <div className="flex flex-wrap gap-8 text-white text-base">
-                <div className="flex items-center bg-white/10 backdrop-blur-md px-4 py-2 rounded-lg border border-white/10 hover:bg-safari-sky/10 transition-colors">
-                    <Clock className="w-5 h-5 mr-3 text-safari-gold" />
-                    <span className="font-medium">{tour.durationDays} Days / {Math.max(1, tour.durationDays - 1)} Nights</span>
-                </div>
-                <div className="flex items-center bg-white/10 backdrop-blur-md px-4 py-2 rounded-lg border border-white/10 hover:bg-safari-sky/10 transition-colors">
-                    <span className="text-safari-gold font-bold text-2xl mr-2">{tour.priceUsd > 0 ? price.formatted : '$ --'}</span>
-                    <span className="opacity-80 mt-1 text-sm">per person</span>
-                </div>
-                </div>
-            </motion.div>
-          </div>
-        </div>
-      </div>
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-20 relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
+        {/* Cinematic Header */}
+        <div className="relative h-[80vh] overflow-hidden">
+          <motion.div 
+              initial={{ scale: 1.2 }}
+              animate={{ scale: 1 }}
+              transition={{ duration: 1.5, ease: "easeOut" }}
+              className="w-full h-full"
+          >
+              <img src={tour.image} alt={tour.name} className="w-full h-full object-cover" />
+          </motion.div>
+          <div className="absolute inset-0 bg-gradient-to-t from-safari-sand via-transparent to-black/30"></div>
           
-          {/* Main Content */}
-          <div className="lg:col-span-2 space-y-10">
-            
-            {/* Overview */}
-            <motion.div 
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                className="bg-white rounded-2xl shadow-sm p-8 md:p-10 border border-stone-200"
-            >
-              <h2 className="text-3xl font-serif font-bold text-stone-800 mb-6">Experience Overview</h2>
-              <p className="text-stone-600 leading-relaxed mb-10 text-lg font-light">{tour.fullDescription}</p>
-              
-              <h3 className="font-bold text-stone-800 mb-6 text-lg uppercase tracking-wide border-b-2 border-safari-sky/30 inline-block pb-1">Highlights</h3>
-              <ul className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {tour.highlights.map((highlight, index) => (
-                  <li key={index} className="flex items-center bg-safari-sand p-4 rounded-lg hover:shadow-md transition-shadow hover:bg-white">
-                    <CheckCircle className="w-5 h-5 text-safari-leaf mr-4 flex-shrink-0" />
-                    <span className="text-stone-700 font-medium">{highlight}</span>
-                  </li>
-                ))}
-              </ul>
-            </motion.div>
-
-            {/* Itinerary */}
-            <motion.div 
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                className="bg-white rounded-2xl shadow-sm p-8 md:p-10 border border-stone-200"
-            >
-              <h2 className="text-3xl font-serif font-bold text-stone-800 mb-10">Day-by-Day Itinerary</h2>
-              <div className="space-y-12 relative border-l-2 border-safari-sand ml-5 pl-10">
-                {tour.itinerary.map((day) => (
-                  <div key={day.day} className="relative group">
-                    <span className="absolute -left-[54px] top-0 flex items-center justify-center w-9 h-9 rounded-full bg-safari-leaf text-white font-bold border-4 border-white shadow-sm group-hover:bg-safari-sky group-hover:scale-110 transition-all">
-                      {day.day}
-                    </span>
-                    <h3 className="text-xl font-bold text-stone-800 mb-3 group-hover:text-safari-blue transition-colors">Day {day.day}: {day.title}</h3>
-                    <p className="text-stone-600 leading-relaxed">{day.description}</p>
-                  </div>
-                ))}
-              </div>
-            </motion.div>
-
-            {/* Photo Gallery */}
-            <motion.div 
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                className="bg-white rounded-2xl shadow-sm p-8 md:p-10 border border-stone-200"
-            >
-                <h2 className="text-2xl font-serif font-bold text-stone-800 mb-8 flex items-center">
-                    <Camera className="w-6 h-6 mr-3 text-safari-sky" /> Photo Gallery
-                </h2>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    {galleryImages.map((img, idx) => (
-                        <div key={idx} className="aspect-square rounded-xl overflow-hidden cursor-pointer group shadow-sm">
-                            <img 
-                                src={img} 
-                                alt={`Gallery ${idx}`} 
-                                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" 
-                            />
-                        </div>
-                    ))}
-                    {galleryImages.length === 0 && (
-                        <p className="col-span-4 text-center text-stone-500 italic py-8">No gallery images available.</p>
-                    )}
-                </div>
-            </motion.div>
-
-          </div>
-
-          {/* Floating Booking Widget */}
-          <div className="lg:col-span-1">
-            <motion.div 
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.5 }}
-                className="glass-blue rounded-2xl shadow-xl p-8 sticky top-28 border border-white/40 bg-white/50 backdrop-blur-md"
-            >
-              <h3 className="text-2xl font-bold text-stone-900 mb-2 font-serif">Ready to book?</h3>
-              <p className="text-stone-600 mb-8 text-sm">
-                Secure your spot for the <span className="font-semibold text-safari-blue">{tour.name}</span> today.
-              </p>
-              
-              <Link 
-                to={`/contact?tour=${tour.id}`} 
-                className="block w-full text-center py-4 bg-safari-sunset text-white font-bold rounded-xl hover:bg-orange-700 transition-all shadow-lg hover:shadow-orange-500/30 mb-8 uppercase tracking-wide transform hover:-translate-y-1"
-              >
-                Inquire Now
+          <div className="absolute top-28 left-4 md:left-12 z-20">
+              <Link to="/tours" className="glass-premium px-4 py-2 rounded-full text-stone-800 text-sm font-bold flex items-center hover:bg-white transition-colors">
+                  <ArrowLeft className="w-4 h-4 mr-2" /> Back to Tours
               </Link>
-              
-              <div className="space-y-6">
-                <div className="bg-white p-4 rounded-xl border border-safari-sky/10 shadow-sm">
-                    <h4 className="font-bold text-stone-800 mb-3 text-sm flex items-center uppercase tracking-wide"><CheckCircle className="w-4 h-4 mr-2 text-green-600" /> What's Included</h4>
-                    <ul className="text-sm text-stone-600 space-y-2">
-                    {['Transport in Safari Vehicle', 'Full board accommodation', 'All Park Entrance Fees', 'Professional English speaking guide', 'Game drives as per itinerary'].map(item => (
-                        <li key={item} className="flex items-start"><span className="mr-2 text-green-500">•</span> {item}</li>
-                    ))}
-                    </ul>
-                </div>
-
-                <div className="bg-white p-4 rounded-xl border border-safari-sky/10 shadow-sm">
-                    <h4 className="font-bold text-stone-800 mb-3 text-sm flex items-center uppercase tracking-wide"><XCircle className="w-4 h-4 mr-2 text-red-500" /> What's Excluded</h4>
-                    <ul className="text-sm text-stone-600 space-y-2">
-                    {['International Flights', 'Tips & Gratuities', 'Personal Insurance', 'Alcoholic drinks'].map(item => (
-                        <li key={item} className="flex items-start"><span className="mr-2 text-red-400">•</span> {item}</li>
-                    ))}
-                    </ul>
-                </div>
-              </div>
-
-            </motion.div>
           </div>
 
+          <div className="absolute bottom-0 left-0 w-full p-4 md:p-12 z-20">
+            <div className="max-w-7xl mx-auto">
+              <motion.div
+                  initial={{ opacity: 0, y: 40 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.2 }}
+              >
+                  <div className="flex items-center space-x-2 text-safari-sunset mb-2 font-bold tracking-wider uppercase text-sm glass-premium inline-flex px-3 py-1 rounded-full">
+                      <CloudSun className="w-4 h-4" /> <span>{tour.category} Safari</span>
+                  </div>
+                  <h1 className="text-5xl md:text-8xl font-serif font-black text-white mb-6 leading-none drop-shadow-2xl">{tour.name}</h1>
+              </motion.div>
+            </div>
+          </div>
+        </div>
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-20 relative z-30">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
+            
+            {/* Main Content */}
+            <div className="lg:col-span-2 space-y-10">
+              <motion.div 
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  className="glass-card p-8 md:p-12 rounded-[2rem]"
+              >
+                <h2 className="text-3xl font-serif font-bold text-stone-800 mb-6">Experience Overview</h2>
+                <p className="text-stone-600 leading-relaxed mb-10 text-lg font-light">{tour.fullDescription}</p>
+                
+                <div className="flex flex-wrap gap-3">
+                  {tour.highlights.map((highlight, index) => (
+                    <span key={index} className="px-4 py-2 rounded-lg bg-safari-sky/10 text-stone-700 font-bold text-sm border border-safari-sky/20">
+                      ✨ {highlight}
+                    </span>
+                  ))}
+                </div>
+              </motion.div>
+
+              {/* Itinerary */}
+              <motion.div 
+                  className="glass-card p-8 md:p-12 rounded-[2rem]"
+              >
+                <h2 className="text-3xl font-serif font-bold text-stone-800 mb-10">Itinerary</h2>
+                <div className="space-y-12 border-l-2 border-stone-200 ml-4 pl-10">
+                  {tour.itinerary.map((day, idx) => (
+                    <motion.div 
+                        key={day.day} 
+                        initial={{ opacity: 0, x: -20 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        transition={{ delay: idx * 0.1 }}
+                        className="relative"
+                    >
+                      <span className="absolute -left-[53px] top-0 w-8 h-8 rounded-full bg-safari-leaf text-white flex items-center justify-center font-bold text-sm ring-4 ring-safari-sand">
+                        {day.day}
+                      </span>
+                      <h3 className="text-xl font-bold text-stone-800 mb-2">Day {day.day}: {day.title}</h3>
+                      <p className="text-stone-600 leading-relaxed">{day.description}</p>
+                    </motion.div>
+                  ))}
+                </div>
+              </motion.div>
+              
+               {/* Photo Gallery */}
+               <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                    {galleryImages.map((img, idx) => (
+                        <motion.div 
+                            key={idx}
+                            whileHover={{ scale: 1.05 }}
+                            className="aspect-square rounded-2xl overflow-hidden shadow-md"
+                        >
+                            <img src={img} className="w-full h-full object-cover" />
+                        </motion.div>
+                    ))}
+                </div>
+
+            </div>
+
+            {/* Premium Booking Widget */}
+            <div className="lg:col-span-1">
+              <motion.div 
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.4 }}
+                  className="glass-premium rounded-[2rem] p-8 sticky top-28 border border-white/60 shadow-2xl"
+              >
+                <div className="flex justify-between items-end mb-6 border-b border-stone-200 pb-6">
+                    <div>
+                        <p className="text-stone-500 text-xs font-bold uppercase tracking-widest mb-1">Total Price</p>
+                        <h3 className="text-4xl font-black text-stone-800">{price.formatted}</h3>
+                    </div>
+                    <span className="text-stone-500 font-medium mb-1">/ person</span>
+                </div>
+                
+                <Link 
+                  to={`/contact?tour=${tour.id}`} 
+                  className="block w-full text-center py-5 bg-safari-sunset text-white font-bold rounded-xl hover:bg-stone-900 transition-all shadow-lg hover:shadow-xl mb-6 text-lg"
+                >
+                  Request Booking
+                </Link>
+                
+                <div className="space-y-4 text-sm text-stone-600">
+                   <div className="flex items-center"><CheckCircle className="w-4 h-4 mr-3 text-green-600" /> Free Cancellation (24h)</div>
+                   <div className="flex items-center"><CheckCircle className="w-4 h-4 mr-3 text-green-600" /> Instant Confirmation</div>
+                   <div className="flex items-center"><CheckCircle className="w-4 h-4 mr-3 text-green-600" /> Best Price Guarantee</div>
+                </div>
+              </motion.div>
+            </div>
+
+          </div>
         </div>
       </div>
-    </div>
+    </PageTransition>
   );
 };
 

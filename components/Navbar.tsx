@@ -34,88 +34,105 @@ const Navbar: React.FC = () => {
     <motion.nav 
       initial={{ y: -100 }}
       animate={{ y: 0 }}
-      transition={{ duration: 0.5, ease: "easeOut" }}
-      className={`sticky top-0 z-50 transition-all duration-300 ${
+      transition={{ type: "spring", stiffness: 100, damping: 20 }}
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         scrolled 
-          ? 'bg-white/90 backdrop-blur-md shadow-sm border-b border-safari-sky/20' 
-          : 'bg-safari-sand shadow-md border-b-4 border-safari-leaf'
+          ? 'py-2' 
+          : 'py-4'
       }`}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between h-20">
+      {/* Floating Glass Pill Container */}
+      <div className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 transition-all duration-300 ${
+          scrolled 
+            ? 'glass-premium rounded-full shadow-lg mx-4 mt-2' 
+            : 'bg-transparent'
+      }`}>
+        <div className="flex justify-between h-16 items-center px-2">
+          {/* Logo Section */}
           <div className="flex-shrink-0 flex items-center">
             <Link to="/" className="flex items-center space-x-2 group">
               <motion.div
-                whileHover={{ rotate: 360 }}
-                transition={{ duration: 1, ease: "easeInOut" }}
-                className="bg-safari-sky/10 p-1.5 rounded-full"
+                whileHover={{ rotate: 180, scale: 1.1 }}
+                transition={{ type: "spring", stiffness: 200 }}
+                className="bg-safari-sky/20 p-2 rounded-full border border-safari-sky/30 backdrop-blur-sm"
               >
-                <Compass className="h-8 w-8 text-safari-sunset" />
+                <Compass className="h-6 w-6 text-safari-sunset" />
               </motion.div>
               <div className="flex flex-col">
-                <span className="font-serif font-bold text-xl md:text-2xl text-safari-leaf group-hover:text-safari-earth transition-colors leading-none">
+                <span className={`font-serif font-bold text-lg md:text-xl transition-colors leading-none ${scrolled ? 'text-stone-800' : 'text-stone-800 lg:text-white lg:drop-shadow-md'}`}>
                     Tom "Cruse" Madeda
                 </span>
-                <span className="text-[10px] tracking-widest uppercase text-safari-blue font-bold">Safaris & Adventure</span>
+                <span className={`text-[10px] tracking-widest uppercase font-bold ${scrolled ? 'text-safari-blue' : 'text-safari-blue lg:text-safari-sand'}`}>Safaris & Adventure</span>
               </div>
             </Link>
           </div>
 
           {/* Desktop Menu */}
-          <div className="hidden md:flex items-center space-x-6">
+          <div className="hidden md:flex items-center space-x-1">
             {navLinks.map((link) => (
               <Link
                 key={link.name}
                 to={link.path}
-                className="relative group py-2"
+                className="relative px-4 py-2 rounded-full group"
               >
-                <span className={`text-sm font-medium transition-colors duration-200 ${
-                  isActive(link.path) ? 'text-safari-blue' : 'text-stone-600 group-hover:text-safari-earth'
+                {isActive(link.path) && (
+                  <motion.div 
+                    layoutId="nav-pill"
+                    className="absolute inset-0 bg-safari-sky/20 rounded-full"
+                    transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                  />
+                )}
+                <span className={`relative z-10 text-sm font-medium transition-colors duration-200 ${
+                  isActive(link.path) 
+                    ? 'text-safari-blue font-bold' 
+                    : scrolled ? 'text-stone-600 group-hover:text-safari-earth' : 'text-stone-100 hover:text-white drop-shadow-sm'
                 }`}>
                   {link.name}
                 </span>
-                {isActive(link.path) && (
-                  <motion.div 
-                    layoutId="underline"
-                    className="absolute bottom-0 left-0 w-full h-0.5 bg-safari-sky"
-                  />
-                )}
               </Link>
             ))}
 
             {/* Currency Switcher */}
-            <div className="relative">
-              <button 
+            <div className="relative ml-4">
+              <motion.button 
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
                 onClick={() => setCurrencyOpen(!currencyOpen)}
-                className="flex items-center space-x-1 px-3 py-1 bg-white border border-stone-200 rounded-full hover:bg-stone-50 transition-colors text-sm font-bold text-stone-700"
+                className={`flex items-center space-x-1 px-3 py-1.5 rounded-full border transition-colors text-sm font-bold ${
+                    scrolled 
+                        ? 'bg-white/50 border-stone-200 text-stone-700 hover:bg-white' 
+                        : 'bg-black/20 border-white/20 text-white hover:bg-black/30 backdrop-blur-sm'
+                }`}
               >
                 <span className="text-lg">{selectedCurrency.flag}</span>
                 <span>{selectedCurrency.code}</span>
-              </button>
+              </motion.button>
               
               <AnimatePresence>
                 {currencyOpen && (
                   <>
                     <div className="fixed inset-0 z-10" onClick={() => setCurrencyOpen(false)}></div>
                     <motion.div 
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: 10 }}
-                      className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-xl border border-stone-100 z-20 max-h-96 overflow-y-auto"
+                      initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                      transition={{ type: "spring", stiffness: 300, damping: 25 }}
+                      className="absolute right-0 mt-2 w-48 glass-premium rounded-xl shadow-2xl border border-white/40 z-20 max-h-96 overflow-y-auto p-1"
                     >
                       {availableCurrencies.map(currency => (
-                        <button
+                        <motion.button
                           key={currency.code}
+                          whileHover={{ x: 5, backgroundColor: 'rgba(125, 211, 252, 0.2)' }}
                           onClick={() => {
                             setCurrency(currency.code);
                             setCurrencyOpen(false);
                           }}
-                          className={`w-full text-left px-4 py-3 flex items-center space-x-3 hover:bg-stone-50 transition-colors ${selectedCurrency.code === currency.code ? 'bg-safari-sand text-safari-earth font-bold' : 'text-stone-600'}`}
+                          className={`w-full text-left px-3 py-2 flex items-center space-x-3 rounded-lg transition-colors mb-1 ${selectedCurrency.code === currency.code ? 'bg-safari-sand text-safari-earth font-bold border border-safari-gold/20' : 'text-stone-600'}`}
                         >
                           <span className="text-xl">{currency.flag}</span>
-                          <span className="flex-grow">{currency.name}</span>
-                          <span className="text-xs font-mono">{currency.code}</span>
-                        </button>
+                          <span className="flex-grow text-sm">{currency.name}</span>
+                          <span className="text-xs font-mono opacity-50">{currency.code}</span>
+                        </motion.button>
                       ))}
                     </motion.div>
                   </>
@@ -124,68 +141,67 @@ const Navbar: React.FC = () => {
             </div>
 
             {isAuthenticated && (
-              <Link to="/admin" className="text-sm font-bold text-safari-sunset flex items-center bg-orange-50 px-3 py-1 rounded-full border border-orange-100 hover:bg-orange-100">
+              <Link to="/admin" className="ml-2 text-xs font-bold text-safari-sunset flex items-center bg-safari-sunset/10 px-3 py-1.5 rounded-full border border-safari-sunset/20 hover:bg-safari-sunset/20 transition-all">
                 <Settings className="w-3 h-3 mr-1" /> Admin
               </Link>
             )}
             
-            <div className="flex items-center space-x-3 ml-4">
+            <div className="flex items-center space-x-2 ml-4">
               <motion.a
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+                whileHover={{ scale: 1.1, rotate: 5 }}
+                whileTap={{ scale: 0.9 }}
                 href={companyInfo.social.whatsapp}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center px-4 py-2 bg-green-600 text-white rounded shadow-lg hover:shadow-xl hover:bg-green-700 transition-all border-b-2 border-green-800"
+                className="flex items-center justify-center w-9 h-9 bg-[#25D366] text-white rounded-full shadow-lg hover:shadow-[#25D366]/40 transition-shadow"
                 title="Chat on WhatsApp"
               >
-                <MessageCircle className="w-4 h-4 mr-2" />
-                <span>WhatsApp</span>
+                <MessageCircle className="w-5 h-5" />
               </motion.a>
 
               <motion.a
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 href={`tel:${companyInfo.phone}`}
-                className="flex items-center px-4 py-2 bg-safari-leaf text-white rounded shadow-lg hover:shadow-xl hover:bg-stone-700 transition-all border-b-2 border-stone-800"
+                className="hidden lg:flex items-center px-4 py-2 bg-safari-leaf text-white rounded-full shadow-lg hover:shadow-safari-leaf/40 hover:bg-stone-700 transition-all text-sm font-bold"
               >
-                <Phone className="w-4 h-4 mr-2" />
-                <span>Call Us</span>
+                <Phone className="w-3 h-3 mr-2" />
+                Book Now
               </motion.a>
             </div>
           </div>
 
           {/* Mobile Menu Button */}
-          <div className="flex items-center md:hidden space-x-4">
-             {/* Mobile Currency Toggle */}
+          <div className="flex items-center md:hidden space-x-3">
              <button 
                 onClick={() => setCurrencyOpen(!currencyOpen)}
-                className="flex items-center space-x-1 px-2 py-1 bg-white border border-stone-200 rounded-full text-xs font-bold text-stone-700"
+                className={`flex items-center space-x-1 px-2 py-1 rounded-full border text-xs font-bold ${scrolled ? 'bg-white/50 border-stone-200 text-stone-800' : 'bg-black/20 border-white/20 text-white backdrop-blur-md'}`}
               >
                 <span>{selectedCurrency.flag}</span>
                 <span>{selectedCurrency.code}</span>
               </button>
 
-            <button
+            <motion.button
+              whileTap={{ scale: 0.9 }}
               onClick={() => setIsOpen(!isOpen)}
-              className="text-stone-600 hover:text-safari-blue focus:outline-none p-2 bg-safari-sand rounded-md"
+              className={`p-2 rounded-full ${scrolled ? 'text-stone-800 hover:bg-stone-100' : 'text-white hover:bg-white/20'}`}
             >
               {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-            </button>
+            </motion.button>
           </div>
         </div>
       </div>
       
-      {/* Mobile Currency Dropdown (Full Width) */}
+      {/* Mobile Currency Dropdown */}
       <AnimatePresence>
         {currencyOpen && (
           <motion.div 
-            initial={{ height: 0 }}
-            animate={{ height: 'auto' }}
-            exit={{ height: 0 }}
-            className="md:hidden bg-stone-50 border-b border-stone-200 overflow-hidden"
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            className="md:hidden glass-premium border-b border-stone-200 overflow-hidden mx-4 mt-2 rounded-xl"
           >
-             <div className="grid grid-cols-2 gap-2 p-4">
+             <div className="grid grid-cols-2 gap-2 p-3">
                  {availableCurrencies.map(currency => (
                     <button
                         key={currency.code}
@@ -193,10 +209,10 @@ const Navbar: React.FC = () => {
                             setCurrency(currency.code);
                             setCurrencyOpen(false);
                         }}
-                        className={`flex items-center space-x-2 p-2 rounded ${selectedCurrency.code === currency.code ? 'bg-white shadow-sm border border-stone-200' : ''}`}
+                        className={`flex items-center space-x-2 p-2 rounded-lg transition-colors ${selectedCurrency.code === currency.code ? 'bg-safari-sky/20 border border-safari-sky/30' : 'hover:bg-white/50'}`}
                     >
                         <span className="text-xl">{currency.flag}</span>
-                        <span className="text-sm font-bold">{currency.code}</span>
+                        <span className="text-sm font-bold text-stone-700">{currency.code}</span>
                     </button>
                  ))}
              </div>
@@ -208,21 +224,22 @@ const Navbar: React.FC = () => {
       <AnimatePresence>
         {isOpen && (
           <motion.div 
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            className="md:hidden bg-safari-sand border-t border-stone-200 overflow-hidden shadow-xl"
+            initial={{ opacity: 0, height: 0, scale: 0.95 }}
+            animate={{ opacity: 1, height: 'auto', scale: 1 }}
+            exit={{ opacity: 0, height: 0, scale: 0.95 }}
+            transition={{ type: "spring", stiffness: 200, damping: 25 }}
+            className="md:hidden glass-premium mt-2 mx-4 rounded-2xl overflow-hidden shadow-2xl border border-white/40"
           >
-            <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+            <div className="px-4 pt-4 pb-6 space-y-2">
               {navLinks.map((link) => (
                 <Link
                   key={link.name}
                   to={link.path}
                   onClick={() => setIsOpen(false)}
-                  className={`block px-3 py-2 rounded-md text-base font-medium ${
+                  className={`block px-4 py-3 rounded-xl text-base font-bold transition-all ${
                     isActive(link.path)
-                      ? 'bg-white text-safari-blue border-l-4 border-safari-sky'
-                      : 'text-stone-700 hover:bg-stone-100 hover:text-safari-leaf'
+                      ? 'bg-safari-sky/20 text-safari-blue translate-x-2'
+                      : 'text-stone-600 hover:bg-white/50 hover:text-safari-earth'
                   }`}
                 >
                   {link.name}
@@ -233,24 +250,22 @@ const Navbar: React.FC = () => {
                 <Link
                   to="/admin"
                   onClick={() => setIsOpen(false)}
-                  className="block px-3 py-2 rounded-md text-base font-bold text-red-600 bg-red-50"
+                  className="block px-4 py-3 rounded-xl text-base font-bold text-red-600 bg-red-50 hover:bg-red-100 mt-2"
                 >
                   Admin Dashboard
                 </Link>
               )}
 
-              <div className="pt-4 space-y-2 pb-4">
+              <div className="pt-4 space-y-3 pb-2">
                 <a
                   href={companyInfo.social.whatsapp}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center justify-center w-full px-4 py-3 bg-green-600 text-white rounded hover:bg-green-700 font-bold"
+                  className="flex items-center justify-center w-full px-4 py-3 bg-[#25D366] text-white rounded-xl hover:shadow-lg font-bold"
                 >
                   <MessageCircle className="w-5 h-5 mr-2" /> WhatsApp Us
                 </a>
                 <a
                   href={`tel:${companyInfo.phone}`}
-                  className="flex items-center justify-center w-full px-4 py-3 bg-safari-leaf text-white rounded hover:bg-stone-700 font-bold"
+                  className="flex items-center justify-center w-full px-4 py-3 bg-safari-leaf text-white rounded-xl hover:shadow-lg font-bold"
                 >
                   <Phone className="w-5 h-5 mr-2" /> Call Us
                 </a>

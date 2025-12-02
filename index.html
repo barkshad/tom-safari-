@@ -27,6 +27,15 @@
                 sky: '#7dd3fc',     /* NEW: Light Blue Pinch (Sky-400 equivalent) */
                 blue: '#0ea5e9'     /* Slightly deeper blue for text/icons */
               }
+            },
+            animation: {
+              'float': 'float 6s ease-in-out infinite',
+            },
+            keyframes: {
+              float: {
+                '0%, 100%': { transform: 'translateY(0)' },
+                '50%': { transform: 'translateY(-10px)' },
+              }
             }
           }
         }
@@ -51,23 +60,57 @@
         background-color: #6b705c;
         background-image: url("https://www.transparenttextures.com/patterns/cubes.png");
       }
-      /* Glassmorphism Utilities */
-      .glass {
-        background: rgba(255, 255, 255, 0.7);
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
-        border: 1px solid rgba(255, 255, 255, 0.18);
+      
+      /* --- PREMIUM GLASMORPHISM SYSTEM --- */
+      
+      /* Base Glass - Used for cards and sections */
+      .glass-premium {
+        background: rgba(255, 255, 255, 0.65);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border: 1px solid rgba(255, 255, 255, 0.5);
+        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
       }
+      
+      /* Dark Glass - Used for overlays or dark mode sections */
       .glass-dark {
-        background: rgba(0, 0, 0, 0.6);
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
+        background: rgba(23, 23, 23, 0.7);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
       }
+      
+      /* Blue Tinted Glass - Used for accents/active states */
       .glass-blue {
-        background: rgba(125, 211, 252, 0.1);
-        backdrop-filter: blur(8px);
-        -webkit-backdrop-filter: blur(8px);
-        border: 1px solid rgba(125, 211, 252, 0.2);
+        background: rgba(125, 211, 252, 0.15);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(125, 211, 252, 0.3);
+        box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+      }
+
+      /* Hoverable Glass Card */
+      .glass-card {
+        background: rgba(255, 255, 255, 0.7);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.6);
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Springy transition */
+      }
+      
+      .glass-card:hover {
+        background: rgba(255, 255, 255, 0.9);
+        border-color: rgba(255, 255, 255, 0.9);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        transform: translateY(-5px);
+      }
+
+      /* Text Gradients */
+      .text-gradient-gold {
+        background: linear-gradient(to right, #8b5e3c, #d4af37);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
       }
     </style>
   <script type="importmap">
@@ -85,7 +128,7 @@
 }
 </script>
 </head>
-  <body class="bg-safari-sand text-stone-900 font-sans antialiased">
+  <body class="bg-safari-sand text-stone-900 font-sans antialiased selection:bg-safari-gold selection:text-white">
     <div id="root"></div>
     <script type="module" src="/index.tsx"></script>
   </body>

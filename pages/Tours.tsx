@@ -1,4 +1,3 @@
-
 // @ts-nocheck
 import React, { useState } from 'react';
 import { useData } from '../context/DataContext';
@@ -6,6 +5,7 @@ import TourCard from '../components/TourCard';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronDown, ChevronUp, Map, Sun, Plane, Mountain } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import PageTransition from '../components/PageTransition';
 
 const Tours: React.FC = () => {
   const { tours, convertPrice, selectedCurrency } = useData();
@@ -16,16 +16,16 @@ const Tours: React.FC = () => {
   const flightSafaris = tours.filter(t => t.group === 'Flight Safari');
   const treks = tours.filter(t => t.group === 'Trek');
 
-  // Road Safari Sub-groups
   const road1Day = roadSafaris.filter(t => t.durationDays === 1);
   const road1Night = roadSafaris.filter(t => t.durationDays === 2);
   const road2Night = roadSafaris.filter(t => t.durationDays === 3);
-  const road3Night = roadSafaris.filter(t => t.durationDays === 4); // 3 nights is 4 days
+  const road3Night = roadSafaris.filter(t => t.durationDays === 4);
   const road5Night = roadSafaris.filter(t => t.durationDays === 6);
   const road6Night = roadSafaris.filter(t => t.durationDays >= 7);
 
   return (
-    <div className="min-h-screen bg-stone-50 pb-20">
+    <PageTransition>
+    <div className="min-h-screen bg-safari-sand pb-20">
       <div className="relative bg-stone-900 py-20 text-center overflow-hidden">
         <div className="absolute inset-0 opacity-40">
             <img src="https://images.unsplash.com/photo-1516426122078-c23e76319801?q=80&w=2000&auto=format&fit=crop" className="w-full h-full object-cover" />
@@ -38,40 +38,40 @@ const Tours: React.FC = () => {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-8 relative z-20">
         
-        {/* --- SECTION 1: EXCURSIONS --- */}
-        <section className="bg-white rounded-2xl shadow-xl border-t-8 border-safari-sunset mb-12 overflow-hidden">
-            <div className="p-8 border-b border-stone-100 flex items-center">
+        {/* --- EXCURSIONS --- */}
+        <section className="glass-premium rounded-3xl shadow-xl mb-12 overflow-hidden border border-white/40">
+            <div className="p-8 border-b border-stone-200/50 flex items-center bg-white/50 backdrop-blur-sm">
                 <Sun className="w-8 h-8 text-safari-sunset mr-4" />
                 <h2 className="text-3xl font-serif font-bold text-stone-900">Excursions from Mombasa</h2>
             </div>
             
             <div className="overflow-x-auto">
                 <table className="w-full text-left border-collapse">
-                    <thead className="bg-stone-50 text-stone-600 uppercase text-sm font-bold">
+                    <thead className="bg-safari-sand/50 text-stone-500 uppercase text-xs font-bold tracking-wider">
                         <tr>
-                            <th className="p-4 border-b border-stone-200">Tour Name</th>
-                            <th className="p-4 border-b border-stone-200">Duration</th>
-                            <th className="p-4 border-b border-stone-200">Price ({selectedCurrency.code})</th>
-                            <th className="p-4 border-b border-stone-200 text-right">Action</th>
+                            <th className="p-6">Tour Name</th>
+                            <th className="p-6">Duration</th>
+                            <th className="p-6">Price ({selectedCurrency.code})</th>
+                            <th className="p-6 text-right">Action</th>
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-stone-100 text-sm md:text-base">
                         {excursions.map(tour => {
                             const price = convertPrice(tour.priceUsd);
                             return (
-                                <tr key={tour.id} className="hover:bg-stone-50 transition-colors">
-                                    <td className="p-4 font-medium text-stone-800">
+                                <tr key={tour.id} className="hover:bg-white/60 transition-colors">
+                                    <td className="p-6 font-bold text-stone-800">
                                         <div className="flex items-center">
-                                            <img src={tour.image} className="w-12 h-12 rounded-lg object-cover mr-4 hidden md:block" alt={tour.name} />
+                                            <img src={tour.image} className="w-12 h-12 rounded-lg object-cover mr-4 hidden md:block shadow-sm" alt={tour.name} />
                                             {tour.name}
                                         </div>
                                     </td>
-                                    <td className="p-4 text-stone-600">{tour.durationDays === 0.5 ? '½ Day' : '1 Day'}</td>
-                                    <td className="p-4 font-bold text-safari-leaf">
+                                    <td className="p-6 text-stone-600 font-medium">{tour.durationDays === 0.5 ? '½ Day' : '1 Day'}</td>
+                                    <td className="p-6 font-bold text-safari-leaf">
                                         {tour.priceUsd > 0 ? price.formatted : 'Inquire'}
                                     </td>
-                                    <td className="p-4 text-right">
-                                        <Link to={`/tours/${tour.id}`} className="text-safari-sunset font-bold hover:underline text-sm">View Details</Link>
+                                    <td className="p-6 text-right">
+                                        <Link to={`/tours/${tour.id}`} className="text-safari-sunset font-bold hover:underline text-sm uppercase tracking-wide">View</Link>
                                     </td>
                                 </tr>
                             );
@@ -81,10 +81,12 @@ const Tours: React.FC = () => {
             </div>
         </section>
 
-        {/* --- SECTION 2: ROAD SAFARIS --- */}
+        {/* --- ROAD SAFARIS --- */}
         <section className="mb-12">
             <div className="flex items-center mb-8">
-                <Map className="w-8 h-8 text-safari-earth mr-4" />
+                <div className="bg-safari-earth p-3 rounded-xl text-white mr-4 shadow-lg">
+                    <Map className="w-6 h-6" />
+                </div>
                 <h2 className="text-3xl font-serif font-bold text-stone-900">Road Safaris</h2>
             </div>
 
@@ -98,28 +100,30 @@ const Tours: React.FC = () => {
             </div>
         </section>
 
-        {/* --- SECTION 3: FLIGHT SAFARIS --- */}
-        <section className="mb-12 bg-stone-100 p-8 rounded-2xl border border-stone-200">
+        {/* --- FLIGHT SAFARIS --- */}
+        <section className="mb-12 glass-premium p-10 rounded-3xl border border-white/40">
             <div className="flex items-center mb-8">
-                <Plane className="w-8 h-8 text-blue-600 mr-4" />
+                <div className="bg-blue-500 p-3 rounded-xl text-white mr-4 shadow-lg shadow-blue-200">
+                     <Plane className="w-6 h-6" />
+                </div>
                 <h2 className="text-3xl font-serif font-bold text-stone-900">Flight Safaris</h2>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                 {flightSafaris.map(tour => (
                     <TourCard key={tour.id} tour={tour} />
                 ))}
             </div>
         </section>
-
-        {/* --- SECTION 4: TAILOR MADE --- */}
-        <section className="bg-stone-900 rounded-2xl p-8 md:p-12 text-center text-white relative overflow-hidden">
-            <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
-            <div className="relative z-10">
-                <h2 className="text-3xl md:text-4xl font-serif font-bold mb-4">Tailor-Made Safaris</h2>
-                <p className="text-stone-300 max-w-2xl mx-auto mb-8 text-lg">
-                    Don't see exactly what you're looking for? We specialize in creating custom itineraries for couples, families, photographers, and corporate groups.
+        
+        {/* --- TAILOR MADE --- */}
+        <section className="bg-stone-900 rounded-3xl p-12 text-center text-white relative overflow-hidden shadow-2xl">
+             <div className="absolute top-0 left-0 w-64 h-64 bg-safari-gold/10 rounded-full blur-[80px]"></div>
+             <div className="relative z-10">
+                <h2 className="text-4xl font-serif font-bold mb-4">Tailor-Made Safaris</h2>
+                <p className="text-stone-300 max-w-2xl mx-auto mb-8 text-lg font-light">
+                    Custom itineraries for couples, families, and groups.
                 </p>
-                <Link to="/contact" className="inline-block px-8 py-3 bg-safari-gold text-stone-900 font-bold rounded-full hover:bg-white transition-colors">
+                <Link to="/contact" className="inline-block px-10 py-4 bg-safari-gold text-stone-900 font-bold rounded-full hover:bg-white transition-all shadow-lg hover:scale-105">
                     Request Custom Quote
                 </Link>
             </div>
@@ -127,20 +131,24 @@ const Tours: React.FC = () => {
 
       </div>
     </div>
+    </PageTransition>
   );
 };
 
-// Sub-component for expandable safari sections
 const SafariSection: React.FC<{ title: string, tours: any[] }> = ({ title, tours }) => {
     const [isOpen, setIsOpen] = useState(true);
-
     if (tours.length === 0) return null;
 
     return (
-        <div className="bg-white rounded-xl shadow-sm border border-stone-200 overflow-hidden">
+        <motion.div 
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="glass-premium rounded-2xl overflow-hidden border border-white/50"
+        >
             <button 
                 onClick={() => setIsOpen(!isOpen)}
-                className="w-full flex items-center justify-between p-6 bg-stone-50 hover:bg-stone-100 transition-colors text-left"
+                className="w-full flex items-center justify-between p-6 bg-white/40 hover:bg-white/60 transition-colors text-left"
             >
                 <h3 className="text-xl font-bold text-stone-800">{title}</h3>
                 {isOpen ? <ChevronUp className="w-5 h-5 text-stone-500" /> : <ChevronDown className="w-5 h-5 text-stone-500" />}
@@ -151,10 +159,10 @@ const SafariSection: React.FC<{ title: string, tours: any[] }> = ({ title, tours
                         initial={{ height: 0, opacity: 0 }}
                         animate={{ height: "auto", opacity: 1 }}
                         exit={{ height: 0, opacity: 0 }}
-                        transition={{ duration: 0.3 }}
+                        transition={{ type: "spring", stiffness: 200, damping: 20 }}
                         className="overflow-hidden"
                     >
-                        <div className="p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <div className="p-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                             {tours.map(tour => (
                                 <TourCard key={tour.id} tour={tour} />
                             ))}
@@ -162,7 +170,7 @@ const SafariSection: React.FC<{ title: string, tours: any[] }> = ({ title, tours
                     </motion.div>
                 )}
             </AnimatePresence>
-        </div>
+        </motion.div>
     );
 }
 
