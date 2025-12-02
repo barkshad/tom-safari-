@@ -1,7 +1,7 @@
 // @ts-nocheck
 import React, { useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, CheckCircle, Map, Shield, Cloud, Sun, Compass } from 'lucide-react';
+import { ArrowRight, CheckCircle, Map, Shield, Cloud, Sun, Compass, Star } from 'lucide-react';
 import { useData } from '../context/DataContext';
 import TourCard from '../components/TourCard';
 import { motion, useScroll, useTransform } from 'framer-motion';
