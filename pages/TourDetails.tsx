@@ -9,7 +9,7 @@ import { motion } from 'framer-motion';
 
 const TourDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const { tours } = useData();
+  const { tours, convertPrice } = useData();
   const [tour, setTour] = useState<Tour | null>(null);
 
   useEffect(() => {
@@ -29,6 +29,9 @@ const TourDetails: React.FC = () => {
       </div>
     );
   }
+
+  // Get dynamic price
+  const price = convertPrice(tour.priceUsd);
 
   // Smart Gallery Logic 
   const getDisplayImages = () => {
@@ -103,7 +106,7 @@ const TourDetails: React.FC = () => {
                     <span className="font-medium">{tour.durationDays} Days / {Math.max(1, tour.durationDays - 1)} Nights</span>
                 </div>
                 <div className="flex items-center bg-white/10 backdrop-blur-md px-4 py-2 rounded-lg border border-white/10 hover:bg-safari-sky/10 transition-colors">
-                    <span className="text-safari-gold font-bold text-2xl mr-2">${tour.priceUsd}</span>
+                    <span className="text-safari-gold font-bold text-2xl mr-2">{tour.priceUsd > 0 ? price.formatted : '$ --'}</span>
                     <span className="opacity-80 mt-1 text-sm">per person</span>
                 </div>
                 </div>

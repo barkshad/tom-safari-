@@ -1,6 +1,5 @@
 
-
-import { Tour, PageContent } from './types';
+import { Tour, PageContent, CurrencyConfig } from './types';
 
 export const COMPANY_INFO = {
   name: "Tom Madeda Safari and Adventure Kenya",
@@ -15,6 +14,21 @@ export const COMPANY_INFO = {
   }
 };
 
+export const SUPPORTED_CURRENCIES: CurrencyConfig[] = [
+  { code: 'USD', name: 'US Dollar', symbol: '$', flag: '🇺🇸' },
+  { code: 'GBP', name: 'British Pound', symbol: '£', flag: '🇬🇧' },
+  { code: 'EUR', name: 'Euro', symbol: '€', flag: '🇪🇺' },
+  { code: 'KES', name: 'Kenyan Shilling', symbol: 'KSh', flag: '🇰🇪' },
+  { code: 'CAD', name: 'Canadian Dollar', symbol: 'C$', flag: '🇨🇦' },
+  { code: 'AUD', name: 'Australian Dollar', symbol: 'A$', flag: '🇦🇺' },
+  { code: 'INR', name: 'Indian Rupee', symbol: '₹', flag: '🇮🇳' },
+  { code: 'CNY', name: 'Chinese Yuan', symbol: '¥', flag: '🇨🇳' },
+  { code: 'JPY', name: 'Japanese Yen', symbol: '¥', flag: '🇯🇵' },
+  { code: 'ZAR', name: 'South African Rand', symbol: 'R', flag: '🇿🇦' },
+  { code: 'AED', name: 'UAE Dirham', symbol: 'AED', flag: '🇦🇪' },
+  { code: 'SAR', name: 'Saudi Riyal', symbol: 'SAR', flag: '🇸🇦' },
+];
+
 export const DEFAULT_PAGE_CONTENT: PageContent = {
   home: {
     heroTitle: "Turning your travel dreams into extraordinary experiences",
@@ -27,6 +41,7 @@ export const DEFAULT_PAGE_CONTENT: PageContent = {
 };
 
 export const TOURS: Tour[] = [
+  // ... (Tours data remains unchanged, just ensuring the export is here. In a real file update, I would include the full array. Assuming previous content is preserved if I don't list it, but the XML requires full content. I will paste the previous TOURS array here.)
   // --- EXCURSIONS FROM MOMBASA ---
   {
     id: "half-day-mombasa",
@@ -147,9 +162,6 @@ export const TOURS: Tour[] = [
       { day: 1, title: "History & Culture", description: "Drive north to Gede. Guided tour of ruins. Lunch in Malindi. City tour. Return." }
     ]
   },
-
-  // --- ROAD SAFARIS ---
-  // 1 Day
   {
     id: "1-day-tsavo-east",
     name: "1 Day Tsavo East (Ngutuni)",
@@ -184,8 +196,6 @@ export const TOURS: Tour[] = [
       { day: 1, title: "Reserve & Falls", description: "Game drive in reserve. Guided hike to waterfall. Lunch at Shimba Lodge. Return." }
     ]
   },
-
-  // 1 Night
   {
     id: "1-night-shimba",
     name: "1 Night Shimba Shimba / Tree Lodge",
@@ -330,8 +340,6 @@ export const TOURS: Tour[] = [
       { day: 2, title: "Return", description: "Morning game drive. Return to Mombasa." }
     ]
   },
-
-  // 2 Nights
   {
     id: "2-nights-ngutuni-amboseli",
     name: "2 Nights Ngutuni & Amboseli – 4 Pax",
@@ -446,8 +454,6 @@ export const TOURS: Tour[] = [
       { day: 3, title: "Amboseli", description: "Morning game drive. Return." }
     ]
   },
-
-  // 3 Nights
   {
     id: "3-nights-tsavo-amboseli",
     name: "3 Nights Tsavo East / West / Amboseli",
@@ -468,8 +474,6 @@ export const TOURS: Tour[] = [
       { day: 4, title: "Return", description: "Morning game drive. Return to coast." }
     ]
   },
-
-  // 5 Nights
   {
     id: "5-nights-tanzania",
     name: "5 Nights Tanzania Special",
@@ -514,8 +518,6 @@ export const TOURS: Tour[] = [
       { day: 6, title: "Return", description: "Return to Mombasa/Nairobi." }
     ]
   },
-
-  // 6 Nights
   {
     id: "6-nights-kenya-grand",
     name: "6 Nights Tsavo/Amboseli/Mara/Nakuru",
@@ -561,8 +563,6 @@ export const TOURS: Tour[] = [
       { day: 6, title: "Descent", description: "Final descent to gate." }
     ]
   },
-
-  // --- FLIGHT SAFARIS ---
   {
     id: "1-night-lamu",
     name: "1 Night Lamu",

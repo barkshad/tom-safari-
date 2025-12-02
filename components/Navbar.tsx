@@ -1,14 +1,16 @@
+
 // @ts-nocheck
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, Phone, Compass, MessageCircle, Settings, CloudSun } from 'lucide-react';
+import { Menu, X, Phone, Compass, MessageCircle, Settings, Globe } from 'lucide-react';
 import { useData } from '../context/DataContext';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const Navbar: React.FC = () => {
-  const { companyInfo, isAuthenticated } = useData();
+  const { companyInfo, isAuthenticated, selectedCurrency, setCurrency, availableCurrencies } = useData();
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [currencyOpen, setCurrencyOpen] = useState(false);
   const location = useLocation();
 
   useEffect(() => {
@@ -82,6 +84,46 @@ const Navbar: React.FC = () => {
               </Link>
             ))}
 
+            {/* Currency Switcher */}
+            <div className="relative">
+              <button 
+                onClick={() => setCurrencyOpen(!currencyOpen)}
+                className="flex items-center space-x-1 px-3 py-1 bg-white border border-stone-200 rounded-full hover:bg-stone-50 transition-colors text-sm font-bold text-stone-700"
+              >
+                <span className="text-lg">{selectedCurrency.flag}</span>
+                <span>{selectedCurrency.code}</span>
+              </button>
+              
+              <AnimatePresence>
+                {currencyOpen && (
+                  <>
+                    <div className="fixed inset-0 z-10" onClick={() => setCurrencyOpen(false)}></div>
+                    <motion.div 
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: 10 }}
+                      className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-xl border border-stone-100 z-20 max-h-96 overflow-y-auto"
+                    >
+                      {availableCurrencies.map(currency => (
+                        <button
+                          key={currency.code}
+                          onClick={() => {
+                            setCurrency(currency.code);
+                            setCurrencyOpen(false);
+                          }}
+                          className={`w-full text-left px-4 py-3 flex items-center space-x-3 hover:bg-stone-50 transition-colors ${selectedCurrency.code === currency.code ? 'bg-safari-sand text-safari-earth font-bold' : 'text-stone-600'}`}
+                        >
+                          <span className="text-xl">{currency.flag}</span>
+                          <span className="flex-grow">{currency.name}</span>
+                          <span className="text-xs font-mono">{currency.code}</span>
+                        </button>
+                      ))}
+                    </motion.div>
+                  </>
+                )}
+              </AnimatePresence>
+            </div>
+
             {isAuthenticated && (
               <Link to="/admin" className="text-sm font-bold text-safari-sunset flex items-center bg-orange-50 px-3 py-1 rounded-full border border-orange-100 hover:bg-orange-100">
                 <Settings className="w-3 h-3 mr-1" /> Admin
@@ -115,7 +157,16 @@ const Navbar: React.FC = () => {
           </div>
 
           {/* Mobile Menu Button */}
-          <div className="flex items-center md:hidden">
+          <div className="flex items-center md:hidden space-x-4">
+             {/* Mobile Currency Toggle */}
+             <button 
+                onClick={() => setCurrencyOpen(!currencyOpen)}
+                className="flex items-center space-x-1 px-2 py-1 bg-white border border-stone-200 rounded-full text-xs font-bold text-stone-700"
+              >
+                <span>{selectedCurrency.flag}</span>
+                <span>{selectedCurrency.code}</span>
+              </button>
+
             <button
               onClick={() => setIsOpen(!isOpen)}
               className="text-stone-600 hover:text-safari-blue focus:outline-none p-2 bg-safari-sand rounded-md"
@@ -125,6 +176,34 @@ const Navbar: React.FC = () => {
           </div>
         </div>
       </div>
+      
+      {/* Mobile Currency Dropdown (Full Width) */}
+      <AnimatePresence>
+        {currencyOpen && (
+          <motion.div 
+            initial={{ height: 0 }}
+            animate={{ height: 'auto' }}
+            exit={{ height: 0 }}
+            className="md:hidden bg-stone-50 border-b border-stone-200 overflow-hidden"
+          >
+             <div className="grid grid-cols-2 gap-2 p-4">
+                 {availableCurrencies.map(currency => (
+                    <button
+                        key={currency.code}
+                        onClick={() => {
+                            setCurrency(currency.code);
+                            setCurrencyOpen(false);
+                        }}
+                        className={`flex items-center space-x-2 p-2 rounded ${selectedCurrency.code === currency.code ? 'bg-white shadow-sm border border-stone-200' : ''}`}
+                    >
+                        <span className="text-xl">{currency.flag}</span>
+                        <span className="text-sm font-bold">{currency.code}</span>
+                    </button>
+                 ))}
+             </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Mobile Menu Dropdown */}
       <AnimatePresence>

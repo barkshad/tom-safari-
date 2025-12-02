@@ -1,8 +1,10 @@
+
 // @ts-nocheck
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Clock, DollarSign, ArrowRight, PoundSterling, Sun } from 'lucide-react';
+import { Clock, DollarSign, ArrowRight, Sun } from 'lucide-react';
 import { Tour } from '../types';
+import { useData } from '../context/DataContext';
 import { motion } from 'framer-motion';
 
 interface TourCardProps {
@@ -10,6 +12,9 @@ interface TourCardProps {
 }
 
 const TourCard: React.FC<TourCardProps> = ({ tour }) => {
+  const { convertPrice, selectedCurrency } = useData();
+  const price = convertPrice(tour.priceUsd);
+
   return (
     <motion.div 
       initial={{ opacity: 0, y: 20 }}
@@ -46,21 +51,14 @@ const TourCard: React.FC<TourCardProps> = ({ tour }) => {
         
         <div className="flex flex-col space-y-2 mb-6 bg-white p-3 rounded-lg border border-stone-100 shadow-inner">
            <div className="flex items-center justify-between">
-              <span className="text-xs font-bold text-safari-leaf uppercase tracking-wide">USD</span>
-              <div className="flex items-center font-bold text-stone-800">
-                <DollarSign className="w-3.5 h-3.5 text-safari-gold" />
-                <span>{tour.priceUsd > 0 ? tour.priceUsd.toLocaleString() : 'Inquire'}</span>
+              <span className="text-xs font-bold text-safari-leaf uppercase tracking-wide flex items-center gap-1">
+                 <span className="text-base">{selectedCurrency.flag}</span> 
+                 {selectedCurrency.code}
+              </span>
+              <div className="flex items-center font-bold text-stone-800 text-lg">
+                <span>{tour.priceUsd > 0 ? price.formatted : 'Inquire'}</span>
               </div>
            </div>
-           {tour.priceGbp > 0 && (
-             <div className="flex items-center justify-between border-t border-stone-100 pt-2">
-                <span className="text-xs font-bold text-safari-blue uppercase tracking-wide">GBP</span>
-                <div className="flex items-center font-bold text-stone-600">
-                  <PoundSterling className="w-3.5 h-3.5 text-safari-sky" />
-                  <span>{tour.priceGbp.toLocaleString()}</span>
-                </div>
-             </div>
-           )}
         </div>
 
         <Link 

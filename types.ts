@@ -1,13 +1,12 @@
 
-
 export interface Tour {
   id: string;
   name: string;
   durationDays: number;
   priceUsd: number;
-  priceGbp: number;
+  priceGbp: number; // Kept for legacy compatibility
   image: string;
-  gallery?: string[]; // New field for uploaded gallery images
+  gallery?: string[];
   shortDescription: string;
   fullDescription: string;
   highlights: string[];
@@ -62,4 +61,11 @@ export interface CompanyInfo {
     instagram: string;
     whatsapp: string;
   };
+}
+
+export interface CurrencyConfig {
+  code: string;
+  name: string;
+  symbol: string;
+  flag: string;
 }

@@ -2,7 +2,7 @@
 // @ts-nocheck
 import React, { useState, useRef } from 'react';
 import { useData } from '../context/DataContext';
-import { Lock, Save, LogOut, RefreshCw, Plus, Trash2, Edit2, X, MessageSquare, Layout, Settings, Home, List, Upload, Image as ImageIcon, Loader, CheckCircle, AlertCircle } from 'lucide-react';
+import { Lock, Save, LogOut, RefreshCw, Plus, Trash2, Edit2, X, MessageSquare, Layout, Settings, Home, List, Upload, Image as ImageIcon, Loader, CheckCircle, AlertCircle, Globe } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Tour, Inquiry, PageContent } from '../types';
 
@@ -23,7 +23,10 @@ const Admin: React.FC = () => {
     changePassword,
     resetData,
     exchangeRate,
-    refreshExchangeRate
+    refreshRates,
+    availableCurrencies,
+    currencyRates,
+    convertPrice
   } = useData();
 
   const [password, setPassword] = useState('');
@@ -362,7 +365,7 @@ const Admin: React.FC = () => {
                         name: "New Adventure",
                         durationDays: 3,
                         priceUsd: 500,
-                        priceGbp: Math.round(500 * exchangeRate),
+                        priceGbp: 0,
                         image: "https://images.unsplash.com/photo-1516426122078-c23e76319801?q=80&w=1000",
                         gallery: [],
                         category: "Safari",
@@ -617,63 +620,71 @@ const Admin: React.FC = () => {
                              )}
                         </div>
 
-                        {/* 3. Pricing & Specs */}
-                        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                            <div>
-                                <label className="block text-sm font-bold mb-1">Price USD</label>
-                                <input 
-                                    type="number" 
-                                    className="w-full p-3 border rounded" 
-                                    value={editingTour.priceUsd} 
-                                    onChange={(e) => {
-                                        const newUsd = Number(e.target.value);
-                                        setEditingTour({
-                                            ...editingTour, 
-                                            priceUsd: newUsd,
-                                            priceGbp: Math.round(newUsd * exchangeRate)
-                                        });
-                                    }}
-                                />
-                            </div>
-                            <div className="relative">
-                                <label className="block text-sm font-bold mb-1 flex items-center">
-                                    Price GBP (Auto) 
-                                </label>
-                                <div className="relative">
-                                    <input 
-                                        type="number" 
-                                        readOnly
-                                        className="w-full p-3 border rounded bg-stone-100 text-stone-500 cursor-not-allowed" 
-                                        value={editingTour.priceGbp} 
-                                    />
+                        {/* 3. Pricing & Specs (MULTI-CURRENCY) */}
+                        <div className="space-y-4">
+                            <h4 className="font-bold text-lg text-stone-800 flex items-center">
+                                <Globe className="w-5 h-5 mr-2" /> Pricing & Currency
+                            </h4>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label className="block text-sm font-bold mb-2">Base Price (USD)</label>
+                                    <div className="flex items-center">
+                                        <span className="bg-stone-200 p-3 rounded-l border border-stone-300 font-bold text-stone-500">$</span>
+                                        <input 
+                                            type="number" 
+                                            className="w-full p-3 border-t border-b border-r rounded-r focus:ring-2 focus:ring-safari-leaf" 
+                                            value={editingTour.priceUsd} 
+                                            onChange={(e) => {
+                                                const newUsd = Number(e.target.value);
+                                                setEditingTour({
+                                                    ...editingTour, 
+                                                    priceUsd: newUsd,
+                                                });
+                                            }}
+                                        />
+                                    </div>
                                     <button 
                                         onClick={async (e) => {
                                             e.preventDefault();
-                                            await refreshExchangeRate();
-                                            if(editingTour.priceUsd) {
-                                                 setEditingTour({
-                                                    ...editingTour, 
-                                                    priceGbp: Math.round(editingTour.priceUsd * exchangeRate)
-                                                });
-                                            }
-                                            showToast("Rate refreshed: " + exchangeRate.toFixed(4));
+                                            await refreshRates();
+                                            showToast("Latest rates fetched!");
                                         }}
-                                        className="absolute right-2 top-2 p-1 hover:bg-stone-200 rounded transition-colors"
-                                        title="Refresh Exchange Rate"
+                                        className="mt-2 text-xs text-safari-sunset font-bold flex items-center hover:underline"
                                     >
-                                        <RefreshCw className="w-5 h-5 text-stone-500" />
+                                        <RefreshCw className="w-3 h-3 mr-1" /> Update Exchange Rates
                                     </button>
                                 </div>
-                                <p className="text-xs text-stone-400 mt-1">1 USD = {exchangeRate.toFixed(4)} GBP</p>
+
+                                <div>
+                                    <label className="block text-sm font-bold mb-2">Duration (Days)</label>
+                                    <input 
+                                        type="number" 
+                                        className="w-full p-3 border rounded" 
+                                        value={editingTour.durationDays} 
+                                        onChange={(e) => setEditingTour({...editingTour, durationDays: Number(e.target.value)})}
+                                    />
+                                </div>
                             </div>
-                            <div>
-                                <label className="block text-sm font-bold mb-1">Duration (Days)</label>
-                                <input 
-                                    type="number" 
-                                    className="w-full p-3 border rounded" 
-                                    value={editingTour.durationDays} 
-                                    onChange={(e) => setEditingTour({...editingTour, durationDays: Number(e.target.value)})}
-                                />
+                            
+                            {/* Live Conversion Table */}
+                            <div className="bg-stone-50 p-4 rounded-lg border border-stone-200">
+                                <p className="text-xs text-stone-500 mb-3 font-medium flex items-center">
+                                    <CheckCircle className="w-3 h-3 mr-1 text-green-500" /> Auto-converted prices based on current rates:
+                                </p>
+                                <div className="grid grid-cols-3 md:grid-cols-4 gap-2 text-sm">
+                                    {availableCurrencies.filter(c => c.code !== 'USD').map(currency => {
+                                        const rate = currencyRates[currency.code] || 0;
+                                        const amount = Math.ceil(editingTour.priceUsd * rate);
+                                        return (
+                                            <div key={currency.code} className="bg-white p-2 rounded border border-stone-100 shadow-sm flex flex-col">
+                                                <span className="text-xs text-stone-400 font-bold">{currency.code} {currency.flag}</span>
+                                                <span className="font-mono font-bold text-stone-700">
+                                                    {currency.symbol}{amount.toLocaleString()}
+                                                </span>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
                             </div>
                         </div>
 

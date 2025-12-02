@@ -1,3 +1,4 @@
+
 // @ts-nocheck
 import React, { useState } from 'react';
 import { useData } from '../context/DataContext';
@@ -7,7 +8,7 @@ import { ChevronDown, ChevronUp, Map, Sun, Plane, Mountain } from 'lucide-react'
 import { Link } from 'react-router-dom';
 
 const Tours: React.FC = () => {
-  const { tours } = useData();
+  const { tours, convertPrice, selectedCurrency } = useData();
 
   // Group tours logic
   const excursions = tours.filter(t => t.group === 'Excursion');
@@ -50,28 +51,31 @@ const Tours: React.FC = () => {
                         <tr>
                             <th className="p-4 border-b border-stone-200">Tour Name</th>
                             <th className="p-4 border-b border-stone-200">Duration</th>
-                            <th className="p-4 border-b border-stone-200">Price (USD)</th>
-                            <th className="p-4 border-b border-stone-200">Price (GBP)</th>
+                            <th className="p-4 border-b border-stone-200">Price ({selectedCurrency.code})</th>
                             <th className="p-4 border-b border-stone-200 text-right">Action</th>
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-stone-100 text-sm md:text-base">
-                        {excursions.map(tour => (
-                            <tr key={tour.id} className="hover:bg-stone-50 transition-colors">
-                                <td className="p-4 font-medium text-stone-800">
-                                    <div className="flex items-center">
-                                        <img src={tour.image} className="w-12 h-12 rounded-lg object-cover mr-4 hidden md:block" alt={tour.name} />
-                                        {tour.name}
-                                    </div>
-                                </td>
-                                <td className="p-4 text-stone-600">{tour.durationDays === 0.5 ? '½ Day' : '1 Day'}</td>
-                                <td className="p-4 font-bold text-safari-leaf">${tour.priceUsd > 0 ? tour.priceUsd : 'Inquire'}</td>
-                                <td className="p-4 font-bold text-stone-500">£{tour.priceGbp > 0 ? tour.priceGbp : 'Inquire'}</td>
-                                <td className="p-4 text-right">
-                                    <Link to={`/tours/${tour.id}`} className="text-safari-sunset font-bold hover:underline text-sm">View Details</Link>
-                                </td>
-                            </tr>
-                        ))}
+                        {excursions.map(tour => {
+                            const price = convertPrice(tour.priceUsd);
+                            return (
+                                <tr key={tour.id} className="hover:bg-stone-50 transition-colors">
+                                    <td className="p-4 font-medium text-stone-800">
+                                        <div className="flex items-center">
+                                            <img src={tour.image} className="w-12 h-12 rounded-lg object-cover mr-4 hidden md:block" alt={tour.name} />
+                                            {tour.name}
+                                        </div>
+                                    </td>
+                                    <td className="p-4 text-stone-600">{tour.durationDays === 0.5 ? '½ Day' : '1 Day'}</td>
+                                    <td className="p-4 font-bold text-safari-leaf">
+                                        {tour.priceUsd > 0 ? price.formatted : 'Inquire'}
+                                    </td>
+                                    <td className="p-4 text-right">
+                                        <Link to={`/tours/${tour.id}`} className="text-safari-sunset font-bold hover:underline text-sm">View Details</Link>
+                                    </td>
+                                </tr>
+                            );
+                        })}
                     </tbody>
                 </table>
             </div>

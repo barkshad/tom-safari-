@@ -1,7 +1,7 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { Tour, CompanyInfo, Inquiry, InquiryForm, PageContent } from '../types';
-import { TOURS, COMPANY_INFO, DEFAULT_PAGE_CONTENT } from '../constants';
+import { Tour, CompanyInfo, Inquiry, InquiryForm, PageContent, CurrencyConfig } from '../types';
+import { TOURS, COMPANY_INFO, DEFAULT_PAGE_CONTENT, SUPPORTED_CURRENCIES } from '../constants';
 
 interface DataContextType {
   companyInfo: CompanyInfo;
@@ -19,8 +19,14 @@ interface DataContextType {
   changePassword: (newPassword: string) => void;
   logout: () => void;
   resetData: () => void;
-  exchangeRate: number;
-  refreshExchangeRate: () => Promise<void>;
+  
+  // Currency Support
+  selectedCurrency: CurrencyConfig;
+  setCurrency: (code: string) => void;
+  currencyRates: Record<string, number>;
+  refreshRates: () => Promise<void>;
+  convertPrice: (priceInUsd: number) => { amount: number, formatted: string, symbol: string };
+  availableCurrencies: CurrencyConfig[];
 }
 
 const DataContext = createContext<DataContextType | undefined>(undefined);
@@ -71,54 +77,91 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return localStorage.getItem('isAdmin') === 'true';
   });
 
-  // Exchange Rate Logic
-  const [exchangeRate, setExchangeRate] = useState<number>(0.79); // Default fallback
+  // --- CURRENCY LOGIC ---
+  const [selectedCurrency, setSelectedCurrency] = useState<CurrencyConfig>(() => {
+    const savedCode = localStorage.getItem('selectedCurrencyCode');
+    return SUPPORTED_CURRENCIES.find(c => c.code === savedCode) || SUPPORTED_CURRENCIES[0]; // Default USD
+  });
 
-  const fetchExchangeRate = async () => {
+  const [currencyRates, setCurrencyRates] = useState<Record<string, number>>({ USD: 1 });
+
+  const fetchRates = async () => {
     try {
+      // Free API for exchange rates based on USD
       const response = await fetch('https://open.er-api.com/v6/latest/USD');
       const data = await response.json();
-      if (data && data.rates && data.rates.GBP) {
-        const rate = data.rates.GBP;
-        setExchangeRate(rate);
-        localStorage.setItem('exchangeRateData', JSON.stringify({
-          rate: rate,
+      if (data && data.rates) {
+        setCurrencyRates(data.rates);
+        localStorage.setItem('currencyRates', JSON.stringify({
+          rates: data.rates,
           timestamp: Date.now()
         }));
-        return rate;
       }
     } catch (error) {
-      console.error("Failed to fetch exchange rate:", error);
+      console.error("Failed to fetch rates:", error);
     }
-    return 0.79;
   };
 
   useEffect(() => {
-    const savedRateData = localStorage.getItem('exchangeRateData');
-    if (savedRateData) {
+    // Load cached rates or fetch new ones
+    const savedRates = localStorage.getItem('currencyRates');
+    if (savedRates) {
       try {
-        const parsed = JSON.parse(savedRateData);
+        const parsed = JSON.parse(savedRates);
         const twelveHours = 12 * 60 * 60 * 1000;
         if (Date.now() - parsed.timestamp < twelveHours) {
-          setExchangeRate(parsed.rate);
+          setCurrencyRates(parsed.rates);
         } else {
-          // Cache expired, fetch new
-          fetchExchangeRate();
+          fetchRates();
         }
-      } catch (e) {
-        fetchExchangeRate();
+      } catch {
+        fetchRates();
       }
     } else {
-      fetchExchangeRate();
+      fetchRates();
     }
   }, []);
 
-  const refreshExchangeRate = async () => {
-    await fetchExchangeRate();
+  const setCurrency = (code: string) => {
+    const currency = SUPPORTED_CURRENCIES.find(c => c.code === code);
+    if (currency) {
+      setSelectedCurrency(currency);
+      localStorage.setItem('selectedCurrencyCode', code);
+    }
+  };
+
+  const convertPrice = (priceInUsd: number) => {
+    const rate = currencyRates[selectedCurrency.code] || 1;
+    const amount = Math.ceil(priceInUsd * rate); // Round up to nearest integer
+    
+    // Formatting logic
+    let formatted = '';
+    try {
+       formatted = new Intl.NumberFormat('en-US', {
+         style: 'currency',
+         currency: selectedCurrency.code,
+         minimumFractionDigits: 0,
+         maximumFractionDigits: 0,
+       }).format(amount);
+    } catch (e) {
+       // Fallback
+       formatted = `${selectedCurrency.symbol}${amount.toLocaleString()}`;
+    }
+
+    return {
+      amount,
+      formatted,
+      symbol: selectedCurrency.symbol
+    };
+  };
+
+  const refreshRates = async () => {
+    await fetchRates();
   };
 
 
-  // Helper to safely save to storage
+  // --- PERSISTENCE & ACTIONS ---
+
   const saveToStorage = (key: string, data: any) => {
     try {
       localStorage.setItem(key, JSON.stringify(data));
@@ -131,7 +174,6 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
-  // Persist changes
   useEffect(() => {
     saveToStorage('companyInfo', companyInfo);
   }, [companyInfo]);
@@ -210,7 +252,10 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setTours(TOURS);
       setPageContent(DEFAULT_PAGE_CONTENT);
       setAdminPassword('12345');
-      // Keep inquiries but clear other data
+      // Reset currency
+      localStorage.removeItem('selectedCurrencyCode');
+      localStorage.removeItem('currencyRates');
+      
       localStorage.removeItem('companyInfo');
       localStorage.removeItem('tours');
       localStorage.removeItem('pageContent');
@@ -236,8 +281,12 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
       changePassword,
       logout,
       resetData,
-      exchangeRate,
-      refreshExchangeRate
+      selectedCurrency,
+      setCurrency,
+      currencyRates,
+      refreshRates,
+      convertPrice,
+      availableCurrencies: SUPPORTED_CURRENCIES
     }}>
       {children}
     </DataContext.Provider>
