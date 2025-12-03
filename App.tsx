@@ -1,3 +1,4 @@
+
 // @ts-nocheck
 import React from 'react';
 import { HashRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
@@ -12,6 +13,7 @@ import Blog from './pages/Blog';
 import Contact from './pages/Contact';
 import Admin from './pages/Admin';
 import { DataProvider } from './context/DataContext';
+import SEOUpdater from './components/SEOUpdater';
 
 // Scroll to top wrapper
 const ScrollToTop: React.FC = () => {
@@ -47,10 +49,8 @@ function App() {
     <DataProvider>
       <Router>
         <ScrollToTop />
+        <SEOUpdater />
         <div className="flex flex-col min-h-screen bg-safari-sand font-sans">
-          {/* We render Navbar outside Routes so it stays persistent, 
-              but we could animate it too if we wanted. 
-              Admin page might want to hide it, but per prompt "Keep existing routing" we leave it simple. */}
           <Routes>
              <Route path="/admin" element={null} />
              <Route path="*" element={<Navbar />} />

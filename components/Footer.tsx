@@ -1,22 +1,28 @@
+
 // @ts-nocheck
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Facebook, Instagram, Mail, MapPin, Phone, MessageCircle, Lock } from 'lucide-react';
+import { Facebook, Instagram, Mail, MapPin, Phone, MessageCircle, Lock, Edit2 } from 'lucide-react';
 import { useData } from '../context/DataContext';
 
 const Footer: React.FC = () => {
-  const { companyInfo } = useData();
+  const { companyInfo, pageContent, isAuthenticated } = useData();
 
   return (
-    <footer className="bg-stone-900 text-stone-300">
+    <footer className="bg-stone-900 text-stone-300 relative group">
+      {isAuthenticated && (
+         <div className="absolute top-4 right-4">
+             <Link to="/admin" className="p-2 bg-safari-sunset text-white rounded-full flex items-center gap-2 text-xs font-bold uppercase"><Edit2 className="w-3 h-3" /> Edit Footer</Link>
+         </div>
+      )}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           
           {/* Brand Column */}
           <div>
-            <h3 className="text-2xl font-serif text-safari-gold mb-4">Tom "Cruse" Madeda Safaris</h3>
+            <h3 className="text-2xl font-serif text-safari-gold mb-4">{companyInfo.name}</h3>
             <p className="text-sm leading-relaxed mb-6">
-              {companyInfo.slogan}
+              {pageContent.footer.aboutText}
             </p>
             <div className="flex space-x-4">
               <a href={companyInfo.social.facebook} target="_blank" rel="noopener noreferrer" className="hover:text-safari-gold transition-colors"><Facebook className="w-5 h-5" /></a>
@@ -62,7 +68,7 @@ const Footer: React.FC = () => {
         </div>
 
         <div className="border-t border-stone-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center text-xs text-stone-500">
-          <p>&copy; {new Date().getFullYear()} {companyInfo.name}. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} {companyInfo.name}. {pageContent.footer.copyrightText}</p>
           <Link to="/admin" className="mt-2 md:mt-0 flex items-center hover:text-stone-300 transition-colors opacity-50 hover:opacity-100">
             <Lock className="w-3 h-3 mr-1" /> Admin Login
           </Link>

@@ -4,7 +4,7 @@ export interface Tour {
   name: string;
   durationDays: number;
   priceUsd: number;
-  priceGbp: number; // Kept for legacy compatibility
+  priceGbp: number;
   image: string;
   gallery?: string[];
   shortDescription: string;
@@ -39,19 +39,50 @@ export interface Inquiry extends InquiryForm {
   submittedAt: string;
 }
 
+export interface SEOData {
+  title: string;
+  description: string;
+}
+
+export interface PageSection {
+  title?: string;
+  subtitle?: string;
+  image?: string;
+  content?: string;
+}
+
 export interface PageContent {
   home: {
-    heroTitle: string;
-    heroSubtitle: string;
-    heroImage: string;
+    hero: PageSection;
+    welcome: PageSection;
+    features: { title: string; text: string }[];
+    testimonials: PageSection & { author: string };
   };
   about: {
-    philosophy: string;
+    hero: PageSection;
+    philosophy: PageSection;
+    founder: PageSection;
+  };
+  contact: {
+    intro: PageSection;
+    mapUrl: string;
+  };
+  footer: {
+    aboutText: string;
+    copyrightText: string;
+  };
+  seo: {
+    home: SEOData;
+    about: SEOData;
+    tours: SEOData;
+    contact: SEOData;
+    blog: SEOData;
   };
 }
 
 export interface CompanyInfo {
   name: string;
+  ownerName: string; // Added Owner Name
   email: string;
   phone: string;
   location: string;

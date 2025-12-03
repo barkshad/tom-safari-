@@ -20,7 +20,6 @@ interface DataContextType {
   logout: () => void;
   resetData: () => void;
   
-  // Currency Support
   selectedCurrency: CurrencyConfig;
   setCurrency: (code: string) => void;
   currencyRates: Record<string, number>;
@@ -32,7 +31,6 @@ interface DataContextType {
 const DataContext = createContext<DataContextType | undefined>(undefined);
 
 export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  // Initialize state from LocalStorage or fall back to Constants
   const [companyInfo, setCompanyInfo] = useState<CompanyInfo>(() => {
     try {
       const saved = localStorage.getItem('companyInfo');
@@ -60,10 +58,24 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   });
 
+  // Deep merge default content to ensure new fields (SEO, Footer) exist even if localStorage has old data
   const [pageContent, setPageContent] = useState<PageContent>(() => {
     try {
       const saved = localStorage.getItem('pageContent');
-      return saved ? JSON.parse(saved) : DEFAULT_PAGE_CONTENT;
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        // Deep merge with default to ensure structure exists
+        return {
+          ...DEFAULT_PAGE_CONTENT,
+          ...parsed,
+          home: { ...DEFAULT_PAGE_CONTENT.home, ...parsed.home },
+          about: { ...DEFAULT_PAGE_CONTENT.about, ...parsed.about },
+          contact: { ...DEFAULT_PAGE_CONTENT.contact, ...parsed.contact },
+          footer: { ...DEFAULT_PAGE_CONTENT.footer, ...parsed.footer },
+          seo: { ...DEFAULT_PAGE_CONTENT.seo, ...parsed.seo },
+        };
+      }
+      return DEFAULT_PAGE_CONTENT;
     } catch {
       return DEFAULT_PAGE_CONTENT;
     }
@@ -77,17 +89,15 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return localStorage.getItem('isAdmin') === 'true';
   });
 
-  // --- CURRENCY LOGIC ---
   const [selectedCurrency, setSelectedCurrency] = useState<CurrencyConfig>(() => {
     const savedCode = localStorage.getItem('selectedCurrencyCode');
-    return SUPPORTED_CURRENCIES.find(c => c.code === savedCode) || SUPPORTED_CURRENCIES[0]; // Default USD
+    return SUPPORTED_CURRENCIES.find(c => c.code === savedCode) || SUPPORTED_CURRENCIES[0];
   });
 
   const [currencyRates, setCurrencyRates] = useState<Record<string, number>>({ USD: 1 });
 
   const fetchRates = async () => {
     try {
-      // Free API for exchange rates based on USD
       const response = await fetch('https://open.er-api.com/v6/latest/USD');
       const data = await response.json();
       if (data && data.rates) {
@@ -103,7 +113,6 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   useEffect(() => {
-    // Load cached rates or fetch new ones
     const savedRates = localStorage.getItem('currencyRates');
     if (savedRates) {
       try {
@@ -132,9 +141,7 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const convertPrice = (priceInUsd: number) => {
     const rate = currencyRates[selectedCurrency.code] || 1;
-    const amount = Math.ceil(priceInUsd * rate); // Round up to nearest integer
-    
-    // Formatting logic
+    const amount = Math.ceil(priceInUsd * rate);
     let formatted = '';
     try {
        formatted = new Intl.NumberFormat('en-US', {
@@ -144,76 +151,35 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
          maximumFractionDigits: 0,
        }).format(amount);
     } catch (e) {
-       // Fallback
        formatted = `${selectedCurrency.symbol}${amount.toLocaleString()}`;
     }
-
-    return {
-      amount,
-      formatted,
-      symbol: selectedCurrency.symbol
-    };
+    return { amount, formatted, symbol: selectedCurrency.symbol };
   };
 
-  const refreshRates = async () => {
-    await fetchRates();
-  };
-
-
-  // --- PERSISTENCE & ACTIONS ---
+  const refreshRates = async () => { await fetchRates(); };
 
   const saveToStorage = (key: string, data: any) => {
     try {
       localStorage.setItem(key, JSON.stringify(data));
     } catch (e: any) {
       if (e.name === 'QuotaExceededError' || e.name === 'NS_ERROR_DOM_QUOTA_REACHED') {
-        alert("⚠️ Storage Limit Reached!\n\nThe website cannot save more data (photos take up a lot of space). Please delete some old tours, gallery photos, or inquiries to make space.");
-      } else {
-        console.error(`Failed to save ${key} to storage:`, e);
+        alert("⚠️ Storage Limit Reached!\n\nPlease delete some gallery photos to make space.");
       }
     }
   };
 
-  useEffect(() => {
-    saveToStorage('companyInfo', companyInfo);
-  }, [companyInfo]);
+  useEffect(() => { saveToStorage('companyInfo', companyInfo); }, [companyInfo]);
+  useEffect(() => { saveToStorage('tours', tours); }, [tours]);
+  useEffect(() => { saveToStorage('inquiries', inquiries); }, [inquiries]);
+  useEffect(() => { saveToStorage('pageContent', pageContent); }, [pageContent]);
+  useEffect(() => { localStorage.setItem('isAdmin', String(isAuthenticated)); }, [isAuthenticated]);
+  useEffect(() => { localStorage.setItem('adminPassword', adminPassword); }, [adminPassword]);
 
-  useEffect(() => {
-    saveToStorage('tours', tours);
-  }, [tours]);
-
-  useEffect(() => {
-    saveToStorage('inquiries', inquiries);
-  }, [inquiries]);
-
-  useEffect(() => {
-    saveToStorage('pageContent', pageContent);
-  }, [pageContent]);
-
-  useEffect(() => {
-    localStorage.setItem('isAdmin', String(isAuthenticated));
-  }, [isAuthenticated]);
+  const updateCompanyInfo = (info: CompanyInfo) => setCompanyInfo(info);
+  const updateTour = (updatedTour: Tour) => setTours(prev => prev.map(t => t.id === updatedTour.id ? updatedTour : t));
+  const addTour = (newTour: Tour) => setTours(prev => [...prev, newTour]);
+  const deleteTour = (id: string) => setTours(prev => prev.filter(t => t.id !== id));
   
-  useEffect(() => {
-    localStorage.setItem('adminPassword', adminPassword);
-  }, [adminPassword]);
-
-  const updateCompanyInfo = (info: CompanyInfo) => {
-    setCompanyInfo(info);
-  };
-
-  const updateTour = (updatedTour: Tour) => {
-    setTours(prev => prev.map(t => t.id === updatedTour.id ? updatedTour : t));
-  };
-
-  const addTour = (newTour: Tour) => {
-    setTours(prev => [...prev, newTour]);
-  };
-
-  const deleteTour = (id: string) => {
-    setTours(prev => prev.filter(t => t.id !== id));
-  };
-
   const addInquiry = (form: InquiryForm) => {
     const tour = tours.find(t => t.id === form.tourId);
     const newInquiry: Inquiry = {
@@ -238,28 +204,16 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return false;
   };
 
-  const changePassword = (newPassword: string) => {
-    setAdminPassword(newPassword);
-  };
-
-  const logout = () => {
-    setIsAuthenticated(false);
-  };
+  const changePassword = (newPassword: string) => setAdminPassword(newPassword);
+  const logout = () => setIsAuthenticated(false);
 
   const resetData = () => {
-    if(window.confirm("This will delete ALL custom tours, photos, and settings. Are you sure?")) {
+    if(window.confirm("Delete ALL custom data and reset to factory defaults?")) {
       setCompanyInfo(COMPANY_INFO);
       setTours(TOURS);
       setPageContent(DEFAULT_PAGE_CONTENT);
       setAdminPassword('12345');
-      // Reset currency
-      localStorage.removeItem('selectedCurrencyCode');
-      localStorage.removeItem('currencyRates');
-      
-      localStorage.removeItem('companyInfo');
-      localStorage.removeItem('tours');
-      localStorage.removeItem('pageContent');
-      localStorage.removeItem('adminPassword');
+      localStorage.clear();
       window.location.reload();
     }
   };
