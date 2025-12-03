@@ -2,9 +2,9 @@
 // @ts-nocheck
 import React, { useState, useRef } from 'react';
 import { useData } from '../context/DataContext';
-import { Lock, Save, LogOut, Globe, Layout, Settings, Home, List, MessageSquare, Image as ImageIcon, ChevronRight, CheckCircle, AlertCircle, Plus, Edit2, Trash2, X, ChevronDown, ChevronUp } from 'lucide-react';
+import { Lock, Save, LogOut, Globe, Layout, Settings, Home, List, MessageSquare, Image as ImageIcon, ChevronRight, CheckCircle, AlertCircle, Plus, Edit2, Trash2, X, ChevronDown, ChevronUp, MapPin, Calendar } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Tour, CompanyInfo, PageContent } from '../types';
+import { Tour, CompanyInfo, PageContent, ItineraryDay } from '../types';
 import PageTransition from '../components/PageTransition';
 
 const Admin: React.FC = () => {
@@ -13,7 +13,8 @@ const Admin: React.FC = () => {
     tours, updateTour, deleteTour, addTour,
     inquiries,
     pageContent, updatePageContent,
-    changePassword
+    changePassword,
+    selectedCurrency, availableCurrencies, convertPrice
   } = useData();
 
   const [password, setPassword] = useState('');
@@ -48,7 +49,7 @@ const Admin: React.FC = () => {
         img.src = event.target?.result as string;
         img.onload = () => {
           const canvas = document.createElement('canvas');
-          const MAX_WIDTH = 800; 
+          const MAX_WIDTH = 600; // Optimized for storage
           let width = img.width;
           let height = img.height;
           if (width > MAX_WIDTH) {
@@ -59,7 +60,7 @@ const Admin: React.FC = () => {
           canvas.height = height;
           const ctx = canvas.getContext('2d');
           ctx?.drawImage(img, 0, 0, width, height);
-          resolve(canvas.toDataURL('image/jpeg', 0.7));
+          resolve(canvas.toDataURL('image/jpeg', 0.6)); // 60% quality
         };
         img.onerror = reject;
       };
@@ -85,6 +86,25 @@ const Admin: React.FC = () => {
         setUploading(false);
       }
     }
+  };
+
+  const handleTourGalleryUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+      if (e.target.files && editingTour) {
+          const files = Array.from(e.target.files);
+          setUploading(true);
+          try {
+              const processedImages = await Promise.all(files.map(f => processFile(f)));
+              setEditingTour({
+                  ...editingTour,
+                  gallery: [...(editingTour.gallery || []), ...processedImages]
+              });
+              showToast(`${files.length} photos added to gallery`);
+          } catch (err) {
+              showToast("Gallery upload failed", "error");
+          } finally {
+              setUploading(false);
+          }
+      }
   };
 
   if (!isAuthenticated) {
@@ -148,9 +168,19 @@ const Admin: React.FC = () => {
                         <h4 className="font-bold text-safari-sunset">Hero Section</h4>
                         <input className="w-full p-3 border rounded" placeholder="Hero Title" value={pageContent.home.hero.title} onChange={(e) => updatePageContent({...pageContent, home: {...pageContent.home, hero: {...pageContent.home.hero, title: e.target.value}}})} />
                         <textarea className="w-full p-3 border rounded" placeholder="Hero Subtitle" value={pageContent.home.hero.subtitle} onChange={(e) => updatePageContent({...pageContent, home: {...pageContent.home, hero: {...pageContent.home.hero, subtitle: e.target.value}}})} />
-                        <div className="flex items-center gap-4">
-                            <img src={pageContent.home.hero.image} className="w-20 h-12 object-cover rounded" />
-                            <label className="cursor-pointer bg-stone-200 px-4 py-2 rounded text-sm font-bold">Change Image <input type="file" className="hidden" onChange={(e) => handlePageImageUpload(e, 'home', 'hero')} /></label>
+                        
+                        {/* Highlight Image URL Input */}
+                        <div>
+                            <label className="text-xs font-bold uppercase text-stone-400">Hero Image URL</label>
+                            <input 
+                                className="w-full p-3 border rounded" 
+                                placeholder="https://example.com/image.jpg" 
+                                value={pageContent.home.hero.image} 
+                                onChange={(e) => updatePageContent({...pageContent, home: {...pageContent.home, hero: {...pageContent.home.hero, image: e.target.value}}})} 
+                            />
+                            {!pageContent.home.hero.image.startsWith('http') && pageContent.home.hero.image.length > 0 && (
+                                <p className="text-red-500 text-xs mt-1">URL must start with http or https</p>
+                            )}
                         </div>
                     </div>
                     <div className="space-y-4">
@@ -244,9 +274,9 @@ const Admin: React.FC = () => {
         <div className="p-8 border-b border-stone-200/50">
            <h1 className="text-xl font-bold font-serif flex items-center text-stone-800">
              <div className="w-8 h-8 bg-safari-sunset rounded-lg flex items-center justify-center text-white mr-3">T</div>
-             Admin CMS
+             Admin – Tom (Cruse)
            </h1>
-           <p className="text-xs text-stone-500 mt-2 pl-11">Tom "Cruse" Madeda</p>
+           <p className="text-xs text-stone-500 mt-2 pl-11">CMS Panel</p>
         </div>
         <nav className="p-4 space-y-2 flex-grow overflow-y-auto">
             {[
@@ -311,35 +341,235 @@ const Admin: React.FC = () => {
              </div>
         )}
 
-        {/* Existing Tour Edit Modal Logic (Simplified for brevity but reusing functionality) */}
+        {/* --- TOUR EDIT MODAL --- */}
         {editingTour && (
              <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-stone-900/60 backdrop-blur-md">
-                 <div className="glass-premium rounded-3xl w-full max-w-4xl max-h-[90vh] overflow-y-auto p-8">
-                     <div className="flex justify-between mb-6">
-                         <h3 className="text-2xl font-bold">Edit Tour</h3>
-                         <button onClick={() => setEditingTour(null)}><X /></button>
+                 <div className="glass-premium rounded-3xl w-full max-w-4xl max-h-[90vh] overflow-y-auto p-8 border border-white/20 shadow-2xl">
+                     <div className="flex justify-between items-center mb-8 border-b pb-4">
+                         <h3 className="text-3xl font-bold font-serif">Edit Tour</h3>
+                         <button onClick={() => setEditingTour(null)} className="p-2 hover:bg-red-50 text-stone-500 hover:text-red-500 rounded-full transition-colors"><X className="w-6 h-6" /></button>
                      </div>
-                     <div className="space-y-4">
-                         <input className="w-full p-4 border rounded-xl" value={editingTour.name} onChange={(e) => setEditingTour({...editingTour, name: e.target.value})} placeholder="Tour Name" />
-                         <div className="grid grid-cols-2 gap-4">
-                             <input type="number" className="p-4 border rounded-xl" value={editingTour.priceUsd} onChange={(e) => setEditingTour({...editingTour, priceUsd: Number(e.target.value)})} placeholder="Price USD" />
-                             <input type="number" className="p-4 border rounded-xl" value={editingTour.durationDays} onChange={(e) => setEditingTour({...editingTour, durationDays: Number(e.target.value)})} placeholder="Duration (Days)" />
-                         </div>
-                         <textarea className="w-full p-4 border rounded-xl" rows={4} value={editingTour.fullDescription} onChange={(e) => setEditingTour({...editingTour, fullDescription: e.target.value})} placeholder="Full Description"></textarea>
-                         
-                         {/* Reusing existing Image Upload Logic */}
-                         <div className="border-2 border-dashed p-4 rounded-xl text-center">
-                             <p className="mb-2">Main Image</p>
-                             <input type="file" onChange={async (e) => {
-                                 if(e.target.files?.[0]) {
-                                     const b64 = await processFile(e.target.files[0]);
-                                     setEditingTour({...editingTour, image: b64});
-                                 }
-                             }} />
+                     
+                     <div className="space-y-8">
+                         {/* Basic Info */}
+                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                             <div>
+                                <label className="text-xs font-bold uppercase text-stone-400 mb-2 block">Tour Name</label>
+                                <input className="w-full p-4 border rounded-xl font-bold text-lg" value={editingTour.name} onChange={(e) => setEditingTour({...editingTour, name: e.target.value})} placeholder="Tour Name" />
+                             </div>
+                             <div>
+                                <label className="text-xs font-bold uppercase text-stone-400 mb-2 block">Category</label>
+                                <select className="w-full p-4 border rounded-xl" value={editingTour.group} onChange={(e) => setEditingTour({...editingTour, group: e.target.value as any})}>
+                                    <option value="Road Safari">Road Safari</option>
+                                    <option value="Flight Safari">Flight Safari</option>
+                                    <option value="Excursion">Excursion</option>
+                                    <option value="Trek">Trek</option>
+                                </select>
+                             </div>
                          </div>
 
-                         <div className="flex justify-end gap-4 mt-6">
-                             <button onClick={() => { updateTour(editingTour); setEditingTour(null); }} className="px-8 py-3 bg-safari-leaf text-white font-bold rounded-xl">Save Changes</button>
+                         {/* Pricing & Specs */}
+                         <div className="glass-card p-6 rounded-2xl bg-safari-sky/5 border border-safari-sky/10">
+                             <h4 className="font-bold text-safari-blue mb-4 flex items-center"><Settings className="w-4 h-4 mr-2" /> Pricing & Specs</h4>
+                             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                                 <div>
+                                     <label className="text-xs font-bold uppercase text-stone-400 mb-1 block">Price (USD)</label>
+                                     <input type="number" className="w-full p-3 border rounded-xl" value={editingTour.priceUsd} 
+                                        onChange={(e) => {
+                                           const usd = Number(e.target.value);
+                                           // Auto-calculate GBP
+                                           const rate = useData().currencyRates['GBP'] || 0.79;
+                                           const gbp = Math.ceil(usd * rate);
+                                           setEditingTour({...editingTour, priceUsd: usd, priceGbp: gbp});
+                                        }} 
+                                     />
+                                 </div>
+                                 <div className="relative">
+                                     <label className="text-xs font-bold uppercase text-stone-400 mb-1 block">Price (GBP)</label>
+                                     <input type="number" readOnly className="w-full p-3 border rounded-xl bg-stone-100 text-stone-500" value={editingTour.priceGbp} />
+                                     <div className="absolute right-2 top-8 text-xs text-stone-400 flex items-center">
+                                         Auto <CheckCircle className="w-3 h-3 ml-1 text-green-500" />
+                                     </div>
+                                 </div>
+                                 <div>
+                                     <label className="text-xs font-bold uppercase text-stone-400 mb-1 block">Duration (Days)</label>
+                                     <input type="number" className="w-full p-3 border rounded-xl" value={editingTour.durationDays} onChange={(e) => setEditingTour({...editingTour, durationDays: Number(e.target.value)})} />
+                                 </div>
+                                 <div className="flex items-center pt-6">
+                                    <label className="flex items-center cursor-pointer space-x-3">
+                                        <input type="checkbox" className="w-5 h-5 accent-safari-gold" checked={editingTour.featured} onChange={(e) => setEditingTour({...editingTour, featured: e.target.checked})} />
+                                        <span className="font-bold text-sm">Featured?</span>
+                                    </label>
+                                 </div>
+                             </div>
+                             
+                             <div className="mt-4 overflow-x-auto">
+                                 <p className="text-xs font-bold uppercase text-stone-400 mb-2">Live Conversions</p>
+                                 <div className="flex gap-4">
+                                     {availableCurrencies.slice(0, 6).map(curr => {
+                                         const p = convertPrice(editingTour.priceUsd);
+                                         // Mock conversion for display in admin since convertPrice uses selectedCurrency
+                                         // In a real app we'd expose a conversion helper for any currency
+                                         return (
+                                             <div key={curr.code} className="bg-white px-3 py-1 rounded border text-xs whitespace-nowrap">
+                                                 {curr.flag} {curr.code}: {Math.ceil(editingTour.priceUsd * (useData().currencyRates[curr.code] || 1))}
+                                             </div>
+                                         )
+                                     })}
+                                 </div>
+                             </div>
+                         </div>
+
+                         {/* Descriptions */}
+                         <div className="space-y-4">
+                             <div>
+                                 <label className="text-xs font-bold uppercase text-stone-400 mb-2 block">Short Description</label>
+                                 <input className="w-full p-4 border rounded-xl" value={editingTour.shortDescription} onChange={(e) => setEditingTour({...editingTour, shortDescription: e.target.value})} placeholder="Brief summary for card..." />
+                             </div>
+                             <div>
+                                 <label className="text-xs font-bold uppercase text-stone-400 mb-2 block">Full Overview</label>
+                                 <textarea className="w-full p-4 border rounded-xl h-32" value={editingTour.fullDescription} onChange={(e) => setEditingTour({...editingTour, fullDescription: e.target.value})} placeholder="Detailed overview..." />
+                             </div>
+                         </div>
+
+                         {/* ITINERARY BUILDER */}
+                         <div className="border-t pt-8">
+                             <div className="flex justify-between items-center mb-6">
+                                 <h4 className="text-xl font-bold text-safari-earth flex items-center"><List className="w-5 h-5 mr-2" /> Itinerary Builder</h4>
+                                 <span className="text-xs bg-stone-100 px-3 py-1 rounded-full text-stone-500">{editingTour.itinerary.length} Days Configured</span>
+                             </div>
+                             
+                             <div className="space-y-4 bg-stone-50 p-6 rounded-2xl border border-stone-100">
+                                {editingTour.itinerary.sort((a,b) => a.day - b.day).map((day, index) => (
+                                  <div key={index} className="glass-card bg-white p-5 rounded-xl border border-stone-200 shadow-sm relative group hover:shadow-md transition-shadow">
+                                    <div className="flex justify-between items-center mb-3">
+                                       <span className="font-black bg-safari-leaf text-white w-20 py-1 rounded-full flex items-center justify-center text-xs uppercase tracking-wider">Day {day.day}</span>
+                                       <button onClick={() => {
+                                          const newItinerary = editingTour.itinerary.filter((_, i) => i !== index);
+                                          // Re-index days optionally? For now keeping original Day number unless manual change
+                                          setEditingTour({...editingTour, itinerary: newItinerary});
+                                       }} className="text-stone-400 hover:text-red-500 hover:bg-red-50 p-2 rounded-full transition-colors"><Trash2 size={16} /></button>
+                                    </div>
+                                    <div className="space-y-3">
+                                        <input 
+                                          className="w-full p-3 border rounded-lg font-bold text-stone-800 focus:ring-2 focus:ring-safari-leaf outline-none" 
+                                          placeholder="Day Title (e.g., Arrival in Nairobi)" 
+                                          value={day.title} 
+                                          onChange={(e) => {
+                                             const newItinerary = [...editingTour.itinerary];
+                                             newItinerary[index].title = e.target.value;
+                                             setEditingTour({...editingTour, itinerary: newItinerary});
+                                          }}
+                                        />
+                                        <textarea 
+                                          className="w-full p-3 border rounded-lg text-sm text-stone-600 focus:ring-2 focus:ring-safari-leaf outline-none" 
+                                          rows={3} 
+                                          placeholder="Detailed activities for the day..."
+                                          value={day.description}
+                                          onChange={(e) => {
+                                             const newItinerary = [...editingTour.itinerary];
+                                             newItinerary[index].description = e.target.value;
+                                             setEditingTour({...editingTour, itinerary: newItinerary});
+                                          }}
+                                        />
+                                    </div>
+                                  </div>
+                                ))}
+                                
+                                <button 
+                                  onClick={() => {
+                                    const nextDay = editingTour.itinerary.length > 0 ? Math.max(...editingTour.itinerary.map(d => d.day)) + 1 : 1;
+                                    setEditingTour({
+                                      ...editingTour, 
+                                      itinerary: [...editingTour.itinerary, { day: nextDay, title: "", description: "" }]
+                                    });
+                                  }}
+                                  className="w-full py-4 border-2 border-dashed border-stone-300 text-stone-500 font-bold rounded-xl hover:bg-white hover:border-safari-leaf hover:text-safari-leaf transition-all flex items-center justify-center gap-2 group"
+                                >
+                                  <div className="bg-stone-200 group-hover:bg-safari-leaf group-hover:text-white rounded-full p-1 transition-colors"><Plus size={16} /></div> 
+                                  Add Day {editingTour.itinerary.length > 0 ? Math.max(...editingTour.itinerary.map(d => d.day)) + 1 : 1}
+                                </button>
+                              </div>
+                         </div>
+                         
+                         {/* Images */}
+                         <div className="border-t pt-8">
+                             <h4 className="text-xl font-bold text-safari-earth mb-4 flex items-center"><ImageIcon className="w-5 h-5 mr-2" /> Media Gallery</h4>
+                             
+                             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                 {/* Main Image */}
+                                 <div>
+                                     <p className="font-bold text-xs uppercase text-stone-400 mb-2">Main Cover Image</p>
+                                     <div className="relative group rounded-xl overflow-hidden aspect-video bg-stone-100 border-2 border-dashed border-stone-300 flex items-center justify-center">
+                                         {editingTour.image ? (
+                                             <>
+                                                <img src={editingTour.image} className="w-full h-full object-cover" />
+                                                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
+                                                    <label className="cursor-pointer bg-white text-stone-900 px-4 py-2 rounded-lg font-bold hover:scale-105 transition-transform">
+                                                        Replace
+                                                        <input type="file" className="hidden" onChange={async (e) => {
+                                                            if(e.target.files?.[0]) {
+                                                                const b64 = await processFile(e.target.files[0]);
+                                                                setEditingTour({...editingTour, image: b64});
+                                                            }
+                                                        }} />
+                                                    </label>
+                                                </div>
+                                             </>
+                                         ) : (
+                                            <label className="cursor-pointer flex flex-col items-center text-stone-400 hover:text-safari-leaf">
+                                                <Plus className="w-8 h-8 mb-2" />
+                                                <span className="text-sm font-bold">Upload Cover</span>
+                                                <input type="file" className="hidden" onChange={async (e) => {
+                                                    if(e.target.files?.[0]) {
+                                                        const b64 = await processFile(e.target.files[0]);
+                                                        setEditingTour({...editingTour, image: b64});
+                                                    }
+                                                }} />
+                                            </label>
+                                         )}
+                                     </div>
+                                 </div>
+
+                                 {/* Gallery Grid */}
+                                 <div>
+                                     <div className="flex justify-between items-center mb-2">
+                                        <p className="font-bold text-xs uppercase text-stone-400">Photo Gallery</p>
+                                        <label className="cursor-pointer text-safari-leaf text-xs font-bold uppercase hover:underline flex items-center">
+                                            <Plus className="w-3 h-3 mr-1" /> Add Photos
+                                            <input type="file" multiple className="hidden" onChange={handleTourGalleryUpload} />
+                                        </label>
+                                     </div>
+                                     <div className="grid grid-cols-3 gap-2">
+                                         {editingTour.gallery && editingTour.gallery.map((img, idx) => (
+                                             <div key={idx} className="aspect-square rounded-lg overflow-hidden relative group">
+                                                 <img src={img} className="w-full h-full object-cover" />
+                                                 <button 
+                                                    onClick={() => {
+                                                        const newGallery = editingTour.gallery?.filter((_, i) => i !== idx);
+                                                        setEditingTour({...editingTour, gallery: newGallery});
+                                                    }}
+                                                    className="absolute top-1 right-1 bg-red-500 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                                                 >
+                                                     <X size={12} />
+                                                 </button>
+                                             </div>
+                                         ))}
+                                         {(!editingTour.gallery || editingTour.gallery.length === 0) && (
+                                             <div className="col-span-3 text-center py-8 text-stone-400 text-xs italic bg-stone-50 rounded-lg">
+                                                 No gallery photos yet.
+                                             </div>
+                                         )}
+                                     </div>
+                                 </div>
+                             </div>
+                         </div>
+
+                         <div className="sticky bottom-0 bg-white/80 backdrop-blur-md p-4 border-t flex justify-end gap-4 rounded-b-3xl">
+                             <button onClick={() => setEditingTour(null)} className="px-6 py-3 text-stone-500 font-bold hover:bg-stone-100 rounded-xl transition-colors">Cancel</button>
+                             <button onClick={() => { updateTour(editingTour); setEditingTour(null); showToast("Tour Saved Successfully!") }} className="px-8 py-3 bg-safari-leaf text-white font-bold rounded-xl shadow-lg hover:bg-green-700 transition-colors flex items-center">
+                                 <Save className="w-4 h-4 mr-2" /> Save Changes
+                             </button>
                          </div>
                      </div>
                  </div>
