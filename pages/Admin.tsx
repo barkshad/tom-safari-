@@ -2,7 +2,7 @@
 // @ts-nocheck
 import React, { useState, useRef } from 'react';
 import { useData } from '../context/DataContext';
-import { Lock, Save, LogOut, Globe, Layout, Settings, Home, List, MessageSquare, Image as ImageIcon, ChevronRight, CheckCircle, AlertCircle, Plus, Edit2, Trash2, X, ChevronDown, ChevronUp, MapPin, Calendar } from 'lucide-react';
+import { Lock, Save, LogOut, Globe, Layout, Settings, Home, List, MessageSquare, Image as ImageIcon, ChevronRight, CheckCircle, AlertCircle, Plus, Edit2, Trash2, X, ChevronDown, ChevronUp, MapPin, Calendar, FileText } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Tour, CompanyInfo, PageContent, ItineraryDay } from '../types';
 import PageTransition from '../components/PageTransition';
@@ -19,8 +19,12 @@ const Admin: React.FC = () => {
 
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const [activeTab, setActiveTab] = useState<'dashboard' | 'global' | 'pages' | 'seo' | 'tours' | 'inquiries' | 'settings'>('dashboard');
+  const [activeTab, setActiveTab] = useState<'dashboard' | 'global' | 'pages' | 'seo' | 'tours' | 'itineraries' | 'inquiries' | 'settings'>('dashboard');
   const [editingTour, setEditingTour] = useState<Tour | null>(null);
+  
+  // Itinerary Editing State
+  const [itineraryModal, setItineraryModal] = useState<{ tourId: string, dayIndex: number | null, data: ItineraryDay } | null>(null);
+
   const [uploading, setUploading] = useState(false);
   const [toast, setToast] = useState<{message: string, type: 'success' | 'error'} | null>(null);
   
@@ -105,6 +109,39 @@ const Admin: React.FC = () => {
               setUploading(false);
           }
       }
+  };
+
+  // Itinerary Helpers
+  const saveItineraryItem = () => {
+    if (!itineraryModal) return;
+    const tour = tours.find(t => t.id === itineraryModal.tourId);
+    if (!tour) return;
+
+    let newItinerary = [...tour.itinerary];
+    if (itineraryModal.dayIndex !== null) {
+        // Update existing
+        newItinerary[itineraryModal.dayIndex] = itineraryModal.data;
+    } else {
+        // Add new
+        newItinerary.push(itineraryModal.data);
+    }
+    
+    // Sort by day
+    newItinerary.sort((a, b) => a.day - b.day);
+
+    updateTour({ ...tour, itinerary: newItinerary });
+    setItineraryModal(null);
+    showToast("Itinerary updated!");
+  };
+
+  const deleteItineraryItem = (tourId: string, index: number) => {
+      if(!window.confirm("Delete this itinerary day?")) return;
+      const tour = tours.find(t => t.id === tourId);
+      if (!tour) return;
+      
+      const newItinerary = tour.itinerary.filter((_, i) => i !== index);
+      updateTour({ ...tour, itinerary: newItinerary });
+      showToast("Day deleted");
   };
 
   if (!isAuthenticated) {
@@ -285,6 +322,7 @@ const Admin: React.FC = () => {
                 { id: 'pages', label: 'Pages & Content', icon: Layout },
                 { id: 'seo', label: 'SEO Manager', icon: Globe },
                 { id: 'tours', label: 'Tours', icon: List },
+                { id: 'itineraries', label: 'Itineraries', icon: FileText },
                 { id: 'inquiries', label: 'Inquiries', icon: MessageSquare },
                 { id: 'settings', label: 'System', icon: Settings },
             ].map((item) => (
@@ -339,6 +377,81 @@ const Admin: React.FC = () => {
                     ))}
                 </div>
              </div>
+        )}
+
+        {activeTab === 'itineraries' && (
+             <div className="space-y-8">
+                {tours.map(tour => (
+                   <div key={tour.id} className="glass-card p-6 rounded-2xl">
+                       <div className="flex justify-between items-center mb-6">
+                           <div className="flex items-center gap-4">
+                               <img src={tour.image} className="w-12 h-12 rounded-lg object-cover" />
+                               <h3 className="text-xl font-bold">{tour.name}</h3>
+                           </div>
+                           <button 
+                             onClick={() => {
+                                const nextDay = tour.itinerary.length > 0 ? Math.max(...tour.itinerary.map(d => d.day)) + 1 : 1;
+                                setItineraryModal({
+                                    tourId: tour.id,
+                                    dayIndex: null,
+                                    data: { day: nextDay, title: "", description: "" }
+                                });
+                             }}
+                             className="px-4 py-2 bg-safari-leaf text-white rounded-lg font-bold text-sm flex items-center"
+                           >
+                               <Plus className="w-4 h-4 mr-2" /> Add Item
+                           </button>
+                       </div>
+                       
+                       <div className="space-y-3 pl-4 border-l-2 border-stone-200">
+                           {tour.itinerary.length === 0 && <p className="text-stone-400 italic text-sm">No itinerary items yet.</p>}
+                           {tour.itinerary.sort((a,b) => a.day - b.day).map((day, idx) => (
+                               <div key={idx} className="bg-white p-4 rounded-xl border border-stone-100 flex justify-between items-start group hover:shadow-md transition-shadow">
+                                   <div>
+                                       <span className="text-xs font-bold uppercase text-safari-sunset bg-safari-sunset/10 px-2 py-1 rounded">Day {day.day}</span>
+                                       <h4 className="font-bold mt-2">{day.title || "Untitled Day"}</h4>
+                                       <p className="text-sm text-stone-500 line-clamp-2">{day.description}</p>
+                                   </div>
+                                   <div className="flex gap-2 opacity-50 group-hover:opacity-100 transition-opacity">
+                                       <button onClick={() => setItineraryModal({ tourId: tour.id, dayIndex: idx, data: {...day} })} className="p-2 hover:bg-stone-100 rounded-full"><Edit2 className="w-4 h-4" /></button>
+                                       <button onClick={() => deleteItineraryItem(tour.id, idx)} className="p-2 hover:bg-red-50 text-red-500 rounded-full"><Trash2 className="w-4 h-4" /></button>
+                                   </div>
+                               </div>
+                           ))}
+                       </div>
+                   </div>
+                ))}
+             </div>
+        )}
+
+        {/* --- ITINERARY ITEM MODAL --- */}
+        {itineraryModal && (
+            <div className="fixed inset-0 z-[70] flex items-center justify-center p-4 bg-stone-900/60 backdrop-blur-md">
+                 <div className="glass-premium rounded-3xl w-full max-w-lg p-8 border border-white/20 shadow-2xl">
+                     <div className="flex justify-between items-center mb-6">
+                         <h3 className="text-2xl font-bold font-serif">{itineraryModal.dayIndex !== null ? 'Edit' : 'Add'} Itinerary Item</h3>
+                         <button onClick={() => setItineraryModal(null)} className="p-2 hover:bg-red-50 text-stone-500 hover:text-red-500 rounded-full transition-colors"><X className="w-6 h-6" /></button>
+                     </div>
+                     <div className="space-y-4">
+                         <div>
+                             <label className="text-xs font-bold uppercase text-stone-400 mb-2 block">Day Number</label>
+                             <input type="number" className="w-full p-3 border rounded-xl" value={itineraryModal.data.day} onChange={(e) => setItineraryModal({...itineraryModal, data: {...itineraryModal.data, day: Number(e.target.value)}})} />
+                         </div>
+                         <div>
+                             <label className="text-xs font-bold uppercase text-stone-400 mb-2 block">Title</label>
+                             <input className="w-full p-3 border rounded-xl" value={itineraryModal.data.title} onChange={(e) => setItineraryModal({...itineraryModal, data: {...itineraryModal.data, title: e.target.value}})} placeholder="e.g. Arrival in Maasai Mara" />
+                         </div>
+                         <div>
+                             <label className="text-xs font-bold uppercase text-stone-400 mb-2 block">Description</label>
+                             <textarea rows={5} className="w-full p-3 border rounded-xl" value={itineraryModal.data.description} onChange={(e) => setItineraryModal({...itineraryModal, data: {...itineraryModal.data, description: e.target.value}})} placeholder="Details..." />
+                         </div>
+                         <div className="pt-4 flex justify-end gap-3">
+                             <button onClick={() => setItineraryModal(null)} className="px-4 py-2 text-stone-500 font-bold hover:bg-stone-100 rounded-lg">Cancel</button>
+                             <button onClick={saveItineraryItem} className="px-6 py-2 bg-safari-leaf text-white font-bold rounded-lg shadow-lg">Save Item</button>
+                         </div>
+                     </div>
+                 </div>
+            </div>
         )}
 
         {/* --- TOUR EDIT MODAL --- */}
