@@ -2,6 +2,8 @@
 
 import { Tour, PageContent, CurrencyConfig } from './types';
 
+export const DATA_VERSION = "1.2"; // New version to force data refresh
+
 export const COMPANY_INFO = {
   name: "Tom 'Cruse' Madeda Safaris",
   ownerName: "Tom 'Cruse' Madeda",
@@ -12,7 +14,7 @@ export const COMPANY_INFO = {
   social: {
     facebook: "#",
     instagram: "https://www.instagram.com/madeda_thomas?igsh=eTA0czUxejI2ZnZp",
-    whatsapp: "https://wa.me/254792150200"
+    whatsapp: "https://wa.me/254792150200" // CORRECTED WHATSAPP NUMBER
   }
 };
 

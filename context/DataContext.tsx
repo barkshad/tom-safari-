@@ -1,7 +1,8 @@
 
+
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { Tour, CompanyInfo, Inquiry, InquiryForm, PageContent, CurrencyConfig } from '../types';
-import { TOURS, COMPANY_INFO, DEFAULT_PAGE_CONTENT, SUPPORTED_CURRENCIES } from '../constants';
+import { TOURS, COMPANY_INFO, DEFAULT_PAGE_CONTENT, SUPPORTED_CURRENCIES, DATA_VERSION } from '../constants';
 
 interface DataContextType {
   companyInfo: CompanyInfo;
@@ -31,35 +32,32 @@ interface DataContextType {
 const DataContext = createContext<DataContextType | undefined>(undefined);
 
 export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [companyInfo, setCompanyInfo] = useState<CompanyInfo>(() => {
+  
+  // Helper to load data from localStorage, checking against the current data version.
+  // If versions mismatch, it loads the fresh data from constants.ts to prevent stale info.
+  const checkVersionAndLoad = (key: string, defaultValue: any) => {
     try {
-      const saved = localStorage.getItem('companyInfo');
-      return saved ? JSON.parse(saved) : COMPANY_INFO;
+      const savedVersion = localStorage.getItem('dataVersion');
+      if (savedVersion !== DATA_VERSION) {
+        // Version mismatch, return default to force update
+        return defaultValue;
+      }
+      const saved = localStorage.getItem(key);
+      return saved ? JSON.parse(saved) : defaultValue;
     } catch {
-      return COMPANY_INFO;
+      return defaultValue;
     }
-  });
+  };
+  
+  const [companyInfo, setCompanyInfo] = useState<CompanyInfo>(() => checkVersionAndLoad('companyInfo', COMPANY_INFO));
+  const [tours, setTours] = useState<Tour[]>(() => checkVersionAndLoad('tours', TOURS));
+  const [inquiries, setInquiries] = useState<Inquiry[]>(() => checkVersionAndLoad('inquiries', []));
 
-  const [tours, setTours] = useState<Tour[]>(() => {
-    try {
-      const saved = localStorage.getItem('tours');
-      return saved ? JSON.parse(saved) : TOURS;
-    } catch {
-      return TOURS;
-    }
-  });
-
-  const [inquiries, setInquiries] = useState<Inquiry[]>(() => {
-    try {
-      const saved = localStorage.getItem('inquiries');
-      return saved ? JSON.parse(saved) : [];
-    } catch {
-      return [];
-    }
-  });
-
-  // Deep merge default content to ensure new fields (SEO, Footer) exist even if localStorage has old data
+  // Special handler for pageContent for deep merging
   const [pageContent, setPageContent] = useState<PageContent>(() => {
+    const savedVersion = localStorage.getItem('dataVersion');
+    if (savedVersion !== DATA_VERSION) return DEFAULT_PAGE_CONTENT;
+
     try {
       const saved = localStorage.getItem('pageContent');
       if (saved) {
@@ -80,7 +78,7 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
       return DEFAULT_PAGE_CONTENT;
     }
   });
-
+  
   const [adminPassword, setAdminPassword] = useState<string>(() => {
     return localStorage.getItem('adminPassword') || '12345';
   });
@@ -161,6 +159,7 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const saveToStorage = (key: string, data: any) => {
     try {
       localStorage.setItem(key, JSON.stringify(data));
+      localStorage.setItem('dataVersion', DATA_VERSION); // Always save the current version with any data change.
     } catch (e: any) {
       if (e.name === 'QuotaExceededError' || e.name === 'NS_ERROR_DOM_QUOTA_REACHED') {
         alert("⚠️ Storage Limit Reached!\n\nPlease delete some gallery photos to make space.");
