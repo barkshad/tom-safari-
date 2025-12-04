@@ -1,4 +1,5 @@
 
+
 import { Tour, PageContent, CurrencyConfig } from './types';
 
 export const COMPANY_INFO = {
@@ -11,7 +12,7 @@ export const COMPANY_INFO = {
   social: {
     facebook: "#",
     instagram: "https://www.instagram.com/madeda_thomas?igsh=eTA0czUxejI2ZnZp",
-    whatsapp: "https://wa.me/254721787589"
+    whatsapp: "https://wa.me/254792150200"
   }
 };
 
