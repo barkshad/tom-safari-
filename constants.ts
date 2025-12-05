@@ -1,7 +1,7 @@
 
 import { Tour, PageContent, CurrencyConfig } from './types';
 
-export const DATA_VERSION = "1.3"; // Incremented to force data refresh
+export const DATA_VERSION = "2.1"; // Incremented to force data refresh
 
 export const COMPANY_INFO = {
   name: "Tom 'Cruse' Madeda Safaris",
