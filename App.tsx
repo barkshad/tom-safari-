@@ -1,26 +1,27 @@
 // @ts-nocheck
-import React from 'react';
+import React, { Suspense, lazy } from 'react';
 import { HashRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
-import Home from './pages/Home';
-import About from './pages/About';
-import Tours from './pages/Tours';
-import TourDetails from './pages/TourDetails';
-import Blog from './pages/Blog';
-import Contact from './pages/Contact';
-import Admin from './pages/Admin';
-import MainLayout from './components/MainLayout';
 import { DataProvider } from './context/DataContext';
+import MainLayout from './components/MainLayout';
 import SEOUpdater from './components/SEOUpdater';
+import LoadingSpinner from './components/LoadingSpinner';
+
+// Lazy load pages for better performance
+const Home = lazy(() => import('./pages/Home'));
+const About = lazy(() => import('./pages/About'));
+const Tours = lazy(() => import('./pages/Tours'));
+const TourDetails = lazy(() => import('./pages/TourDetails'));
+const Blog = lazy(() => import('./pages/Blog'));
+const Contact = lazy(() => import('./pages/Contact'));
+const Admin = lazy(() => import('./pages/Admin'));
 
 // Scroll to top wrapper
 const ScrollToTop: React.FC = () => {
   const { pathname } = useLocation();
-
   React.useEffect(() => {
     window.scrollTo(0, 0);
   }, [pathname]);
-
   return null;
 };
 
@@ -50,9 +51,11 @@ function App() {
       <Router>
         <ScrollToTop />
         <SEOUpdater />
-        <div className="flex flex-col min-h-screen bg-safari-sand font-sans">
-          <AnimatedRoutes />
-        </div>
+        <Suspense fallback={<LoadingSpinner />}>
+          <div className="flex flex-col min-h-screen bg-safari-sand font-sans">
+            <AnimatedRoutes />
+          </div>
+        </Suspense>
       </Router>
     </DataProvider>
   );

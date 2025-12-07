@@ -1,4 +1,5 @@
 
+
 export interface Tour {
   id: string;
   name: string;
@@ -14,6 +15,8 @@ export interface Tour {
   featured: boolean;
   category: 'Safari' | 'Coastal' | 'Trek' | 'Day Trip';
   group: 'Excursion' | 'Road Safari' | 'Flight Safari' | 'Trek' | 'Custom';
+  // FIX: Added optional 'keywords' property to allow for SEO keywords on tour objects.
+  keywords?: string;
 }
 
 export interface ItineraryDay {

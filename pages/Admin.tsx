@@ -1,4 +1,3 @@
-
 // @ts-nocheck
 import React, { useState, useRef } from 'react';
 import { useData } from '../context/DataContext';
@@ -60,7 +59,7 @@ const Admin: React.FC = () => {
         img.src = event.target?.result as string;
         img.onload = () => {
           const canvas = document.createElement('canvas');
-          const MAX_WIDTH = 600;
+          const MAX_WIDTH = 800; // Increased for better quality
           let width = img.width;
           let height = img.height;
           if (width > MAX_WIDTH) {
@@ -71,7 +70,7 @@ const Admin: React.FC = () => {
           canvas.height = height;
           const ctx = canvas.getContext('2d');
           ctx?.drawImage(img, 0, 0, width, height);
-          resolve(canvas.toDataURL('image/jpeg', 0.6));
+          resolve(canvas.toDataURL('image/jpeg', 0.7)); // Quality 0.7
         };
         img.onerror = reject;
       };
@@ -268,7 +267,7 @@ const Admin: React.FC = () => {
     <div>
         <div className="flex justify-between items-center mb-6">
             <h2 className="text-2xl font-bold">Manage Tours</h2>
-            <button onClick={() => setEditingTour({ id: `tour-${Date.now()}`, name: 'New Tour', durationDays: 1, priceUsd: 0, priceGbp: 0, image: '', shortDescription: '', fullDescription: '', highlights: [], itinerary: [], featured: false, category: 'Safari', group: 'Road Safari', gallery: [] })} className="bg-safari-leaf text-white px-4 py-2 rounded-lg flex items-center gap-2"><Plus/> Add Tour</button>
+            <button onClick={() => setEditingTour({ id: `tour-${Date.now()}`, name: 'New Tour', durationDays: 1, priceUsd: 0, priceGbp: 0, image: '', shortDescription: '', fullDescription: '', highlights: [], itinerary: [], featured: false, category: 'Safari', group: 'Road Safari', gallery: [], keywords: '' })} className="bg-safari-leaf text-white px-4 py-2 rounded-lg flex items-center gap-2"><Plus/> Add Tour</button>
         </div>
         <div className="glass-card rounded-2xl overflow-hidden">
             <table className="w-full">
@@ -387,10 +386,11 @@ const Admin: React.FC = () => {
 
                            {/* SECTION 2: DESCRIPTIONS */}
                            <div className="space-y-4">
-                                <h4 className="text-sm font-bold uppercase text-safari-earth border-b pb-2">Descriptions</h4>
+                                <h4 className="text-sm font-bold uppercase text-safari-earth border-b pb-2">Descriptions & SEO</h4>
                                 <div><label className="text-xs font-bold uppercase text-stone-400">Short Description (Card)</label><textarea rows={2} value={editingTour.shortDescription} onChange={e => setEditingTour({...editingTour, shortDescription: e.target.value})} className="w-full p-2 border rounded" /></div>
                                 <div><label className="text-xs font-bold uppercase text-stone-400">Full Description (Page)</label><textarea rows={4} value={editingTour.fullDescription} onChange={e => setEditingTour({...editingTour, fullDescription: e.target.value})} className="w-full p-2 border rounded" /></div>
                                 <div><label className="text-xs font-bold uppercase text-stone-400">Highlights (Comma Separated)</label><input value={editingTour.highlights.join(', ')} onChange={e => setEditingTour({...editingTour, highlights: e.target.value.split(',').map(s=>s.trim())})} className="w-full p-2 border rounded" placeholder="e.g. Lions, Beach, Sunset" /></div>
+                                <div><label className="text-xs font-bold uppercase text-stone-400">Keywords (Comma Separated)</label><input value={editingTour.keywords} onChange={e => setEditingTour({...editingTour, keywords: e.target.value})} className="w-full p-2 border rounded" placeholder="e.g. tsavo east safari, salt lick" /></div>
                            </div>
 
                            {/* SECTION 3: PRICING */}
@@ -398,7 +398,7 @@ const Admin: React.FC = () => {
                                 <h4 className="text-sm font-bold uppercase text-safari-earth border-b pb-2">Pricing</h4>
                                 <div className="grid grid-cols-2 gap-4">
                                     <div><label className="text-xs font-bold uppercase text-stone-400">Price (USD)</label><input type="number" value={editingTour.priceUsd} onChange={e => setEditingTour({...editingTour, priceUsd: Number(e.target.value)})} className="w-full p-2 border rounded" /></div>
-                                    <div><label className="text-xs font-bold uppercase text-stone-400">Price (GBP) - Auto Calculated</label><input type="number" value={Math.ceil(editingTour.priceUsd * 0.79)} disabled className="w-full p-2 border rounded bg-stone-100" /></div>
+                                    <div><label className="text-xs font-bold uppercase text-stone-400">Price (GBP) - Auto Calculated</label><input type="number" value={Math.ceil(editingTour.priceUsd * (currencyRates['GBP'] || 0.79))} disabled className="w-full p-2 border rounded bg-stone-100" /></div>
                                 </div>
                            </div>
 
@@ -453,7 +453,7 @@ const Admin: React.FC = () => {
                         </div>
                         <div className="p-6 border-t flex justify-end gap-4 bg-stone-50 rounded-b-2xl">
                             <button onClick={() => setEditingTour(null)} className="px-4 py-2 border rounded-lg hover:bg-stone-200 font-bold text-stone-600">Cancel</button>
-                            <button onClick={() => { updateTour(editingTour); setEditingTour(null); showToast("Tour saved!"); }} className="px-6 py-2 bg-safari-leaf text-white rounded-lg font-bold shadow-lg hover:bg-green-800 transition-all flex items-center gap-2">{uploading ? 'Uploading...' : <><Save size={18}/> Save Changes</>}</button>
+                            <button onClick={() => { editingTour.id.startsWith('tour-') ? addTour(editingTour) : updateTour(editingTour); setEditingTour(null); showToast("Tour saved!"); }} className="px-6 py-2 bg-safari-leaf text-white rounded-lg font-bold shadow-lg hover:bg-green-800 transition-all flex items-center gap-2">{uploading ? 'Uploading...' : <><Save size={18}/> Save Changes</>}</button>
                         </div>
                     </motion.div>
                 </div>
@@ -473,4 +473,108 @@ const Admin: React.FC = () => {
   );
 };
 
-export default Admin;
+export default Admin;--- START OF FILE types.ts ---
+
+// @ts-nocheck
+export interface Tour {
+  id: string;
+  name: string;
+  durationDays: number;
+  priceUsd: number;
+  priceGbp: number;
+  image: string;
+  gallery?: string[];
+  shortDescription: string;
+  fullDescription: string;
+  highlights: string[];
+  itinerary: ItineraryDay[];
+  featured: boolean;
+  category: 'Safari' | 'Coastal' | 'Trek' | 'Day Trip';
+  group: 'Excursion' | 'Road Safari' | 'Flight Safari' | 'Trek' | 'Custom';
+  keywords?: string; // For SEO
+}
+
+export interface ItineraryDay {
+  day: number;
+  title: string;
+  description: string;
+}
+
+export interface InquiryForm {
+  name: string;
+  email: string;
+  phone: string;
+  tourId?: string;
+  date: string;
+  travelers: number;
+  message: string;
+}
+
+export interface Inquiry extends InquiryForm {
+  id: string;
+  tourName?: string;
+  status: 'New' | 'In Progress' | 'Closed';
+  submittedAt: string;
+}
+
+export interface SEOData {
+  title: string;
+  description: string;
+}
+
+export interface PageSection {
+  title?: string;
+  subtitle?: string;
+  image?: string;
+  content?: string;
+}
+
+export interface PageContent {
+  home: {
+    hero: PageSection;
+    welcome: PageSection;
+    features: { title: string; text: string }[];
+    testimonials: PageSection & { author: string };
+  };
+  about: {
+    hero: PageSection;
+    philosophy: PageSection;
+    founder: PageSection;
+  };
+  contact: {
+    intro: PageSection;
+    mapUrl: string;
+  };
+  footer: {
+    aboutText: string;
+    copyrightText: string;
+  };
+  seo: {
+    home: SEOData;
+    about: SEOData;
+    tours: SEOData;
+    contact: SEOData;
+    blog: SEOData;
+  };
+}
+
+export interface CompanyInfo {
+  name: string;
+  ownerName: string; 
+  email: string;
+  phone: string;
+  location: string;
+  slogan: string;
+  social: {
+    facebook: string;
+    instagram: string;
+    whatsapp: string;
+  };
+}
+
+export interface CurrencyConfig {
+  code: string;
+  name: string;
+  symbol: string;
+  flag: string;
+}

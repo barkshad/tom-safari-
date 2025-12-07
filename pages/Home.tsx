@@ -1,13 +1,13 @@
-
 // @ts-nocheck
 import React, { useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, CheckCircle, Map, Shield, Cloud, Sun, Compass, Star } from 'lucide-react';
+import { ArrowRight, Sun, Compass, Star } from 'lucide-react';
 import { useData } from '../context/DataContext';
 import TourCard from '../components/TourCard';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import PageTransition from '../components/PageTransition';
 import EditTrigger from '../components/EditTrigger';
+import StructuredData from '../components/StructuredData';
 
 const Home: React.FC = () => {
   const { tours, companyInfo, pageContent } = useData();
@@ -21,6 +21,8 @@ const Home: React.FC = () => {
 
   return (
     <PageTransition>
+      <StructuredData type="WebSite" data={{ name: companyInfo.name }} />
+      <StructuredData type="Organization" data={companyInfo} />
       <div className="flex flex-col min-h-screen overflow-x-hidden bg-safari-sand">
         
         {/* --- CINEMATIC PARALLAX HERO --- */}
@@ -28,7 +30,7 @@ const Home: React.FC = () => {
           <EditTrigger sectionName="Hero Section" className="top-24 right-4" />
           <div className="absolute inset-0 z-0">
             <motion.div style={{ scale: scaleImg }} className="w-full h-full">
-              <img src={pageContent.home.hero.image} alt="Safari Hero" className="w-full h-full object-cover" />
+              <img src={pageContent.home.hero.image} alt="Safari Hero" className="w-full h-full object-cover" loading="eager" />
             </motion.div>
             <div className="absolute inset-0 bg-gradient-to-t from-stone-900 via-stone-900/40 to-safari-sky/10 mix-blend-multiply"></div>
             <div className="absolute inset-0 bg-black/20"></div>
@@ -77,15 +79,24 @@ const Home: React.FC = () => {
           </div>
         </section>
 
-        {/* --- FEATURED TOURS (Glass List) --- */}
+        {/* --- FEATURED TOURS --- */}
         <section className="py-24 bg-white/50 backdrop-blur-sm relative">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-16">
+              <h2 className="text-4xl font-serif font-bold text-stone-900">Featured Safaris</h2>
+              <p className="text-lg text-stone-600 mt-2">Hand-picked adventures for an unforgettable experience.</p>
+            </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {featuredTours.map((tour, idx) => (
                 <motion.div key={tour.id} initial={{ opacity: 0, y: 50 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: idx * 0.1 }}>
                   <TourCard tour={tour} />
                 </motion.div>
               ))}
+            </div>
+             <div className="text-center mt-16">
+                <Link to="/tours" className="inline-block px-8 py-4 bg-safari-leaf text-white font-bold rounded-full hover:bg-stone-800 transition-colors shadow-lg">
+                    View All Safaris
+                </Link>
             </div>
           </div>
         </section>
@@ -94,7 +105,7 @@ const Home: React.FC = () => {
         <section className="py-40 relative overflow-hidden flex items-center justify-center group">
           <EditTrigger sectionName="Testimonials" className="top-4 right-4" />
           <div className="absolute inset-0 z-0">
-               <img src="https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?q=80&w=2000" alt="Background" className="w-full h-full object-cover fixed-bg" />
+               <img src="https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?q=80&w=2000" alt="Background" className="w-full h-full object-cover" loading="lazy"/>
                <div className="absolute inset-0 bg-stone-900/60 backdrop-blur-sm"></div>
           </div>
           

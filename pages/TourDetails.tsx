@@ -2,10 +2,12 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useData } from '../context/DataContext';
-import { Clock, CheckCircle, ArrowLeft, Camera, XCircle, MapPin, CloudSun } from 'lucide-react';
+import { ArrowLeft, CloudSun } from 'lucide-react';
 import { Tour } from '../types';
 import { motion } from 'framer-motion';
 import PageTransition from '../components/PageTransition';
+import StructuredData from '../components/StructuredData';
+import EditTrigger from '../components/EditTrigger';
 
 const TourDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -23,27 +25,30 @@ const TourDetails: React.FC = () => {
 
   const price = convertPrice(tour.priceUsd);
   
-  // Smart Gallery Logic 
   const getDisplayImages = () => {
     if (tour.gallery && tour.gallery.length > 0) return tour.gallery;
-    return [tour.image, tour.image, tour.image]; // Fallback placeholder logic
+    // Graceful fallback: show only the main image if no gallery exists.
+    if(tour.image) return [tour.image];
+    return []; 
   };
 
   const galleryImages = getDisplayImages();
 
   return (
     <PageTransition>
+      <StructuredData type="TouristAttraction" data={tour} />
       <div className="bg-safari-sand min-h-screen pb-20">
         
         {/* Cinematic Header */}
         <div className="relative h-[80vh] overflow-hidden">
+          <EditTrigger sectionName={`Tour: ${tour.name}`} className="top-24 right-4" />
           <motion.div 
               initial={{ scale: 1.2 }}
               animate={{ scale: 1 }}
               transition={{ duration: 1.5, ease: "easeOut" }}
               className="w-full h-full"
           >
-              <img src={tour.image} alt={tour.name} className="w-full h-full object-cover" />
+              <img src={tour.image} alt={tour.name} className="w-full h-full object-cover" loading="eager"/>
           </motion.div>
           <div className="absolute inset-0 bg-gradient-to-t from-safari-sand via-transparent to-black/30"></div>
           
@@ -93,41 +98,45 @@ const TourDetails: React.FC = () => {
               </motion.div>
 
               {/* Itinerary */}
-              <motion.div 
-                  className="glass-card p-8 md:p-12 rounded-[2rem]"
-              >
-                <h2 className="text-3xl font-serif font-bold text-stone-800 mb-10">Itinerary</h2>
-                <div className="space-y-12 border-l-2 border-stone-200 ml-4 pl-10">
-                  {tour.itinerary.map((day, idx) => (
-                    <motion.div 
-                        key={day.day} 
-                        initial={{ opacity: 0, x: -20 }}
-                        whileInView={{ opacity: 1, x: 0 }}
-                        transition={{ delay: idx * 0.1 }}
-                        className="relative"
-                    >
-                      <span className="absolute -left-[53px] top-0 w-8 h-8 rounded-full bg-safari-leaf text-white flex items-center justify-center font-bold text-sm ring-4 ring-safari-sand">
-                        {day.day}
-                      </span>
-                      <h3 className="text-xl font-bold text-stone-800 mb-2">Day {day.day}: {day.title}</h3>
-                      <p className="text-stone-600 leading-relaxed">{day.description}</p>
-                    </motion.div>
-                  ))}
-                </div>
-              </motion.div>
+              {tour.itinerary && tour.itinerary.length > 0 && (
+                <motion.div 
+                    className="glass-card p-8 md:p-12 rounded-[2rem]"
+                >
+                  <h2 className="text-3xl font-serif font-bold text-stone-800 mb-10">Itinerary</h2>
+                  <div className="space-y-12 border-l-2 border-stone-200 ml-4 pl-10">
+                    {tour.itinerary.map((day, idx) => (
+                      <motion.div 
+                          key={day.day} 
+                          initial={{ opacity: 0, x: -20 }}
+                          whileInView={{ opacity: 1, x: 0 }}
+                          transition={{ delay: idx * 0.1 }}
+                          className="relative"
+                      >
+                        <span className="absolute -left-[53px] top-0 w-8 h-8 rounded-full bg-safari-leaf text-white flex items-center justify-center font-bold text-sm ring-4 ring-safari-sand">
+                          {day.day}
+                        </span>
+                        <h3 className="text-xl font-bold text-stone-800 mb-2">Day {day.day}: {day.title}</h3>
+                        <p className="text-stone-600 leading-relaxed">{day.description}</p>
+                      </motion.div>
+                    ))}
+                  </div>
+                </motion.div>
+              )}
               
                {/* Photo Gallery */}
-               <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                    {galleryImages.map((img, idx) => (
-                        <motion.div 
-                            key={idx}
-                            whileHover={{ scale: 1.05 }}
-                            className="aspect-square rounded-2xl overflow-hidden shadow-md"
-                        >
-                            <img src={img} className="w-full h-full object-cover" />
-                        </motion.div>
-                    ))}
-                </div>
+               {galleryImages.length > 0 && (
+                 <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                      {galleryImages.map((img, idx) => (
+                          <motion.div 
+                              key={idx}
+                              whileHover={{ scale: 1.05 }}
+                              className="aspect-square rounded-2xl overflow-hidden shadow-md"
+                          >
+                              <img src={img} className="w-full h-full object-cover" loading="lazy" />
+                          </motion.div>
+                      ))}
+                  </div>
+               )}
 
             </div>
 

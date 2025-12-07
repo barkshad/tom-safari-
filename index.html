@@ -3,8 +3,26 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Tom 'Cruse' Madeda Safari and Adventure Kenya - The premier safari operator in Kilifi and Mombasa. Offering road safaris, flight safaris, and excursions to Tsavo, Amboseli, Maasai Mara, and more.">
+    <!-- SEO -->
     <title>Tom 'Cruse' Madeda Safari | Wildlife & Coastal Tours</title>
+    <meta name="description" content="Tom 'Cruse' Madeda Safari and Adventure Kenya - The premier safari operator in Kilifi and Mombasa. Offering road safaris, flight safaris, and excursions to Tsavo, Amboseli, Maasai Mara, and more.">
+    <meta name="keywords" content="Kenya safari, Tsavo East, Amboseli, Maasai Mara, Tom Madeda, Cruse Safari, Kilifi tours, Mombasa excursions, wildlife safari, Salt Lick Lodge">
+    <link rel="canonical" href="https://[YOUR_VERCEL_URL]/" />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://[YOUR_VERCEL_URL]/">
+    <meta property="og:title" content="Tom 'Cruse' Madeda Safari | Wildlife & Coastal Tours">
+    <meta property="og:description" content="Experience the thrill of the wild with Kenya's premier safari expert, hosted by Tom 'Cruse' Madeda.">
+    <meta property="og:image" content="https://images.unsplash.com/photo-1516426122078-c23e76319801?q=80&w=1200&auto=format&fit=crop">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://[YOUR_VERCEL_URL]/">
+    <meta property="twitter:title" content="Tom 'Cruse' Madeda Safari | Wildlife & Coastal Tours">
+    <meta property="twitter:description" content="Experience the thrill of the wild with Kenya's premier safari expert, hosted by Tom 'Cruse' Madeda.">
+    <meta property="twitter:image" content="https://images.unsplash.com/photo-1516426122078-c23e76319801?q=80&w=1200&auto=format&fit=crop">
+
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -62,8 +80,6 @@
       }
       
       /* --- PREMIUM GLASMORPHISM SYSTEM --- */
-      
-      /* Base Glass - Used for cards and sections */
       .glass-premium {
         background: rgba(255, 255, 255, 0.65);
         backdrop-filter: blur(16px);
@@ -71,8 +87,6 @@
         border: 1px solid rgba(255, 255, 255, 0.5);
         box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
       }
-      
-      /* Dark Glass - Used for overlays or dark mode sections */
       .glass-dark {
         background: rgba(23, 23, 23, 0.7);
         backdrop-filter: blur(16px);
@@ -80,8 +94,6 @@
         border: 1px solid rgba(255, 255, 255, 0.1);
         box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
       }
-      
-      /* Blue Tinted Glass - Used for accents/active states */
       .glass-blue {
         background: rgba(125, 211, 252, 0.15);
         backdrop-filter: blur(12px);
@@ -89,8 +101,6 @@
         border: 1px solid rgba(125, 211, 252, 0.3);
         box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
       }
-
-      /* Hoverable Glass Card */
       .glass-card {
         background: rgba(255, 255, 255, 0.7);
         backdrop-filter: blur(12px);
@@ -98,15 +108,12 @@
         border: 1px solid rgba(255, 255, 255, 0.6);
         transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Springy transition */
       }
-      
       .glass-card:hover {
         background: rgba(255, 255, 255, 0.9);
         border-color: rgba(255, 255, 255, 0.9);
         box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
         transform: translateY(-5px);
       }
-
-      /* Text Gradients */
       .text-gradient-gold {
         background: linear-gradient(to right, #8b5e3c, #d4af37);
         -webkit-background-clip: text;

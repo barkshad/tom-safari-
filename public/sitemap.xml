@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://[YOUR_VERCEL_URL]/</loc>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://[YOUR_VERCEL_URL]/about</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://[YOUR_VERCEL_URL]/tours</loc>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://[YOUR_VERCEL_URL]/contact</loc>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://[YOUR_VERCEL_URL]/blog</loc>
+    <priority>0.7</priority>
+  </url>
+  <!-- Tour URLs will be added here dynamically in a real build process -->
+  <url><loc>https://[YOUR_VERCEL_URL]/tours/marine-park-full-day</loc></url>
+  <url><loc>https://[YOUR_VERCEL_URL]/tours/big-game-fishing</loc></url>
+  <url><loc>https://[YOUR_VERCEL_URL]/tours/sunset-cruise</loc></url>
+  <url><loc>https://[YOUR_VERCEL_URL]/tours/tsavo-east-west-3days</loc></url>
+  <url><loc>https://[YOUR_VERCEL_URL]/tours/tsavo-salt-lick-3days</loc></url>
+  <url><loc>https://[YOUR_VERCEL_URL]/tours/amboseli-express-3days</loc></url>
+</urlset>
