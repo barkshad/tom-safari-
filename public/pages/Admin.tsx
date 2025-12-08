@@ -1,7 +1,7 @@
 // @ts-nocheck
 import React, { useState, useRef, useEffect } from 'react';
 import { useData } from '../../context/DataContext';
-import { Lock, Save, LogOut, Globe, Layout, Settings, Home, List, MessageSquare, Image as ImageIcon, ChevronRight, CheckCircle, AlertCircle, Plus, Edit2, Trash2, X, ChevronDown, ChevronUp, MapPin, Calendar, FileText, BarChart, SlidersHorizontal, Search, Upload, Menu, Download, Zap } from 'lucide-react';
+import { Lock, Save, LogOut, Globe, Layout, Settings, Home, List, MessageSquare, Image as ImageIcon, ChevronRight, CheckCircle, AlertCircle, Plus, Edit2, Trash2, X, ChevronDown, ChevronUp, MapPin, Calendar, FileText, BarChart, SlidersHorizontal, Search, Upload, Menu, Download, Zap, Link as LinkIcon } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Tour, CompanyInfo, PageContent, ItineraryDay } from '../../types';
 import PageTransition from '../../components/PageTransition';
@@ -70,6 +70,20 @@ const Admin: React.FC = () => {
       showToast('Uploader not ready. Please refresh.', 'error');
     }
   };
+  
+  const handleManualUrl = (updateFn: (url: string) => void) => {
+    const url = prompt("Enter the full image URL:");
+    if (url) {
+        try {
+            new URL(url); // Basic validation
+            updateFn(url);
+            showToast("Image URL updated!");
+        } catch (e) {
+            showToast("Invalid URL provided.", "error");
+        }
+    }
+  };
+
 
   const showToast = (message: string, type: 'success' | 'error' = 'success') => {
     setToast({ message, type });
@@ -257,9 +271,14 @@ const Admin: React.FC = () => {
                             {pageContent.home.hero.image && <img src={pageContent.home.hero.image} className="w-24 h-16 object-cover rounded-lg border" alt="Hero Preview"/>}
                             <div>
                                  <label className="text-xs font-bold uppercase text-stone-400 block mb-2">Hero Image</label>
-                                 <button onClick={() => handlePageImageUpload('home', 'hero')} className="cursor-pointer bg-stone-200 px-4 py-2 rounded text-sm font-bold inline-flex items-center gap-2 hover:bg-stone-300">
-                                     <Upload size={14} /> Upload Image
-                                 </button>
+                                 <div className="flex gap-2">
+                                     <button onClick={() => handlePageImageUpload('home', 'hero')} className="cursor-pointer bg-stone-200 px-4 py-2 rounded text-sm font-bold inline-flex items-center gap-2 hover:bg-stone-300">
+                                         <Upload size={14} /> Upload
+                                     </button>
+                                     <button onClick={() => handleManualUrl(url => { const newContent = JSON.parse(JSON.stringify(pageContent)); newContent.home.hero.image = url; updatePageContent(newContent); })} className="cursor-pointer bg-stone-200 px-4 py-2 rounded text-sm font-bold inline-flex items-center gap-2 hover:bg-stone-300">
+                                         <LinkIcon size={14} /> Paste URL
+                                     </button>
+                                 </div>
                             </div>
                         </div>
                     </div>
@@ -289,9 +308,14 @@ const Admin: React.FC = () => {
                             {pageContent.about.founder.image && <img src={pageContent.about.founder.image} className="w-20 h-20 object-cover rounded-full border" alt="Founder Preview" />}
                              <div>
                                 <label className="text-xs font-bold uppercase text-stone-400 block mb-2">Founder Photo</label>
-                                <button onClick={() => handlePageImageUpload('about', 'founder')} className="cursor-pointer bg-stone-200 px-4 py-2 rounded text-sm font-bold inline-flex items-center gap-2 hover:bg-stone-300">
-                                    <Upload size={14} /> Change Photo
-                                </button>
+                                <div className="flex gap-2">
+                                    <button onClick={() => handlePageImageUpload('about', 'founder')} className="cursor-pointer bg-stone-200 px-4 py-2 rounded text-sm font-bold inline-flex items-center gap-2 hover:bg-stone-300">
+                                        <Upload size={14} /> Upload
+                                    </button>
+                                    <button onClick={() => handleManualUrl(url => { const newContent = JSON.parse(JSON.stringify(pageContent)); newContent.about.founder.image = url; updatePageContent(newContent); })} className="cursor-pointer bg-stone-200 px-4 py-2 rounded text-sm font-bold inline-flex items-center gap-2 hover:bg-stone-300">
+                                        <LinkIcon size={14} /> Paste URL
+                                    </button>
+                                </div>
                              </div>
                         </div>
                     </div>
@@ -475,9 +499,14 @@ const Admin: React.FC = () => {
                                     </div>
                                     <div>
                                         <label className="text-xs font-bold uppercase text-stone-400 block mb-2">Main Cover Image</label>
-                                        <button onClick={() => handleTourImageUpload('main')} className="cursor-pointer bg-safari-sky text-white px-4 py-2 rounded-lg font-bold inline-flex items-center gap-2 hover:bg-blue-600 transition-colors">
-                                            <Upload size={16}/> Upload Cover
-                                        </button>
+                                        <div className="flex gap-2">
+                                            <button onClick={() => handleTourImageUpload('main')} className="cursor-pointer bg-safari-sky text-white px-4 py-2 rounded-lg font-bold inline-flex items-center gap-2 hover:bg-blue-600 transition-colors">
+                                                <Upload size={16}/> Upload
+                                            </button>
+                                            <button onClick={() => handleManualUrl(url => setEditingTour(prev => prev ? { ...prev, image: url } : null))} className="cursor-pointer bg-stone-200 px-4 py-2 rounded-lg font-bold inline-flex items-center gap-2 hover:bg-stone-300 transition-colors">
+                                                <LinkIcon size={16}/> Paste URL
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                                 
@@ -491,9 +520,14 @@ const Admin: React.FC = () => {
                                             </div>
                                         ))}
                                     </div>
-                                    <button onClick={() => handleTourImageUpload('gallery')} className="cursor-pointer bg-stone-200 text-stone-700 px-4 py-2 rounded-lg font-bold inline-flex items-center gap-2 hover:bg-stone-300 transition-colors">
-                                        <Plus size={16}/> Add to Gallery
-                                    </button>
+                                    <div className="flex gap-2">
+                                        <button onClick={() => handleTourImageUpload('gallery')} className="cursor-pointer bg-stone-200 text-stone-700 px-4 py-2 rounded-lg font-bold inline-flex items-center gap-2 hover:bg-stone-300 transition-colors">
+                                            <Plus size={16}/> Add via Upload
+                                        </button>
+                                        <button onClick={() => handleManualUrl(url => setEditingTour(prev => prev ? { ...prev, gallery: [...(prev.gallery || []), url] } : null))} className="cursor-pointer bg-stone-200 text-stone-700 px-4 py-2 rounded-lg font-bold inline-flex items-center gap-2 hover:bg-stone-300 transition-colors">
+                                            <LinkIcon size={16}/> Add via URL
+                                        </button>
+                                    </div>
                                 </div>
                            </div>
 
