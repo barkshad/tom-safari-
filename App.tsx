@@ -8,13 +8,13 @@ import SEOUpdater from './components/SEOUpdater';
 import LoadingSpinner from './components/LoadingSpinner';
 
 // Lazy load pages for better performance
-const Home = lazy(() => import('./pages/Home'));
-const About = lazy(() => import('./pages/About'));
-const Tours = lazy(() => import('./pages/Tours'));
-const TourDetails = lazy(() => import('./pages/TourDetails'));
-const Blog = lazy(() => import('./pages/Blog'));
-const Contact = lazy(() => import('./pages/Contact'));
-const Admin = lazy(() => import('./pages/Admin'));
+const Home = lazy(() => import('./public/pages/Home'));
+const About = lazy(() => import('./public/pages/About'));
+const Tours = lazy(() => import('./public/pages/Tours'));
+const TourDetails = lazy(() => import('./public/pages/TourDetails'));
+const Blog = lazy(() => import('./public/pages/Blog'));
+const Contact = lazy(() => import('./public/pages/Contact'));
+const Admin = lazy(() => import('./public/pages/Admin'));
 
 // Scroll to top wrapper
 const ScrollToTop: React.FC = () => {

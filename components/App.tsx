@@ -1,16 +1,16 @@
 // @ts-nocheck
 import React from 'react';
 import { HashRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
-import Navbar from './components/Navbar';
-import Footer from './components/Footer';
-import Home from './pages/Home';
-import About from './pages/About';
-import Tours from './pages/Tours';
-import TourDetails from './pages/TourDetails';
-import Blog from './pages/Blog';
-import Contact from './pages/Contact';
-import Admin from './pages/Admin';
-import { DataProvider } from './context/DataContext';
+import Navbar from './Navbar';
+import Footer from './Footer';
+import Home from '../public/pages/Home';
+import About from '../public/pages/About';
+import Tours from '../public/pages/Tours';
+import TourDetails from '../public/pages/TourDetails';
+import Blog from '../public/pages/Blog';
+import Contact from '../public/pages/Contact';
+import Admin from '../public/pages/Admin';
+import { DataProvider } from '../context/DataContext';
 
 // Scroll to top wrapper
 const ScrollToTop: React.FC = () => {

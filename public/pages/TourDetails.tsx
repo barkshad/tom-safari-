@@ -1,13 +1,13 @@
 // @ts-nocheck
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { useData } from '../context/DataContext';
-import { ArrowLeft, CloudSun } from 'lucide-react';
-import { Tour } from '../types';
+import { useData } from '../../context/DataContext';
+import { ArrowLeft, CloudSun, CheckCircle } from 'lucide-react';
+import { Tour } from '../../types';
 import { motion } from 'framer-motion';
-import PageTransition from '../components/PageTransition';
-import StructuredData from '../components/StructuredData';
-import EditTrigger from '../components/EditTrigger';
+import PageTransition from '../../components/PageTransition';
+import StructuredData from '../../components/StructuredData';
+import EditTrigger from '../../components/EditTrigger';
 
 const TourDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -27,7 +27,6 @@ const TourDetails: React.FC = () => {
   
   const getDisplayImages = () => {
     if (tour.gallery && tour.gallery.length > 0) return tour.gallery;
-    // Graceful fallback: show only the main image if no gallery exists.
     if(tour.image) return [tour.image];
     return []; 
   };
@@ -39,7 +38,6 @@ const TourDetails: React.FC = () => {
       <StructuredData type="TouristAttraction" data={tour} />
       <div className="bg-safari-sand min-h-screen pb-20">
         
-        {/* Cinematic Header */}
         <div className="relative h-[80vh] overflow-hidden">
           <EditTrigger sectionName={`Tour: ${tour.name}`} className="top-24 right-4" />
           <motion.div 
@@ -68,7 +66,7 @@ const TourDetails: React.FC = () => {
                   <div className="flex items-center space-x-2 text-safari-sunset mb-2 font-bold tracking-wider uppercase text-sm glass-premium inline-flex px-3 py-1 rounded-full">
                       <CloudSun className="w-4 h-4" /> <span>{tour.category} Safari</span>
                   </div>
-                  <h1 className="text-5xl md:text-8xl font-serif font-black text-white mb-6 leading-none drop-shadow-2xl">{tour.name}</h1>
+                  <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-serif font-black text-white mb-6 leading-none drop-shadow-2xl">{tour.name}</h1>
               </motion.div>
             </div>
           </div>
@@ -77,13 +75,12 @@ const TourDetails: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-20 relative z-30">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
             
-            {/* Main Content */}
             <div className="lg:col-span-2 space-y-10">
               <motion.div 
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
-                  className="glass-card p-8 md:p-12 rounded-[2rem]"
+                  className="glass-card p-6 sm:p-8 md:p-12 rounded-[2rem]"
               >
                 <h2 className="text-3xl font-serif font-bold text-stone-800 mb-6">Experience Overview</h2>
                 <p className="text-stone-600 leading-relaxed mb-10 text-lg font-light">{tour.fullDescription}</p>
@@ -97,13 +94,12 @@ const TourDetails: React.FC = () => {
                 </div>
               </motion.div>
 
-              {/* Itinerary */}
               {tour.itinerary && tour.itinerary.length > 0 && (
                 <motion.div 
-                    className="glass-card p-8 md:p-12 rounded-[2rem]"
+                    className="glass-card p-6 sm:p-8 md:p-12 rounded-[2rem]"
                 >
                   <h2 className="text-3xl font-serif font-bold text-stone-800 mb-10">Itinerary</h2>
-                  <div className="space-y-12 border-l-2 border-stone-200 ml-4 pl-10">
+                  <div className="space-y-12 border-l-2 border-stone-200 ml-4 pl-6 sm:pl-10">
                     {tour.itinerary.map((day, idx) => (
                       <motion.div 
                           key={day.day} 
@@ -112,7 +108,7 @@ const TourDetails: React.FC = () => {
                           transition={{ delay: idx * 0.1 }}
                           className="relative"
                       >
-                        <span className="absolute -left-[53px] top-0 w-8 h-8 rounded-full bg-safari-leaf text-white flex items-center justify-center font-bold text-sm ring-4 ring-safari-sand">
+                        <span className="absolute -left-[37px] sm:-left-[53px] top-0 w-8 h-8 rounded-full bg-safari-leaf text-white flex items-center justify-center font-bold text-sm ring-4 ring-safari-sand">
                           {day.day}
                         </span>
                         <h3 className="text-xl font-bold text-stone-800 mb-2">Day {day.day}: {day.title}</h3>
@@ -123,7 +119,6 @@ const TourDetails: React.FC = () => {
                 </motion.div>
               )}
               
-               {/* Photo Gallery */}
                {galleryImages.length > 0 && (
                  <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                       {galleryImages.map((img, idx) => (
@@ -140,13 +135,12 @@ const TourDetails: React.FC = () => {
 
             </div>
 
-            {/* Premium Booking Widget */}
             <div className="lg:col-span-1">
               <motion.div 
                   initial={{ opacity: 0, x: 20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.4 }}
-                  className="glass-premium rounded-[2rem] p-8 sticky top-28 border border-white/60 shadow-2xl"
+                  className="glass-premium rounded-[2rem] p-6 sm:p-8 sticky top-28 border border-white/60 shadow-2xl"
               >
                 <div className="flex justify-between items-end mb-6 border-b border-stone-200 pb-6">
                     <div>

@@ -1,11 +1,11 @@
 // @ts-nocheck
 import React, { useState } from 'react';
-import { useData } from '../context/DataContext';
-import TourCard from '../components/TourCard';
+import { useData } from '../../context/DataContext';
+import TourCard from '../../components/TourCard';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronDown, ChevronUp, Map, Sun, Plane, Mountain } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import PageTransition from '../components/PageTransition';
+import PageTransition from '../../components/PageTransition';
 
 const Tours: React.FC = () => {
   const { tours, convertPrice, selectedCurrency } = useData();

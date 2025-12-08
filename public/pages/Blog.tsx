@@ -3,7 +3,7 @@ import React from 'react';
 import { Calendar, User } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import PageTransition from '../components/PageTransition';
+import PageTransition from '../../components/PageTransition';
 
 const BLOG_POSTS = [
   {

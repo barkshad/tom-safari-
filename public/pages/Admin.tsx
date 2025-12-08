@@ -1,10 +1,10 @@
 // @ts-nocheck
-import React, { useState, useRef } from 'react';
-import { useData } from '../context/DataContext';
-import { Lock, Save, LogOut, Globe, Layout, Settings, Home, List, MessageSquare, Image as ImageIcon, ChevronRight, CheckCircle, AlertCircle, Plus, Edit2, Trash2, X, ChevronDown, ChevronUp, MapPin, Calendar, FileText, BarChart, SlidersHorizontal, Search, Upload } from 'lucide-react';
+import React, { useState, useRef, useEffect } from 'react';
+import { useData } from '../../context/DataContext';
+import { Lock, Save, LogOut, Globe, Layout, Settings, Home, List, MessageSquare, Image as ImageIcon, ChevronRight, CheckCircle, AlertCircle, Plus, Edit2, Trash2, X, ChevronDown, ChevronUp, MapPin, Calendar, FileText, BarChart, SlidersHorizontal, Search, Upload, Menu } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Tour, CompanyInfo, PageContent, ItineraryDay } from '../types';
-import PageTransition from '../components/PageTransition';
+import { Tour, CompanyInfo, PageContent, ItineraryDay } from '../../types';
+import PageTransition from '../../components/PageTransition';
 
 const Admin: React.FC = () => {
   const { 
@@ -27,6 +27,18 @@ const Admin: React.FC = () => {
   const [expandedSection, setExpandedSection] = useState<string | null>('home');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  // Close sidebar on larger screens
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 768) {
+        setIsSidebarOpen(false); // Only use toggle on mobile
+      }
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const showToast = (message: string, type: 'success' | 'error' = 'success') => {
     setToast({ message, type });
@@ -120,7 +132,7 @@ const Admin: React.FC = () => {
 
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-stone-900 relative">
+      <div className="min-h-screen flex items-center justify-center bg-stone-900 relative p-4">
         <div className="glass-premium p-10 rounded-3xl max-w-md w-full relative z-10 text-center">
             <Lock className="w-12 h-12 text-safari-sky mx-auto mb-4" />
             <h2 className="text-3xl font-bold mb-2">CMS Login</h2>
@@ -159,7 +171,7 @@ const Admin: React.FC = () => {
   };
 
   const DashboardContent = () => (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
         <div className="glass-card p-6 rounded-2xl"><h3 className="text-4xl font-bold">{tours.length}</h3><p className="text-stone-500">Total Tours</p></div>
         <div className="glass-card p-6 rounded-2xl"><h3 className="text-4xl font-bold">{inquiries.filter(i => i.status === 'New').length}</h3><p className="text-stone-500">New Inquiries</p></div>
         <div className="glass-card p-6 rounded-2xl"><h3 className="text-4xl font-bold">{Object.keys(currencyRates).length}</h3><p className="text-stone-500">Currencies Loaded</p></div>
@@ -168,7 +180,7 @@ const Admin: React.FC = () => {
 
   const GlobalSettings = () => (
     <div className="space-y-6">
-        <div className="glass-card p-8 rounded-3xl">
+        <div className="glass-card p-6 md:p-8 rounded-3xl">
             <h3 className="text-2xl font-bold mb-6">Company Identity</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div><label className="text-xs font-bold uppercase text-stone-400">Website Name</label>
@@ -179,7 +191,7 @@ const Admin: React.FC = () => {
                 <input className="w-full p-3 border rounded-lg" value={companyInfo.slogan} onChange={(e) => updateCompanyInfo({...companyInfo, slogan: e.target.value})} /></div>
             </div>
         </div>
-        <div className="glass-card p-8 rounded-3xl">
+        <div className="glass-card p-6 md:p-8 rounded-3xl">
             <h3 className="text-2xl font-bold mb-6">Contact & Social</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div><label className="text-xs font-bold uppercase text-stone-400">Phone</label>
@@ -198,11 +210,11 @@ const Admin: React.FC = () => {
   const PageEditor = () => (
     <div className="space-y-4">
         <div className="glass-card rounded-2xl overflow-hidden">
-            <button onClick={() => setExpandedSection(expandedSection === 'home' ? null : 'home')} className="w-full p-6 flex justify-between items-center bg-stone-100/50 hover:bg-stone-200/50 font-bold text-lg">
+            <button onClick={() => setExpandedSection(expandedSection === 'home' ? null : 'home')} className="w-full p-6 flex justify-between items-center bg-stone-100/50 hover:bg-stone-200/50 font-bold text-lg text-left">
                 <span>Home Page Content</span> {expandedSection === 'home' ? <ChevronUp /> : <ChevronDown />}
             </button>
             {expandedSection === 'home' && (
-                <div className="p-6 space-y-6">
+                <div className="p-4 sm:p-6 space-y-6">
                     <div className="space-y-4 border-b pb-6">
                         <h4 className="font-bold text-safari-sunset">Hero Section</h4>
                         <input className="w-full p-3 border rounded" placeholder="Hero Title" value={pageContent.home.hero.title} onChange={(e) => updatePageContent({...pageContent, home: {...pageContent.home, hero: {...pageContent.home.hero, title: e.target.value}}})} />
@@ -224,11 +236,11 @@ const Admin: React.FC = () => {
             )}
         </div>
         <div className="glass-card rounded-2xl overflow-hidden">
-            <button onClick={() => setExpandedSection(expandedSection === 'about' ? null : 'about')} className="w-full p-6 flex justify-between items-center bg-stone-100/50 hover:bg-stone-200/50 font-bold text-lg">
+            <button onClick={() => setExpandedSection(expandedSection === 'about' ? null : 'about')} className="w-full p-6 flex justify-between items-center bg-stone-100/50 hover:bg-stone-200/50 font-bold text-lg text-left">
                 <span>About Page Content</span> {expandedSection === 'about' ? <ChevronUp /> : <ChevronDown />}
             </button>
             {expandedSection === 'about' && (
-                <div className="p-6 space-y-6">
+                <div className="p-4 sm:p-6 space-y-6">
                      <div className="space-y-4 border-b pb-6">
                         <h4 className="font-bold text-safari-sunset">Philosophy</h4>
                         <textarea rows={4} className="w-full p-3 border rounded" value={pageContent.about.philosophy.content} onChange={(e) => updatePageContent({...pageContent, about: {...pageContent.about, philosophy: {...pageContent.about.philosophy, content: e.target.value}}})} />
@@ -249,7 +261,7 @@ const Admin: React.FC = () => {
   );
 
   const SEOEditor = () => (
-      <div className="glass-card p-8 rounded-3xl space-y-8">
+      <div className="glass-card p-6 md:p-8 rounded-3xl space-y-8">
           <h3 className="text-2xl font-bold">SEO & Metadata</h3>
           {['home', 'about', 'tours', 'contact', 'blog'].map((page) => (
               <div key={page} className="border p-4 rounded-xl space-y-3">
@@ -265,12 +277,12 @@ const Admin: React.FC = () => {
 
   const ToursManager = () => (
     <div>
-        <div className="flex justify-between items-center mb-6">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
             <h2 className="text-2xl font-bold">Manage Tours</h2>
             <button onClick={() => setEditingTour({ id: `tour-${Date.now()}`, name: 'New Tour', durationDays: 1, priceUsd: 0, priceGbp: 0, image: '', shortDescription: '', fullDescription: '', highlights: [], itinerary: [], featured: false, category: 'Safari', group: 'Road Safari', gallery: [], keywords: '' })} className="bg-safari-leaf text-white px-4 py-2 rounded-lg flex items-center gap-2"><Plus/> Add Tour</button>
         </div>
-        <div className="glass-card rounded-2xl overflow-hidden">
-            <table className="w-full">
+        <div className="glass-card rounded-2xl overflow-x-auto">
+            <table className="w-full min-w-[600px]">
                 <thead className="bg-stone-100/50 text-xs uppercase font-bold text-stone-500"><tr><th className="p-4 text-left">Tour Name</th><th className="p-4 text-left">Price (USD)</th><th className="p-4 text-left">Category</th><th className="p-4 text-right">Actions</th></tr></thead>
                 <tbody>
                     {tours.map(tour => (
@@ -293,8 +305,8 @@ const Admin: React.FC = () => {
   const InquiriesManager = () => (
       <div>
         <h2 className="text-2xl font-bold mb-6">Inquiries</h2>
-        <div className="glass-card rounded-2xl overflow-hidden">
-            <table className="w-full">
+        <div className="glass-card rounded-2xl overflow-x-auto">
+            <table className="w-full min-w-[600px]">
                 <thead className="bg-stone-100/50 text-xs uppercase font-bold text-stone-500"><tr><th className="p-4 text-left">Date</th><th className="p-4 text-left">Name</th><th className="p-4 text-left">Tour</th><th className="p-4 text-left">Status</th></tr></thead>
                 <tbody>
                     {inquiries.map(inq => (
@@ -313,7 +325,7 @@ const Admin: React.FC = () => {
 
   const SystemSettings = () => (
     <div className="space-y-6">
-        <div className="glass-card p-8 rounded-3xl">
+        <div className="glass-card p-6 md:p-8 rounded-3xl">
             <h3 className="text-2xl font-bold mb-6">Security</h3>
             <div className="space-y-4 max-w-sm">
                 <input type="password" placeholder="New Password" value={newPassword} onChange={e => setNewPassword(e.target.value)} className="w-full p-3 border rounded-lg" />
@@ -321,7 +333,7 @@ const Admin: React.FC = () => {
                 <button onClick={handlePasswordChange} className="bg-safari-leaf text-white px-6 py-3 rounded-lg font-bold">Change Password</button>
             </div>
         </div>
-        <div className="glass-card p-8 rounded-3xl border-2 border-red-500/20">
+        <div className="glass-card p-6 md:p-8 rounded-3xl border-2 border-red-500/20">
             <h3 className="text-2xl font-bold mb-2 text-red-700">Danger Zone</h3>
             <p className="text-sm text-stone-500 mb-6">This action is irreversible and will delete all your custom content.</p>
             <button onClick={resetData} className="bg-red-600 hover:bg-red-800 text-white px-6 py-3 rounded-lg font-bold">Reset Website Data</button>
@@ -331,40 +343,51 @@ const Admin: React.FC = () => {
 
   return (
     <PageTransition>
-      <div className="min-h-screen bg-stone-100 flex">
+      <div className="min-h-screen bg-stone-100 flex flex-col md:flex-row">
+        {/* Mobile Header */}
+        <header className="md:hidden bg-stone-900 text-white p-4 flex justify-between items-center sticky top-0 z-40">
+           <div className="font-bold text-lg">Admin</div>
+           <button onClick={() => setIsSidebarOpen(!isSidebarOpen)}>
+             <Menu size={24} />
+           </button>
+        </header>
+
         {/* Sidebar */}
-        <div className="w-64 bg-stone-900 text-stone-300 flex flex-col p-4">
-          <div className="font-bold text-lg text-white p-4 mb-6">Admin Panel<span className="block text-xs text-safari-gold">Tom "Cruse"</span></div>
+        <aside className={`fixed md:relative top-0 left-0 h-full md:h-auto z-50 bg-stone-900 text-stone-300 flex flex-col p-4 w-64 transform transition-transform duration-300 ease-in-out ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0`}>
+          <div className="flex justify-between items-center mb-6">
+            <div className="font-bold text-lg text-white p-4">Admin Panel<span className="block text-xs text-safari-gold">Tom "Cruse"</span></div>
+            <button className="md:hidden" onClick={() => setIsSidebarOpen(false)}><X/></button>
+          </div>
           <nav className="flex-grow space-y-2">
             {sidebarItems.map(item => (
-              <button key={item.id} onClick={() => setActiveTab(item.id)} className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-colors ${activeTab === item.id ? 'bg-safari-gold text-stone-900 font-bold' : 'hover:bg-stone-800'}`}>
+              <button key={item.id} onClick={() => { setActiveTab(item.id); setIsSidebarOpen(false); }} className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-colors ${activeTab === item.id ? 'bg-safari-gold text-stone-900 font-bold' : 'hover:bg-stone-800'}`}>
                 <item.icon size={18} /><span>{item.label}</span>
               </button>
             ))}
           </nav>
-          <button onClick={logout} className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-red-500/20 text-red-400 hover:text-red-300 transition-colors"><LogOut size={18}/><span>Logout</span></button>
-        </div>
+          <button onClick={logout} className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-red-500/20 text-red-400 hover:text-red-300 transition-colors mt-4"><LogOut size={18}/><span>Logout</span></button>
+        </aside>
 
         {/* Main Content */}
-        <main className="flex-1 p-8 overflow-y-auto">
+        <main className="flex-1 p-4 sm:p-6 md:p-8 overflow-y-auto">
           {renderContent()}
         </main>
 
         {/* Tour Edit Modal */}
         <AnimatePresence>
             {editingTour && (
-                <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50 backdrop-blur-sm">
-                    <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.9, opacity: 0 }} className="bg-white rounded-2xl w-full max-w-4xl max-h-[90vh] flex flex-col">
-                        <div className="p-6 border-b flex justify-between items-center bg-stone-50 rounded-t-2xl">
-                            <h2 className="text-xl font-bold flex items-center gap-2"><Edit2 size={18}/> Edit Tour: {editingTour.name}</h2>
+                <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-2 sm:p-4 z-50 backdrop-blur-sm">
+                    <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.9, opacity: 0 }} className="bg-white rounded-2xl w-full max-w-sm sm:max-w-xl md:max-w-2xl lg:max-w-4xl max-h-[90vh] flex flex-col">
+                        <div className="p-4 sm:p-6 border-b flex justify-between items-center bg-stone-50 rounded-t-2xl">
+                            <h2 className="text-lg sm:text-xl font-bold flex items-center gap-2"><Edit2 size={18}/> Edit Tour: {editingTour.name}</h2>
                             <button onClick={() => setEditingTour(null)} className="p-2 hover:bg-stone-200 rounded-full"><X /></button>
                         </div>
-                        <div className="p-6 space-y-8 overflow-y-auto">
+                        <div className="p-4 sm:p-6 space-y-8 overflow-y-auto">
                            
                            {/* SECTION 1: BASIC INFO */}
                            <div className="space-y-4">
                                 <h4 className="text-sm font-bold uppercase text-safari-earth border-b pb-2">Basic Details</h4>
-                                <div className="grid grid-cols-2 gap-4">
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                     <div><label className="text-xs font-bold uppercase text-stone-400">Tour Name</label><input value={editingTour.name} onChange={e => setEditingTour({...editingTour, name: e.target.value})} className="w-full p-2 border rounded" /></div>
                                     <div><label className="text-xs font-bold uppercase text-stone-400">Duration (Days)</label><input type="number" value={editingTour.durationDays} onChange={e => setEditingTour({...editingTour, durationDays: Number(e.target.value)})} className="w-full p-2 border rounded" /></div>
                                     <div><label className="text-xs font-bold uppercase text-stone-400">Category</label>
@@ -396,7 +419,7 @@ const Admin: React.FC = () => {
                            {/* SECTION 3: PRICING */}
                            <div className="space-y-4">
                                 <h4 className="text-sm font-bold uppercase text-safari-earth border-b pb-2">Pricing</h4>
-                                <div className="grid grid-cols-2 gap-4">
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                     <div><label className="text-xs font-bold uppercase text-stone-400">Price (USD)</label><input type="number" value={editingTour.priceUsd} onChange={e => setEditingTour({...editingTour, priceUsd: Number(e.target.value)})} className="w-full p-2 border rounded" /></div>
                                     <div><label className="text-xs font-bold uppercase text-stone-400">Price (GBP) - Auto Calculated</label><input type="number" value={Math.ceil(editingTour.priceUsd * (currencyRates['GBP'] || 0.79))} disabled className="w-full p-2 border rounded bg-stone-100" /></div>
                                 </div>
@@ -405,8 +428,8 @@ const Admin: React.FC = () => {
                            {/* SECTION 4: IMAGES */}
                            <div className="space-y-4">
                                 <h4 className="text-sm font-bold uppercase text-safari-earth border-b pb-2">Media</h4>
-                                <div className="flex gap-4 items-start">
-                                    <div className="w-32 h-32 bg-stone-100 rounded-lg overflow-hidden border">
+                                <div className="flex flex-col sm:flex-row gap-4 items-start">
+                                    <div className="w-32 h-32 bg-stone-100 rounded-lg overflow-hidden border flex-shrink-0">
                                         {editingTour.image ? <img src={editingTour.image} className="w-full h-full object-cover" /> : <div className="flex items-center justify-center h-full text-stone-300"><ImageIcon/></div>}
                                     </div>
                                     <div>
@@ -420,7 +443,7 @@ const Admin: React.FC = () => {
                                 
                                 <div>
                                     <label className="text-xs font-bold uppercase text-stone-400 block mb-2">Gallery Images</label>
-                                    <div className="grid grid-cols-4 gap-2 mb-2">
+                                    <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-2 mb-2">
                                         {editingTour.gallery && editingTour.gallery.map((img, idx) => (
                                             <div key={idx} className="relative w-20 h-20 rounded overflow-hidden group">
                                                 <img src={img} className="w-full h-full object-cover" />
@@ -440,18 +463,18 @@ const Admin: React.FC = () => {
                                 <h4 className="font-bold mb-2 uppercase text-safari-earth">Itinerary Builder</h4>
                                 <div className="space-y-2">
                                 {editingTour.itinerary.map((day, index) => (
-                                    <div key={index} className="grid grid-cols-[auto_1fr_1fr_auto] gap-2 items-center p-2 bg-stone-50 rounded">
-                                        <span className="font-bold">Day {day.day}</span>
-                                        <input placeholder="Title" value={day.title} onChange={e => { const newItinerary = [...editingTour.itinerary]; newItinerary[index].title = e.target.value; setEditingTour({...editingTour, itinerary: newItinerary}); }} className="p-1 border rounded" />
-                                        <input placeholder="Description" value={day.description} onChange={e => { const newItinerary = [...editingTour.itinerary]; newItinerary[index].description = e.target.value; setEditingTour({...editingTour, itinerary: newItinerary}); }} className="p-1 border rounded" />
-                                        <button onClick={() => { const newItinerary = editingTour.itinerary.filter((_, i) => i !== index); setEditingTour({...editingTour, itinerary: newItinerary}); }} className="text-red-500"><Trash2 size={16}/></button>
+                                    <div key={index} className="grid grid-cols-[auto_1fr_auto] sm:grid-cols-[auto_1fr_1fr_auto] gap-2 items-center p-2 bg-stone-50 rounded">
+                                        <span className="font-bold text-sm">Day {day.day}</span>
+                                        <input placeholder="Title" value={day.title} onChange={e => { const newItinerary = [...editingTour.itinerary]; newItinerary[index].title = e.target.value; setEditingTour({...editingTour, itinerary: newItinerary}); }} className="p-1 border rounded w-full" />
+                                        <textarea placeholder="Description" value={day.description} rows={1} onChange={e => { const newItinerary = [...editingTour.itinerary]; newItinerary[index].description = e.target.value; setEditingTour({...editingTour, itinerary: newItinerary}); }} className="p-1 border rounded w-full hidden sm:block" />
+                                        <button onClick={() => { const newItinerary = editingTour.itinerary.filter((_, i) => i !== index); setEditingTour({...editingTour, itinerary: newItinerary}); }} className="text-red-500 p-1"><Trash2 size={16}/></button>
                                     </div>
                                 ))}
                                 </div>
                                 <button onClick={() => { const newDay = { day: editingTour.itinerary.length + 1, title: '', description: '' }; setEditingTour({...editingTour, itinerary: [...editingTour.itinerary, newDay]}); }} className="mt-2 text-sm bg-blue-100 text-blue-600 px-3 py-1 rounded">Add Day</button>
                             </div>
                         </div>
-                        <div className="p-6 border-t flex justify-end gap-4 bg-stone-50 rounded-b-2xl">
+                        <div className="p-4 sm:p-6 border-t flex justify-end gap-4 bg-stone-50 rounded-b-2xl">
                             <button onClick={() => setEditingTour(null)} className="px-4 py-2 border rounded-lg hover:bg-stone-200 font-bold text-stone-600">Cancel</button>
                             <button onClick={() => { editingTour.id.startsWith('tour-') ? addTour(editingTour) : updateTour(editingTour); setEditingTour(null); showToast("Tour saved!"); }} className="px-6 py-2 bg-safari-leaf text-white rounded-lg font-bold shadow-lg hover:bg-green-800 transition-all flex items-center gap-2">{uploading ? 'Uploading...' : <><Save size={18}/> Save Changes</>}</button>
                         </div>
@@ -473,108 +496,4 @@ const Admin: React.FC = () => {
   );
 };
 
-export default Admin;--- START OF FILE types.ts ---
-
-// @ts-nocheck
-export interface Tour {
-  id: string;
-  name: string;
-  durationDays: number;
-  priceUsd: number;
-  priceGbp: number;
-  image: string;
-  gallery?: string[];
-  shortDescription: string;
-  fullDescription: string;
-  highlights: string[];
-  itinerary: ItineraryDay[];
-  featured: boolean;
-  category: 'Safari' | 'Coastal' | 'Trek' | 'Day Trip';
-  group: 'Excursion' | 'Road Safari' | 'Flight Safari' | 'Trek' | 'Custom';
-  keywords?: string; // For SEO
-}
-
-export interface ItineraryDay {
-  day: number;
-  title: string;
-  description: string;
-}
-
-export interface InquiryForm {
-  name: string;
-  email: string;
-  phone: string;
-  tourId?: string;
-  date: string;
-  travelers: number;
-  message: string;
-}
-
-export interface Inquiry extends InquiryForm {
-  id: string;
-  tourName?: string;
-  status: 'New' | 'In Progress' | 'Closed';
-  submittedAt: string;
-}
-
-export interface SEOData {
-  title: string;
-  description: string;
-}
-
-export interface PageSection {
-  title?: string;
-  subtitle?: string;
-  image?: string;
-  content?: string;
-}
-
-export interface PageContent {
-  home: {
-    hero: PageSection;
-    welcome: PageSection;
-    features: { title: string; text: string }[];
-    testimonials: PageSection & { author: string };
-  };
-  about: {
-    hero: PageSection;
-    philosophy: PageSection;
-    founder: PageSection;
-  };
-  contact: {
-    intro: PageSection;
-    mapUrl: string;
-  };
-  footer: {
-    aboutText: string;
-    copyrightText: string;
-  };
-  seo: {
-    home: SEOData;
-    about: SEOData;
-    tours: SEOData;
-    contact: SEOData;
-    blog: SEOData;
-  };
-}
-
-export interface CompanyInfo {
-  name: string;
-  ownerName: string; 
-  email: string;
-  phone: string;
-  location: string;
-  slogan: string;
-  social: {
-    facebook: string;
-    instagram: string;
-    whatsapp: string;
-  };
-}
-
-export interface CurrencyConfig {
-  code: string;
-  name: string;
-  symbol: string;
-  flag: string;
-}
+export default Admin;

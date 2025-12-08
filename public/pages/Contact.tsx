@@ -3,11 +3,11 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Mail, Phone, MapPin, Send, ExternalLink } from 'lucide-react';
-import { useData } from '../context/DataContext';
-import { InquiryForm } from '../types';
+import { useData } from '../../context/DataContext';
+import { InquiryForm } from '../../types';
 import { motion } from 'framer-motion';
-import PageTransition from '../components/PageTransition';
-import EditTrigger from '../components/EditTrigger';
+import PageTransition from '../../components/PageTransition';
+import EditTrigger from '../../components/EditTrigger';
 
 const Contact: React.FC = () => {
   const { companyInfo, tours, addInquiry, pageContent } = useData();

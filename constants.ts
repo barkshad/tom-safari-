@@ -1,6 +1,6 @@
 import { Tour, PageContent, CurrencyConfig } from './types';
 
-export const DATA_VERSION = "3.0"; // Force production data refresh
+export const DATA_VERSION = "4.0"; // Force production responsive style refresh
 
 export const COMPANY_INFO = {
   name: "Tom 'Cruse' Madeda Safaris",

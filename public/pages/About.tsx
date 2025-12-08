@@ -3,9 +3,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { useData } from '../context/DataContext';
-import PageTransition from '../components/PageTransition';
-import EditTrigger from '../components/EditTrigger';
+import { useData } from '../../context/DataContext';
+import PageTransition from '../../components/PageTransition';
+import EditTrigger from '../../components/EditTrigger';
 
 const About: React.FC = () => {
   const { companyInfo, pageContent } = useData();

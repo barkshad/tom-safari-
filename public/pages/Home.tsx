@@ -2,12 +2,12 @@
 import React, { useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Sun, Compass, Star } from 'lucide-react';
-import { useData } from '../context/DataContext';
-import TourCard from '../components/TourCard';
+import { useData } from '../../context/DataContext';
+import TourCard from '../../components/TourCard';
 import { motion, useScroll, useTransform } from 'framer-motion';
-import PageTransition from '../components/PageTransition';
-import EditTrigger from '../components/EditTrigger';
-import StructuredData from '../components/StructuredData';
+import PageTransition from '../../components/PageTransition';
+import EditTrigger from '../../components/EditTrigger';
+import StructuredData from '../../components/StructuredData';
 
 const Home: React.FC = () => {
   const { tours, companyInfo, pageContent } = useData();
