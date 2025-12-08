@@ -15,7 +15,8 @@
     "react-router-dom": "^7.9.6",
     "@vitejs/plugin-react": "^5.1.1",
     "vite": "^7.2.4",
-    "framer-motion": "^12.4.2"
+    "framer-motion": "^12.4.2",
+    "firebase": "^12.6.0"
   },
   "devDependencies": {
     "@types/node": "^22.14.0",

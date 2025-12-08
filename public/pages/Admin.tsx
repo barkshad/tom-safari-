@@ -1,10 +1,70 @@
 // @ts-nocheck
 import React, { useState, useRef, useEffect } from 'react';
 import { useData } from '../../context/DataContext';
-import { Lock, Save, LogOut, Globe, Layout, Settings, Home, List, MessageSquare, Image as ImageIcon, ChevronRight, CheckCircle, AlertCircle, Plus, Edit2, Trash2, X, ChevronDown, ChevronUp, MapPin, Calendar, FileText, BarChart, SlidersHorizontal, Search, Upload, Menu, Download, Zap, Link as LinkIcon } from 'lucide-react';
+import { Lock, Save, LogOut, Globe, Layout, Settings, Home, List, MessageSquare, Image as ImageIcon, ChevronRight, CheckCircle, AlertCircle, Plus, Edit2, Trash2, X, ChevronDown, ChevronUp, MapPin, Calendar, FileText, BarChart, SlidersHorizontal, Search, Upload, Menu } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Tour, CompanyInfo, PageContent, ItineraryDay } from '../../types';
+import { Tour, ItineraryDay } from '../../types';
 import PageTransition from '../../components/PageTransition';
+import { storage } from '../../firebase';
+import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
+
+const FirebaseImageUploader: React.FC<{
+  onUploadSuccess: (url: string) => void;
+  currentImageUrl?: string;
+  label: string;
+}> = ({ onUploadSuccess, currentImageUrl, label }) => {
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const [isUploading, setIsUploading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setIsUploading(true);
+    setUploadProgress(0);
+    const storageRef = ref(storage, `images/${Date.now()}_${file.name}`);
+    const uploadTask = uploadBytesResumable(storageRef, file);
+
+    uploadTask.on('state_changed',
+      (snapshot) => {
+        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        setUploadProgress(progress);
+      },
+      (error) => {
+        console.error("Upload failed:", error);
+        setIsUploading(false);
+        // Add user-facing error message here
+      },
+      () => {
+        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+          onUploadSuccess(downloadURL);
+          setIsUploading(false);
+        });
+      }
+    );
+  };
+
+  return (
+    <div>
+      <label className="text-xs font-bold uppercase text-stone-400 block mb-2">{label}</label>
+      <div className="flex items-center gap-4">
+        {currentImageUrl && <img src={currentImageUrl} className="w-24 h-16 object-cover rounded-lg border" alt="Preview"/>}
+        <div className="flex-grow">
+          <button onClick={() => fileInputRef.current?.click()} className="cursor-pointer bg-stone-200 px-4 py-2 rounded text-sm font-bold inline-flex items-center gap-2 hover:bg-stone-300" disabled={isUploading}>
+            <Upload size={14} /> {isUploading ? `Uploading... ${Math.round(uploadProgress)}%` : 'Choose Image'}
+          </button>
+          <input type="file" ref={fileInputRef} onChange={handleFileChange} className="hidden" accept="image/*" />
+          {isUploading && (
+            <div className="w-full bg-stone-200 rounded-full h-1.5 mt-2">
+              <div className="bg-safari-leaf h-1.5 rounded-full" style={{ width: `${uploadProgress}%` }}></div>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const Admin: React.FC = () => {
   const { 
@@ -14,7 +74,7 @@ const Admin: React.FC = () => {
     pageContent, updatePageContent,
     changePassword, resetData,
     saving,
-    selectedCurrency, availableCurrencies, convertPrice, refreshRates, currencyRates
+    currencyRates
   } = useData();
 
   const [password, setPassword] = useState('');
@@ -29,61 +89,13 @@ const Admin: React.FC = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-  const cloudinaryWidgetRef = useRef<any>(null);
-  const uploadCallbackRef = useRef<((url: string) => void) | null>(null);
-
-  // Close sidebar on larger screens
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth >= 768) {
-        setIsSidebarOpen(false); // Only use toggle on mobile
-      }
+      if (window.innerWidth >= 768) setIsSidebarOpen(false);
     };
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
-
-  // Initialize Cloudinary Widget
-  useEffect(() => {
-    if (typeof window !== 'undefined' && window.cloudinary) {
-      cloudinaryWidgetRef.current = window.cloudinary.createUploadWidget({
-        cloudName: 'ds2mbrzcn',
-        uploadPreset: 'qqk2urzm',
-        folder: 'tomsafaris/gallery',
-        sources: ['local', 'url'],
-        multiple: false,
-      }, (error, result) => {
-        if (!error && result && result.event === 'success') {
-          if (uploadCallbackRef.current) {
-            uploadCallbackRef.current(result.info.secure_url);
-          }
-        }
-      });
-    }
-  }, []);
-
-  const openCloudinaryWidget = (onSuccess: (url: string) => void) => {
-    uploadCallbackRef.current = onSuccess;
-    if (cloudinaryWidgetRef.current) {
-      cloudinaryWidgetRef.current.open();
-    } else {
-      showToast('Uploader not ready. Please refresh.', 'error');
-    }
-  };
-  
-  const handleManualUrl = (updateFn: (url: string) => void) => {
-    const url = prompt("Enter the full image URL:");
-    if (url) {
-        try {
-            new URL(url); // Basic validation
-            updateFn(url);
-            showToast("Image URL updated!");
-        } catch (e) {
-            showToast("Invalid URL provided.", "error");
-        }
-    }
-  };
-
 
   const showToast = (message: string, type: 'success' | 'error' = 'success') => {
     setToast({ message, type });
@@ -92,42 +104,26 @@ const Admin: React.FC = () => {
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    if (login(password)) setError('');
-    else setError('Invalid password');
+    login(password).then(success => {
+      if (success) setError('');
+      else setError('Invalid credentials. Please try again.');
+    });
   };
 
   const handlePasswordChange = () => {
     if (newPassword && newPassword === confirmPassword) {
-      changePassword(newPassword);
-      showToast("Password updated successfully!");
-      setNewPassword('');
-      setConfirmPassword('');
+      changePassword(newPassword).then(success => {
+        if(success) {
+          showToast("Password updated successfully!");
+          setNewPassword('');
+          setConfirmPassword('');
+        } else {
+          showToast("Password change failed. You may need to log in again.", "error");
+        }
+      });
     } else {
       showToast("Passwords do not match.", "error");
     }
-  };
-
-  const handlePageImageUpload = (section: keyof PageContent, subSection: string) => {
-    openCloudinaryWidget((secureUrl) => {
-      const newContent = JSON.parse(JSON.stringify(pageContent));
-      if (newContent[section] && newContent[section][subSection]) {
-        newContent[section][subSection].image = secureUrl;
-        updatePageContent(newContent);
-        showToast("Image updated!");
-      }
-    });
-  };
-
-  const handleTourImageUpload = (type: 'main' | 'gallery') => {
-    if (!editingTour) return;
-    openCloudinaryWidget((secureUrl) => {
-      if (type === 'main') {
-        setEditingTour(prev => prev ? { ...prev, image: secureUrl } : null);
-      } else {
-        setEditingTour(prev => prev ? { ...prev, gallery: [...(prev.gallery || []), secureUrl] } : null);
-      }
-      showToast('Image uploaded successfully!');
-    });
   };
 
   if (!isAuthenticated) {
@@ -251,20 +247,15 @@ const Admin: React.FC = () => {
                         <h4 className="font-bold text-safari-sunset">Hero Section</h4>
                         <input className="w-full p-3 border rounded" placeholder="Hero Title" value={pageContent.home.hero.title} onChange={(e) => updatePageContent({...pageContent, home: {...pageContent.home, hero: {...pageContent.home.hero, title: e.target.value}}})} />
                         <textarea className="w-full p-3 border rounded" placeholder="Hero Subtitle" value={pageContent.home.hero.subtitle} onChange={(e) => updatePageContent({...pageContent, home: {...pageContent.home, hero: {...pageContent.home.hero, subtitle: e.target.value}}})} />
-                         <div className="flex items-center gap-4">
-                            {pageContent.home.hero.image && <img src={pageContent.home.hero.image} className="w-24 h-16 object-cover rounded-lg border" alt="Hero Preview"/>}
-                            <div>
-                                 <label className="text-xs font-bold uppercase text-stone-400 block mb-2">Hero Image</label>
-                                 <div className="flex gap-2">
-                                     <button onClick={() => handlePageImageUpload('home', 'hero')} className="cursor-pointer bg-stone-200 px-4 py-2 rounded text-sm font-bold inline-flex items-center gap-2 hover:bg-stone-300">
-                                         <Upload size={14} /> Upload
-                                     </button>
-                                     <button onClick={() => handleManualUrl(url => { const newContent = JSON.parse(JSON.stringify(pageContent)); newContent.home.hero.image = url; updatePageContent(newContent); })} className="cursor-pointer bg-stone-200 px-4 py-2 rounded text-sm font-bold inline-flex items-center gap-2 hover:bg-stone-300">
-                                         <LinkIcon size={14} /> Paste URL
-                                     </button>
-                                 </div>
-                            </div>
-                        </div>
+                        <FirebaseImageUploader
+                            label="Hero Image"
+                            currentImageUrl={pageContent.home.hero.image}
+                            onUploadSuccess={(url) => {
+                                const newContent = JSON.parse(JSON.stringify(pageContent));
+                                newContent.home.hero.image = url;
+                                updatePageContent(newContent);
+                            }}
+                        />
                     </div>
                     <div className="space-y-4">
                         <h4 className="font-bold text-safari-sunset">Welcome Section</h4>
@@ -288,20 +279,15 @@ const Admin: React.FC = () => {
                         <h4 className="font-bold text-safari-sunset">Founder Bio (Cruse)</h4>
                         <input className="w-full p-3 border rounded" value={pageContent.about.founder.title} onChange={(e) => updatePageContent({...pageContent, about: {...pageContent.about, founder: {...pageContent.about.founder, title: e.target.value}}})} />
                         <textarea rows={6} className="w-full p-3 border rounded" value={pageContent.about.founder.content} onChange={(e) => updatePageContent({...pageContent, about: {...pageContent.about, founder: {...pageContent.about.founder, content: e.target.value}}})} />
-                        <div className="flex items-center gap-4">
-                            {pageContent.about.founder.image && <img src={pageContent.about.founder.image} className="w-20 h-20 object-cover rounded-full border" alt="Founder Preview" />}
-                             <div>
-                                <label className="text-xs font-bold uppercase text-stone-400 block mb-2">Founder Photo</label>
-                                <div className="flex gap-2">
-                                    <button onClick={() => handlePageImageUpload('about', 'founder')} className="cursor-pointer bg-stone-200 px-4 py-2 rounded text-sm font-bold inline-flex items-center gap-2 hover:bg-stone-300">
-                                        <Upload size={14} /> Upload
-                                    </button>
-                                    <button onClick={() => handleManualUrl(url => { const newContent = JSON.parse(JSON.stringify(pageContent)); newContent.about.founder.image = url; updatePageContent(newContent); })} className="cursor-pointer bg-stone-200 px-4 py-2 rounded text-sm font-bold inline-flex items-center gap-2 hover:bg-stone-300">
-                                        <LinkIcon size={14} /> Paste URL
-                                    </button>
-                                </div>
-                             </div>
-                        </div>
+                        <FirebaseImageUploader
+                            label="Founder Photo"
+                            currentImageUrl={pageContent.about.founder.image}
+                            onUploadSuccess={(url) => {
+                                const newContent = JSON.parse(JSON.stringify(pageContent));
+                                newContent.about.founder.image = url;
+                                updatePageContent(newContent);
+                            }}
+                        />
                     </div>
                 </div>
             )}
@@ -395,7 +381,6 @@ const Admin: React.FC = () => {
   return (
     <PageTransition>
       <div className="min-h-screen bg-stone-100 flex flex-col md:flex-row">
-        {/* Mobile Header */}
         <header className="md:hidden bg-stone-900 text-white p-4 flex justify-between items-center sticky top-0 z-40">
            <div className="font-bold text-lg">Admin Panel</div>
            <button onClick={() => setIsSidebarOpen(!isSidebarOpen)}>
@@ -403,7 +388,6 @@ const Admin: React.FC = () => {
            </button>
         </header>
 
-        {/* Sidebar */}
         <aside className={`fixed md:relative top-0 left-0 h-full md:h-auto z-50 bg-stone-900 text-stone-300 flex flex-col p-4 w-64 transform transition-transform duration-300 ease-in-out ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0`}>
           <div className="flex justify-between items-center mb-6">
             <div className="font-bold text-lg text-white p-4">Admin Panel<span className="block text-xs text-safari-gold">Tom "Cruse"</span></div>
@@ -419,7 +403,6 @@ const Admin: React.FC = () => {
           <button onClick={logout} className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-red-500/20 text-red-400 hover:text-red-300 transition-colors mt-4"><LogOut size={18}/><span>Logout</span></button>
         </aside>
 
-        {/* Main Content */}
         <main className="flex-1 p-4 sm:p-6 md:p-8 overflow-y-auto">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-3">
               <h1 className="text-3xl font-bold text-stone-800">{activeTabName}</h1>
@@ -428,7 +411,6 @@ const Admin: React.FC = () => {
           {renderContent()}
         </main>
 
-        {/* Tour Edit Modal */}
         <AnimatePresence>
             {editingTour && (
                 <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-2 sm:p-4 z-50 backdrop-blur-sm">
@@ -438,8 +420,6 @@ const Admin: React.FC = () => {
                             <button onClick={() => setEditingTour(null)} className="p-2 hover:bg-stone-200 rounded-full"><X /></button>
                         </div>
                         <div className="p-4 sm:p-6 space-y-8 overflow-y-auto">
-                           
-                           {/* SECTION 1: BASIC INFO */}
                            <div className="space-y-4">
                                 <h4 className="text-sm font-bold uppercase text-safari-earth border-b pb-2">Basic Details</h4>
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -461,8 +441,6 @@ const Admin: React.FC = () => {
                                     <label className="font-bold">Mark as Featured Tour</label>
                                 </div>
                            </div>
-
-                           {/* SECTION 2: DESCRIPTIONS */}
                            <div className="space-y-4">
                                 <h4 className="text-sm font-bold uppercase text-safari-earth border-b pb-2">Descriptions & SEO</h4>
                                 <div><label className="text-xs font-bold uppercase text-stone-400">Short Description (Card)</label><textarea rows={2} value={editingTour.shortDescription} onChange={e => setEditingTour({...editingTour, shortDescription: e.target.value})} className="w-full p-2 border rounded" /></div>
@@ -470,8 +448,6 @@ const Admin: React.FC = () => {
                                 <div><label className="text-xs font-bold uppercase text-stone-400">Highlights (Comma Separated)</label><input value={editingTour.highlights.join(', ')} onChange={e => setEditingTour({...editingTour, highlights: e.target.value.split(',').map(s=>s.trim())})} className="w-full p-2 border rounded" placeholder="e.g. Lions, Beach, Sunset" /></div>
                                 <div><label className="text-xs font-bold uppercase text-stone-400">Keywords (Comma Separated)</label><input value={editingTour.keywords} onChange={e => setEditingTour({...editingTour, keywords: e.target.value})} className="w-full p-2 border rounded" placeholder="e.g. tsavo east safari, salt lick" /></div>
                            </div>
-
-                           {/* SECTION 3: PRICING */}
                            <div className="space-y-4">
                                 <h4 className="text-sm font-bold uppercase text-safari-earth border-b pb-2">Pricing</h4>
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -479,28 +455,10 @@ const Admin: React.FC = () => {
                                     <div><label className="text-xs font-bold uppercase text-stone-400">Price (GBP) - Auto Calculated</label><input type="number" value={Math.ceil(editingTour.priceUsd * (currencyRates['GBP'] || 0.79))} disabled className="w-full p-2 border rounded bg-stone-100" /></div>
                                 </div>
                            </div>
-
-                           {/* SECTION 4: IMAGES */}
                            <div className="space-y-4">
                                 <h4 className="text-sm font-bold uppercase text-safari-earth border-b pb-2">Media</h4>
-                                <div className="flex flex-col sm:flex-row gap-4 items-start">
-                                    <div className="w-32 h-32 bg-stone-100 rounded-lg overflow-hidden border flex-shrink-0">
-                                        {editingTour.image ? <img src={editingTour.image} className="w-full h-full object-cover" /> : <div className="flex items-center justify-center h-full text-stone-300"><ImageIcon/></div>}
-                                    </div>
-                                    <div>
-                                        <label className="text-xs font-bold uppercase text-stone-400 block mb-2">Main Cover Image</label>
-                                        <div className="flex gap-2">
-                                            <button onClick={() => handleTourImageUpload('main')} className="cursor-pointer bg-safari-sky text-white px-4 py-2 rounded-lg font-bold inline-flex items-center gap-2 hover:bg-blue-600 transition-colors">
-                                                <Upload size={16}/> Upload
-                                            </button>
-                                            <button onClick={() => handleManualUrl(url => setEditingTour(prev => prev ? { ...prev, image: url } : null))} className="cursor-pointer bg-stone-200 px-4 py-2 rounded-lg font-bold inline-flex items-center gap-2 hover:bg-stone-300 transition-colors">
-                                                <LinkIcon size={16}/> Paste URL
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <div>
+                                <FirebaseImageUploader label="Main Cover Image" currentImageUrl={editingTour.image} onUploadSuccess={(url) => setEditingTour({...editingTour, image: url})} />
+                                <div className="mt-4">
                                     <label className="text-xs font-bold uppercase text-stone-400 block mb-2">Gallery Images</label>
                                     <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-2 mb-2">
                                         {editingTour.gallery && editingTour.gallery.map((img, idx) => (
@@ -510,18 +468,9 @@ const Admin: React.FC = () => {
                                             </div>
                                         ))}
                                     </div>
-                                    <div className="flex gap-2">
-                                        <button onClick={() => handleTourImageUpload('gallery')} className="cursor-pointer bg-stone-200 text-stone-700 px-4 py-2 rounded-lg font-bold inline-flex items-center gap-2 hover:bg-stone-300 transition-colors">
-                                            <Plus size={16}/> Add via Upload
-                                        </button>
-                                        <button onClick={() => handleManualUrl(url => setEditingTour(prev => prev ? { ...prev, gallery: [...(prev.gallery || []), url] } : null))} className="cursor-pointer bg-stone-200 text-stone-700 px-4 py-2 rounded-lg font-bold inline-flex items-center gap-2 hover:bg-stone-300 transition-colors">
-                                            <LinkIcon size={16}/> Add via URL
-                                        </button>
-                                    </div>
+                                    <FirebaseImageUploader label="Add to Gallery" onUploadSuccess={(url) => setEditingTour({...editingTour, gallery: [...(editingTour.gallery || []), url]})} />
                                 </div>
                            </div>
-
-                           {/* SECTION 5: ITINERARY */}
                            <div className="space-y-4">
                                 <h4 className="text-sm font-bold uppercase text-safari-earth border-b pb-2">Itinerary Builder</h4>
                                 <div className="space-y-4 max-h-[40vh] overflow-y-auto p-1">
@@ -566,7 +515,6 @@ const Admin: React.FC = () => {
             )}
         </AnimatePresence>
         
-        {/* Toast Notification */}
         <AnimatePresence>
           {toast && (
             <motion.div initial={{ y: -100, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: -100, opacity: 0 }} className={`fixed top-5 right-5 p-4 rounded-lg text-white font-bold flex items-center gap-3 ${toast.type === 'success' ? 'bg-green-500' : 'bg-red-500'} shadow-2xl z-50`}>

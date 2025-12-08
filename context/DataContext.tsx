@@ -1,33 +1,9 @@
-// FIX: Augment the global AIStudio interface to include `get` and `set` methods for mock cloud storage,
-// and add `cloudinary` to the Window interface to type the image uploader service.
-declare global {
-  interface Window {
-    // FIX: Removed re-declaration of 'aistudio' on the Window interface to resolve a TypeScript error about conflicting modifiers.
-    // The property is likely already declared in the global scope, so we only need to augment the existing interfaces.
-    cloudinary: any;
-  }
-  interface AIStudio {
-    get: (key: string) => Promise<any>;
-    set: (key: string, value: any) => Promise<void>;
-  }
-}
-
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { Tour, CompanyInfo, Inquiry, InquiryForm, PageContent, CurrencyConfig } from '../types';
 import { TOURS, COMPANY_INFO, DEFAULT_PAGE_CONTENT, SUPPORTED_CURRENCIES } from '../constants';
-
-// A mock for the platform's cloud storage.
-// In a real environment, this would be provided by the host.
-const FAKE_CLOUD_STORAGE = 'FAKE_CLOUD_STORAGE_TOM_SAFARIS';
-if (typeof window !== 'undefined' && (!window.aistudio || typeof window.aistudio.get !== 'function' || typeof window.aistudio.set !== 'function')) {
-  // FIX: If the aistudio object is missing or incomplete (doesn't have the required functions),
-  // this creates a mock that uses localStorage. This prevents the "window.aistudio.get is not a function"
-  // error that occurs when the hosting environment provides an empty or partial aistudio object.
-  (window as any).aistudio = {
-    get: (key) => Promise.resolve(JSON.parse(localStorage.getItem(key) || 'null')),
-    set: (key, value) => Promise.resolve(localStorage.setItem(key, JSON.stringify(value))),
-  };
-}
+import { db, auth } from '../firebase';
+import { doc, getDoc, setDoc, collection, addDoc, getDocs, query, orderBy } from 'firebase/firestore';
+import { onAuthStateChanged, signInWithEmailAndPassword, signOut, updatePassword, User } from 'firebase/auth';
 
 interface CloudData {
   companyInfo: CompanyInfo;
@@ -47,8 +23,8 @@ interface DataContextType {
   addInquiry: (form: InquiryForm) => void;
   updatePageContent: (content: PageContent) => void;
   isAuthenticated: boolean;
-  login: (password: string) => boolean;
-  changePassword: (newPassword: string) => void;
+  login: (password: string) => Promise<boolean>;
+  changePassword: (newPassword: string) => Promise<boolean>;
   logout: () => void;
   resetData: () => void;
   loading: boolean;
@@ -64,6 +40,9 @@ interface DataContextType {
 
 const DataContext = createContext<DataContextType | undefined>(undefined);
 
+const DB_COLLECTION = 'website_content';
+const DB_DOC_ID = 'live_data';
+
 export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -75,8 +54,7 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
   });
 
   const [inquiries, setInquiries] = useState<Inquiry[]>([]);
-  const [adminPassword, setAdminPassword] = useState<string>(() => localStorage.getItem('adminPassword') || '12345');
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => localStorage.getItem('isAdmin') === 'true');
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
 
   const [selectedCurrency, setSelectedCurrency] = useState<CurrencyConfig>(() => {
     const savedCode = localStorage.getItem('selectedCurrencyCode');
@@ -84,11 +62,19 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
   });
 
   const [currencyRates, setCurrencyRates] = useState<Record<string, number>>({ USD: 1 });
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setIsAuthenticated(!!user);
+    });
+    return () => unsubscribe();
+  }, []);
   
-  const saveDataToCloud = async (newData: CloudData) => {
+  const saveData = async (newData: CloudData) => {
+    if (!isAuthenticated) return;
     setSaving(true);
     try {
-      await window.aistudio.set(FAKE_CLOUD_STORAGE, newData);
+      await setDoc(doc(db, DB_COLLECTION, DB_DOC_ID), newData, { merge: true });
     } catch (e) {
       console.error("Failed to save data to cloud", e);
     } finally {
@@ -99,12 +85,12 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
   useEffect(() => {
     const loadData = async () => {
       setLoading(true);
+      const docRef = doc(db, DB_COLLECTION, DB_DOC_ID);
       try {
-        const cloudData = await window.aistudio.get(FAKE_CLOUD_STORAGE);
-        const localInquiries = JSON.parse(localStorage.getItem('inquiries') || '[]');
-        setInquiries(localInquiries);
-
-        if (cloudData && typeof cloudData === 'object') {
+        // Fetch main content
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+          const cloudData = docSnap.data() as CloudData;
           const mergedPageContent = {
             ...DEFAULT_PAGE_CONTENT, ...cloudData.pageContent,
             home: { ...DEFAULT_PAGE_CONTENT.home, ...cloudData.pageContent?.home },
@@ -118,7 +104,22 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
             tours: cloudData.tours || TOURS,
             pageContent: mergedPageContent
           });
+        } else {
+           console.log("No data in Firestore. Seeding with default content.");
+           const defaultData = { companyInfo: COMPANY_INFO, tours: TOURS, pageContent: DEFAULT_PAGE_CONTENT };
+           await setDoc(docRef, defaultData);
+           setData(defaultData);
         }
+
+        // Fetch inquiries
+        const q = query(collection(db, "inquiries"), orderBy("submittedAt", "desc"));
+        const querySnapshot = await getDocs(q);
+        const fetchedInquiries: Inquiry[] = [];
+        querySnapshot.forEach((doc) => {
+            fetchedInquiries.push(doc.data() as Inquiry);
+        });
+        setInquiries(fetchedInquiries);
+
       } catch (e) {
         console.error("Failed to load cloud data, falling back to defaults.", e);
       } finally {
@@ -151,10 +152,6 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
     } else { fetchRates(); }
   }, []);
 
-  useEffect(() => { localStorage.setItem('isAdmin', String(isAuthenticated)); }, [isAuthenticated]);
-  useEffect(() => { localStorage.setItem('adminPassword', adminPassword); }, [adminPassword]);
-  useEffect(() => { localStorage.setItem('inquiries', JSON.stringify(inquiries)); }, [inquiries]);
-
   const setCurrency = (code: string) => {
     const currency = SUPPORTED_CURRENCIES.find(c => c.code === code);
     if (currency) {
@@ -178,37 +175,37 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const updateCompanyInfo = (info: CompanyInfo) => {
     const newData = { ...data, companyInfo: info };
     setData(newData);
-    saveDataToCloud(newData);
+    saveData(newData);
   };
 
   const updateTour = (updatedTour: Tour) => {
     const newTours = data.tours.map(t => t.id === updatedTour.id ? updatedTour : t);
     const newData = { ...data, tours: newTours };
     setData(newData);
-    saveDataToCloud(newData);
+    saveData(newData);
   };
   
   const addTour = (newTour: Tour) => {
     const newTours = [...data.tours, newTour];
     const newData = { ...data, tours: newTours };
     setData(newData);
-    saveDataToCloud(newData);
+    saveData(newData);
   };
   
   const deleteTour = (id: string) => {
     const newTours = data.tours.filter(t => t.id !== id);
     const newData = { ...data, tours: newTours };
     setData(newData);
-    saveDataToCloud(newData);
+    saveData(newData);
   };
   
   const updatePageContent = (content: PageContent) => {
     const newData = { ...data, pageContent: content };
     setData(newData);
-    saveDataToCloud(newData);
+    saveData(newData);
   };
 
-  const addInquiry = (form: InquiryForm) => {
+  const addInquiry = async (form: InquiryForm) => {
     const tour = data.tours.find(t => t.id === form.tourId);
     const newInquiry: Inquiry = {
       ...form,
@@ -217,13 +214,30 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
       status: 'New',
       submittedAt: new Date().toISOString()
     };
+    await addDoc(collection(db, "inquiries"), newInquiry);
     setInquiries(prev => [newInquiry, ...prev]);
   };
 
-  const login = (password: string) => {
-    if (password === adminPassword) {
-      setIsAuthenticated(true);
+  const login = async (password: string) => {
+    const email = 'admin@tomsafaris.co.ke'; // Hardcoded admin email
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
       return true;
+    } catch (error) {
+      console.error("Firebase login failed:", error);
+      return false;
+    }
+  };
+
+  const changePassword = async (newPassword: string) => {
+    if (auth.currentUser) {
+      try {
+        await updatePassword(auth.currentUser, newPassword);
+        return true;
+      } catch (error) {
+        console.error("Firebase password change failed:", error);
+        return false;
+      }
     }
     return false;
   };
@@ -232,9 +246,7 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
     if(window.confirm("Delete ALL custom content from the cloud and reset to factory defaults? This is irreversible.")) {
       const defaultData = { companyInfo: COMPANY_INFO, tours: TOURS, pageContent: DEFAULT_PAGE_CONTENT };
       setData(defaultData);
-      setSaving(true);
-      await window.aistudio.set(FAKE_CLOUD_STORAGE, defaultData);
-      localStorage.clear();
+      await saveData(defaultData);
       window.location.reload();
     }
   };
@@ -253,8 +265,8 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
       updatePageContent,
       isAuthenticated,
       login,
-      changePassword: setAdminPassword,
-      logout: () => setIsAuthenticated(false),
+      changePassword,
+      logout: () => signOut(auth),
       resetData,
       loading,
       saving,
