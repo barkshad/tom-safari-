@@ -29,6 +29,12 @@ if (typeof window !== 'undefined' && (!window.aistudio || typeof window.aistudio
   };
 }
 
+interface CloudData {
+  companyInfo: CompanyInfo;
+  tours: Tour[];
+  pageContent: PageContent;
+}
+
 interface DataContextType {
   companyInfo: CompanyInfo;
   tours: Tour[];
@@ -45,8 +51,8 @@ interface DataContextType {
   changePassword: (newPassword: string) => void;
   logout: () => void;
   resetData: () => void;
-  publishData: () => Promise<boolean>;
   loading: boolean;
+  saving: boolean;
   
   selectedCurrency: CurrencyConfig;
   setCurrency: (code: string) => void;
@@ -60,11 +66,15 @@ const DataContext = createContext<DataContextType | undefined>(undefined);
 
 export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [loading, setLoading] = useState(true);
-  const [companyInfo, setCompanyInfo] = useState<CompanyInfo>(COMPANY_INFO);
-  const [tours, setTours] = useState<Tour[]>(TOURS);
-  const [inquiries, setInquiries] = useState<Inquiry[]>([]);
-  const [pageContent, setPageContent] = useState<PageContent>(DEFAULT_PAGE_CONTENT);
+  const [saving, setSaving] = useState(false);
   
+  const [data, setData] = useState<CloudData>({
+    companyInfo: COMPANY_INFO,
+    tours: TOURS,
+    pageContent: DEFAULT_PAGE_CONTENT
+  });
+
+  const [inquiries, setInquiries] = useState<Inquiry[]>([]);
   const [adminPassword, setAdminPassword] = useState<string>(() => localStorage.getItem('adminPassword') || '12345');
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => localStorage.getItem('isAdmin') === 'true');
 
@@ -74,54 +84,49 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
   });
 
   const [currencyRates, setCurrencyRates] = useState<Record<string, number>>({ USD: 1 });
+  
+  const saveDataToCloud = async (newData: CloudData) => {
+    setSaving(true);
+    try {
+      await window.aistudio.set(FAKE_CLOUD_STORAGE, newData);
+    } catch (e) {
+      console.error("Failed to save data to cloud", e);
+    } finally {
+      setTimeout(() => setSaving(false), 500);
+    }
+  };
 
-  // Load data from cloud on initial app load
   useEffect(() => {
     const loadData = async () => {
       setLoading(true);
       try {
         const cloudData = await window.aistudio.get(FAKE_CLOUD_STORAGE);
-        
-        // Also load inquiries from local storage as they are not public content
         const localInquiries = JSON.parse(localStorage.getItem('inquiries') || '[]');
         setInquiries(localInquiries);
 
         if (cloudData && typeof cloudData === 'object') {
-          // Deep merge page content to prevent breaking site if structure changes
           const mergedPageContent = {
-            ...DEFAULT_PAGE_CONTENT,
-            ...cloudData.pageContent,
+            ...DEFAULT_PAGE_CONTENT, ...cloudData.pageContent,
             home: { ...DEFAULT_PAGE_CONTENT.home, ...cloudData.pageContent?.home },
             about: { ...DEFAULT_PAGE_CONTENT.about, ...cloudData.pageContent?.about },
             contact: { ...DEFAULT_PAGE_CONTENT.contact, ...cloudData.pageContent?.contact },
             footer: { ...DEFAULT_PAGE_CONTENT.footer, ...cloudData.pageContent?.footer },
             seo: { ...DEFAULT_PAGE_CONTENT.seo, ...cloudData.pageContent?.seo },
           };
-          setCompanyInfo(cloudData.companyInfo || COMPANY_INFO);
-          setTours(cloudData.tours || TOURS);
-          setPageContent(mergedPageContent);
+          setData({
+            companyInfo: cloudData.companyInfo || COMPANY_INFO,
+            tours: cloudData.tours || TOURS,
+            pageContent: mergedPageContent
+          });
         }
       } catch (e) {
         console.error("Failed to load cloud data, falling back to defaults.", e);
-        // Data remains as defaults if cloud load fails
       } finally {
         setLoading(false);
       }
     };
     loadData();
   }, []);
-
-  // Publish data to the cloud
-  const publishData = async (): Promise<boolean> => {
-    try {
-      const allData = { companyInfo, tours, pageContent };
-      await window.aistudio.set(FAKE_CLOUD_STORAGE, allData);
-      return true;
-    } catch (e) {
-      console.error("Failed to publish data to cloud", e);
-      return false;
-    }
-  };
 
   const fetchRates = async () => {
     try {
@@ -170,8 +175,41 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return { amount, formatted, symbol: selectedCurrency.symbol };
   };
 
+  const updateCompanyInfo = (info: CompanyInfo) => {
+    const newData = { ...data, companyInfo: info };
+    setData(newData);
+    saveDataToCloud(newData);
+  };
+
+  const updateTour = (updatedTour: Tour) => {
+    const newTours = data.tours.map(t => t.id === updatedTour.id ? updatedTour : t);
+    const newData = { ...data, tours: newTours };
+    setData(newData);
+    saveDataToCloud(newData);
+  };
+  
+  const addTour = (newTour: Tour) => {
+    const newTours = [...data.tours, newTour];
+    const newData = { ...data, tours: newTours };
+    setData(newData);
+    saveDataToCloud(newData);
+  };
+  
+  const deleteTour = (id: string) => {
+    const newTours = data.tours.filter(t => t.id !== id);
+    const newData = { ...data, tours: newTours };
+    setData(newData);
+    saveDataToCloud(newData);
+  };
+  
+  const updatePageContent = (content: PageContent) => {
+    const newData = { ...data, pageContent: content };
+    setData(newData);
+    saveDataToCloud(newData);
+  };
+
   const addInquiry = (form: InquiryForm) => {
-    const tour = tours.find(t => t.id === form.tourId);
+    const tour = data.tours.find(t => t.id === form.tourId);
     const newInquiry: Inquiry = {
       ...form,
       id: `inq-${Date.now()}`,
@@ -192,36 +230,34 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
   
   const resetData = async () => {
     if(window.confirm("Delete ALL custom content from the cloud and reset to factory defaults? This is irreversible.")) {
-      setCompanyInfo(COMPANY_INFO);
-      setTours(TOURS);
-      setPageContent(DEFAULT_PAGE_CONTENT);
-      setAdminPassword('12345');
-      await window.aistudio.set(FAKE_CLOUD_STORAGE, null); // Clear cloud data
-      localStorage.removeItem('isAdmin');
-      localStorage.removeItem('adminPassword');
+      const defaultData = { companyInfo: COMPANY_INFO, tours: TOURS, pageContent: DEFAULT_PAGE_CONTENT };
+      setData(defaultData);
+      setSaving(true);
+      await window.aistudio.set(FAKE_CLOUD_STORAGE, defaultData);
+      localStorage.clear();
       window.location.reload();
     }
   };
 
   return (
     <DataContext.Provider value={{
-      companyInfo,
-      tours,
+      companyInfo: data.companyInfo,
+      tours: data.tours,
+      pageContent: data.pageContent,
       inquiries,
-      pageContent,
-      updateCompanyInfo: setCompanyInfo,
-      updateTour: (updatedTour: Tour) => setTours(prev => prev.map(t => t.id === updatedTour.id ? updatedTour : t)),
-      addTour: (newTour: Tour) => setTours(prev => [...prev, newTour]),
-      deleteTour: (id: string) => setTours(prev => prev.filter(t => t.id !== id)),
+      updateCompanyInfo,
+      updateTour,
+      addTour,
+      deleteTour,
       addInquiry,
-      updatePageContent: setPageContent,
+      updatePageContent,
       isAuthenticated,
       login,
       changePassword: setAdminPassword,
       logout: () => setIsAuthenticated(false),
       resetData,
-      publishData,
       loading,
+      saving,
       selectedCurrency,
       setCurrency,
       currencyRates,

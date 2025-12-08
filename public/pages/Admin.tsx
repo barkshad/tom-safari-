@@ -13,7 +13,7 @@ const Admin: React.FC = () => {
     inquiries,
     pageContent, updatePageContent,
     changePassword, resetData,
-    publishData,
+    saving,
     selectedCurrency, availableCurrencies, convertPrice, refreshRates, currencyRates
   } = useData();
 
@@ -157,6 +157,26 @@ const Admin: React.FC = () => {
     { id: 'settings', label: 'System', icon: Settings }
   ];
 
+  const SaveStatus = () => (
+    <div className="flex items-center gap-2 text-sm font-bold transition-colors">
+      {saving ? (
+        <>
+          <motion.div
+            animate={{ rotate: 360 }}
+            transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
+            className="w-4 h-4 border-2 border-stone-400 border-t-safari-gold rounded-full"
+          />
+          <span className="text-stone-500">Saving...</span>
+        </>
+      ) : (
+        <>
+          <CheckCircle size={16} className="text-green-500" />
+          <span className="text-stone-500">All changes saved</span>
+        </>
+      )}
+    </div>
+  );
+
   const renderContent = () => {
     switch(activeTab) {
       case 'dashboard': return <DashboardContent />;
@@ -170,57 +190,21 @@ const Admin: React.FC = () => {
     }
   };
 
-  const DashboardContent = () => {
-    const [publishStatus, setPublishStatus] = useState<'idle' | 'publishing' | 'success'>('idle');
-
-    const handlePublish = async () => {
-      setPublishStatus('publishing');
-      const success = await publishData();
-      if (success) {
-        setPublishStatus('success');
-        showToast('Changes are live!', 'success');
-        setTimeout(() => setPublishStatus('idle'), 3000);
-      } else {
-        showToast('Error publishing changes.', 'error');
-        setPublishStatus('idle');
-      }
-    };
-    
-    const getButtonText = () => {
-      switch (publishStatus) {
-        case 'publishing': return 'Publishing...';
-        case 'success': return 'Changes Published!';
-        default: return 'Publish All Changes';
-      }
-    };
-
-    return (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-            <div className="glass-card p-6 rounded-2xl"><h3 className="text-4xl font-bold">{tours.length}</h3><p className="text-stone-500">Total Tours</p></div>
-            <div className="glass-card p-6 rounded-2xl"><h3 className="text-4xl font-bold">{inquiries.filter(i => i.status === 'New').length}</h3><p className="text-stone-500">New Inquiries</p></div>
-            <div className="glass-card p-6 rounded-2xl"><h3 className="text-4xl font-bold">{Object.keys(currencyRates).length}</h3><p className="text-stone-500">Currencies Loaded</p></div>
-            
-            <div className="sm:col-span-2 md:col-span-3 glass-card p-8 rounded-2xl border-2 border-safari-sunset">
-                <h3 className="text-2xl font-bold text-safari-sunset mb-2 flex items-center gap-2"><Zap size={24}/> Publish Live Changes</h3>
-                <p className="text-stone-600 mb-6 max-w-3xl">
-                    Your edits are saved in this session. When you are ready, click the button below to make all your changes live for everyone to see. This will update the website globally.
-                </p>
-                <button 
-                  onClick={handlePublish} 
-                  disabled={publishStatus !== 'idle'}
-                  className={`font-bold px-8 py-4 rounded-lg transition-all shadow-lg text-lg flex items-center gap-3 w-full sm:w-auto
-                    ${publishStatus === 'idle' && 'bg-safari-sunset text-white hover:bg-orange-600'}
-                    ${publishStatus === 'publishing' && 'bg-stone-400 text-white cursor-wait'}
-                    ${publishStatus === 'success' && 'bg-green-600 text-white'}
-                  `}
-                >
-                  {publishStatus === 'success' ? <CheckCircle /> : <Zap />}
-                  {getButtonText()}
-                </button>
-            </div>
-        </div>
-      );
-  };
+  const DashboardContent = () => (
+    <div className="space-y-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+        <div className="glass-card p-6 rounded-2xl"><h3 className="text-4xl font-bold">{tours.length}</h3><p className="text-stone-500">Total Tours</p></div>
+        <div className="glass-card p-6 rounded-2xl"><h3 className="text-4xl font-bold">{inquiries.filter(i => i.status === 'New').length}</h3><p className="text-stone-500">New Inquiries</p></div>
+        <div className="glass-card p-6 rounded-2xl"><h3 className="text-4xl font-bold">{Object.keys(currencyRates).length}</h3><p className="text-stone-500">Currencies Loaded</p></div>
+      </div>
+      <div className="glass-card p-8 rounded-2xl border-2 border-safari-leaf/30">
+        <h3 className="text-2xl font-bold text-safari-leaf mb-2 flex items-center gap-2"><CheckCircle size={24}/> Content is Live!</h3>
+        <p className="text-stone-600 mb-6 max-w-3xl">
+          All changes you make are saved to the cloud automatically. Your updates will be visible to users worldwide in real-time. There is no "publish" step.
+        </p>
+      </div>
+    </div>
+  );
 
   const GlobalSettings = () => (
     <div className="space-y-6">
@@ -405,13 +389,15 @@ const Admin: React.FC = () => {
         </div>
     </div>
   );
+  
+  const activeTabName = sidebarItems.find(item => item.id === activeTab)?.label || 'Dashboard';
 
   return (
     <PageTransition>
       <div className="min-h-screen bg-stone-100 flex flex-col md:flex-row">
         {/* Mobile Header */}
         <header className="md:hidden bg-stone-900 text-white p-4 flex justify-between items-center sticky top-0 z-40">
-           <div className="font-bold text-lg">Admin</div>
+           <div className="font-bold text-lg">Admin Panel</div>
            <button onClick={() => setIsSidebarOpen(!isSidebarOpen)}>
              <Menu size={24} />
            </button>
@@ -435,6 +421,10 @@ const Admin: React.FC = () => {
 
         {/* Main Content */}
         <main className="flex-1 p-4 sm:p-6 md:p-8 overflow-y-auto">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-3">
+              <h1 className="text-3xl font-bold text-stone-800">{activeTabName}</h1>
+              <SaveStatus />
+          </div>
           {renderContent()}
         </main>
 
@@ -569,7 +559,7 @@ const Admin: React.FC = () => {
                         </div>
                         <div className="p-4 sm:p-6 border-t flex justify-end gap-4 bg-stone-50 rounded-b-2xl">
                             <button onClick={() => setEditingTour(null)} className="px-4 py-2 border rounded-lg hover:bg-stone-200 font-bold text-stone-600">Cancel</button>
-                            <button onClick={() => { editingTour.id.startsWith('tour-') ? addTour(editingTour) : updateTour(editingTour); setEditingTour(null); showToast("Tour saved! (Publish to make it live)"); }} className="px-6 py-2 bg-safari-leaf text-white rounded-lg font-bold shadow-lg hover:bg-green-800 transition-all flex items-center gap-2"><Save size={18}/> Save Changes</button>
+                            <button onClick={() => { editingTour.id.startsWith('tour-') ? addTour(editingTour) : updateTour(editingTour); setEditingTour(null); showToast("Tour saved and is now live!"); }} className="px-6 py-2 bg-safari-leaf text-white rounded-lg font-bold shadow-lg hover:bg-green-800 transition-all flex items-center gap-2"><Save size={18}/> Save Changes</button>
                         </div>
                     </motion.div>
                 </div>
