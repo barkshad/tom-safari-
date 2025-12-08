@@ -21,13 +21,15 @@ const Admin: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'dashboard' | 'global' | 'pages' | 'seo' | 'tours' | 'inquiries' | 'settings'>('dashboard');
   const [editingTour, setEditingTour] = useState<Tour | null>(null);
   
-  const [uploading, setUploading] = useState(false);
   const [toast, setToast] = useState<{message: string, type: 'success' | 'error'} | null>(null);
   
   const [expandedSection, setExpandedSection] = useState<string | null>('home');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  const cloudinaryWidgetRef = useRef<any>(null);
+  const uploadCallbackRef = useRef<((url: string) => void) | null>(null);
 
   // Close sidebar on larger screens
   useEffect(() => {
@@ -39,6 +41,34 @@ const Admin: React.FC = () => {
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
+
+  // Initialize Cloudinary Widget
+  useEffect(() => {
+    if (typeof window !== 'undefined' && window.cloudinary) {
+      cloudinaryWidgetRef.current = window.cloudinary.createUploadWidget({
+        cloudName: 'ds2mbrzcn',
+        uploadPreset: 'qqk2urzm',
+        folder: 'tomsafaris/gallery',
+        sources: ['local', 'url'],
+        multiple: false,
+      }, (error, result) => {
+        if (!error && result && result.event === 'success') {
+          if (uploadCallbackRef.current) {
+            uploadCallbackRef.current(result.info.secure_url);
+          }
+        }
+      });
+    }
+  }, []);
+
+  const openCloudinaryWidget = (onSuccess: (url: string) => void) => {
+    uploadCallbackRef.current = onSuccess;
+    if (cloudinaryWidgetRef.current) {
+      cloudinaryWidgetRef.current.open();
+    } else {
+      showToast('Uploader not ready. Please refresh.', 'error');
+    }
+  };
 
   const showToast = (message: string, type: 'success' | 'error' = 'success') => {
     setToast({ message, type });
@@ -62,72 +92,27 @@ const Admin: React.FC = () => {
     }
   };
 
-  const processFile = (file: File): Promise<string> => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = (event) => {
-        const img = new Image();
-        img.src = event.target?.result as string;
-        img.onload = () => {
-          const canvas = document.createElement('canvas');
-          const MAX_WIDTH = 800; // Increased for better quality
-          let width = img.width;
-          let height = img.height;
-          if (width > MAX_WIDTH) {
-            height = height * (MAX_WIDTH / width);
-            width = MAX_WIDTH;
-          }
-          canvas.width = width;
-          canvas.height = height;
-          const ctx = canvas.getContext('2d');
-          ctx?.drawImage(img, 0, 0, width, height);
-          resolve(canvas.toDataURL('image/jpeg', 0.7)); // Quality 0.7
-        };
-        img.onerror = reject;
-      };
-      reader.onerror = reject;
+  const handlePageImageUpload = (section: keyof PageContent, subSection: string) => {
+    openCloudinaryWidget((secureUrl) => {
+      const newContent = JSON.parse(JSON.stringify(pageContent));
+      if (newContent[section] && newContent[section][subSection]) {
+        newContent[section][subSection].image = secureUrl;
+        updatePageContent(newContent);
+        showToast("Image updated!");
+      }
     });
   };
 
-  const handlePageImageUpload = async (e: React.ChangeEvent<HTMLInputElement>, section: string, subSection: string) => {
-    if (e.target.files && e.target.files[0]) {
-      setUploading(true);
-      try {
-        const base64 = await processFile(e.target.files[0]);
-        const newContent = { ...pageContent };
-        newContent[section][subSection].image = base64;
-        updatePageContent(newContent);
-        showToast("Image updated!");
-      } catch (err) {
-        showToast("Upload failed", "error");
-      } finally {
-        setUploading(false);
+  const handleTourImageUpload = (type: 'main' | 'gallery') => {
+    if (!editingTour) return;
+    openCloudinaryWidget((secureUrl) => {
+      if (type === 'main') {
+        setEditingTour(prev => prev ? { ...prev, image: secureUrl } : null);
+      } else {
+        setEditingTour(prev => prev ? { ...prev, gallery: [...(prev.gallery || []), secureUrl] } : null);
       }
-    }
-  };
-
-  const handleTourImageUpload = async (e: React.ChangeEvent<HTMLInputElement>, type: 'main' | 'gallery') => {
-      if (e.target.files && editingTour) {
-          const files = Array.from(e.target.files);
-          setUploading(true);
-          try {
-              const processedImages = await Promise.all(files.map(f => processFile(f)));
-              if(type === 'main' && processedImages.length > 0) {
-                setEditingTour({...editingTour, image: processedImages[0]});
-              } else {
-                setEditingTour({
-                    ...editingTour,
-                    gallery: [...(editingTour.gallery || []), ...processedImages]
-                });
-              }
-              showToast(`${files.length} photo(s) uploaded.`);
-          } catch (err) {
-              showToast("Upload failed", "error");
-          } finally {
-              setUploading(false);
-          }
-      }
+      showToast('Image uploaded successfully!');
+    });
   };
 
   if (!isAuthenticated) {
@@ -251,7 +236,7 @@ const Admin: React.FC = () => {
                         <textarea rows={6} className="w-full p-3 border rounded" value={pageContent.about.founder.content} onChange={(e) => updatePageContent({...pageContent, about: {...pageContent.about, founder: {...pageContent.about.founder, content: e.target.value}}})} />
                         <div className="flex items-center gap-4">
                             <img src={pageContent.about.founder.image} className="w-20 h-20 object-cover rounded-full" />
-                            <label className="cursor-pointer bg-stone-200 px-4 py-2 rounded text-sm font-bold">Change Founder Photo <input type="file" className="hidden" onChange={(e) => handlePageImageUpload(e, 'about', 'founder')} /></label>
+                            <button onClick={() => handlePageImageUpload('about', 'founder')} className="cursor-pointer bg-stone-200 px-4 py-2 rounded text-sm font-bold">Change Founder Photo</button>
                         </div>
                     </div>
                 </div>
@@ -434,10 +419,9 @@ const Admin: React.FC = () => {
                                     </div>
                                     <div>
                                         <label className="text-xs font-bold uppercase text-stone-400 block mb-2">Main Cover Image</label>
-                                        <label className="cursor-pointer bg-safari-sky text-white px-4 py-2 rounded-lg font-bold inline-flex items-center gap-2 hover:bg-blue-600 transition-colors">
+                                        <button onClick={() => handleTourImageUpload('main')} className="cursor-pointer bg-safari-sky text-white px-4 py-2 rounded-lg font-bold inline-flex items-center gap-2 hover:bg-blue-600 transition-colors">
                                             <Upload size={16}/> Upload Cover
-                                            <input type="file" className="hidden" accept="image/*" onChange={(e) => handleTourImageUpload(e, 'main')} />
-                                        </label>
+                                        </button>
                                     </div>
                                 </div>
                                 
@@ -451,10 +435,9 @@ const Admin: React.FC = () => {
                                             </div>
                                         ))}
                                     </div>
-                                    <label className="cursor-pointer bg-stone-200 text-stone-700 px-4 py-2 rounded-lg font-bold inline-flex items-center gap-2 hover:bg-stone-300 transition-colors">
+                                    <button onClick={() => handleTourImageUpload('gallery')} className="cursor-pointer bg-stone-200 text-stone-700 px-4 py-2 rounded-lg font-bold inline-flex items-center gap-2 hover:bg-stone-300 transition-colors">
                                         <Plus size={16}/> Add to Gallery
-                                        <input type="file" multiple className="hidden" accept="image/*" onChange={(e) => handleTourImageUpload(e, 'gallery')} />
-                                    </label>
+                                    </button>
                                 </div>
                            </div>
 
@@ -496,7 +479,7 @@ const Admin: React.FC = () => {
                         </div>
                         <div className="p-4 sm:p-6 border-t flex justify-end gap-4 bg-stone-50 rounded-b-2xl">
                             <button onClick={() => setEditingTour(null)} className="px-4 py-2 border rounded-lg hover:bg-stone-200 font-bold text-stone-600">Cancel</button>
-                            <button onClick={() => { editingTour.id.startsWith('tour-') ? addTour(editingTour) : updateTour(editingTour); setEditingTour(null); showToast("Tour saved!"); }} className="px-6 py-2 bg-safari-leaf text-white rounded-lg font-bold shadow-lg hover:bg-green-800 transition-all flex items-center gap-2">{uploading ? 'Uploading...' : <><Save size={18}/> Save Changes</>}</button>
+                            <button onClick={() => { editingTour.id.startsWith('tour-') ? addTour(editingTour) : updateTour(editingTour); setEditingTour(null); showToast("Tour saved!"); }} className="px-6 py-2 bg-safari-leaf text-white rounded-lg font-bold shadow-lg hover:bg-green-800 transition-all flex items-center gap-2"><Save size={18}/> Save Changes</button>
                         </div>
                     </motion.div>
                 </div>
