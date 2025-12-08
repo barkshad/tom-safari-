@@ -8,7 +8,7 @@ const firebaseConfig = {
   apiKey: "AIzaSyDpRDeIu3NGQ4HsekLAr4kqHF3Im07FUDY",
   authDomain: "tomsafaris-64de6.firebaseapp.com",
   projectId: "tomsafaris-64de6",
-  storageBucket: "tomsafaris-64de6.appspot.com",
+  storageBucket: "tomsafaris-64de6.firebasestorage.app",
   messagingSenderId: "160811556924",
   appId: "1:160811556924:web:10a77899029c8f34da6339"
 };
