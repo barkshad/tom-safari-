@@ -82,12 +82,12 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
+  // Load public data on initial load
   useEffect(() => {
-    const loadData = async () => {
+    const loadPublicData = async () => {
       setLoading(true);
       const docRef = doc(db, DB_COLLECTION, DB_DOC_ID);
       try {
-        // Fetch main content
         const docSnap = await getDoc(docRef);
         if (docSnap.exists()) {
           const cloudData = docSnap.data() as CloudData;
@@ -110,24 +110,38 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
            await setDoc(docRef, defaultData);
            setData(defaultData);
         }
-
-        // Fetch inquiries
-        const q = query(collection(db, "inquiries"), orderBy("submittedAt", "desc"));
-        const querySnapshot = await getDocs(q);
-        const fetchedInquiries: Inquiry[] = [];
-        querySnapshot.forEach((doc) => {
-            fetchedInquiries.push(doc.data() as Inquiry);
-        });
-        setInquiries(fetchedInquiries);
-
       } catch (e) {
-        console.error("Failed to load cloud data, falling back to defaults.", e);
+        console.error("Failed to load public cloud data, falling back to defaults.", e);
       } finally {
         setLoading(false);
       }
     };
-    loadData();
+    loadPublicData();
   }, []);
+
+  // Load admin-only data (inquiries) when authenticated
+  useEffect(() => {
+    const loadInquiries = async () => {
+      if (isAuthenticated) {
+        try {
+          const q = query(collection(db, "inquiries"), orderBy("submittedAt", "desc"));
+          const querySnapshot = await getDocs(q);
+          const fetchedInquiries: Inquiry[] = [];
+          querySnapshot.forEach((doc) => {
+              fetchedInquiries.push(doc.data() as Inquiry);
+          });
+          setInquiries(fetchedInquiries);
+        } catch(e) {
+          console.error("Failed to load inquiries. Check Firestore rules.", e);
+        }
+      } else {
+        // Clear inquiries on logout
+        setInquiries([]);
+      }
+    };
+    loadInquiries();
+  }, [isAuthenticated]);
+
 
   const fetchRates = async () => {
     try {
@@ -215,7 +229,10 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
       submittedAt: new Date().toISOString()
     };
     await addDoc(collection(db, "inquiries"), newInquiry);
-    setInquiries(prev => [newInquiry, ...prev]);
+    // If admin is logged in, refresh inquiries list
+    if (isAuthenticated) {
+        setInquiries(prev => [newInquiry, ...prev]);
+    }
   };
 
   const login = async (password: string) => {
