@@ -459,20 +459,40 @@ const Admin: React.FC = () => {
                            </div>
 
                            {/* SECTION 5: ITINERARY */}
-                            <div className="border-t pt-4">
-                                <h4 className="font-bold mb-2 uppercase text-safari-earth">Itinerary Builder</h4>
-                                <div className="space-y-2">
-                                {editingTour.itinerary.map((day, index) => (
-                                    <div key={index} className="grid grid-cols-[auto_1fr_auto] sm:grid-cols-[auto_1fr_1fr_auto] gap-2 items-center p-2 bg-stone-50 rounded">
-                                        <span className="font-bold text-sm">Day {day.day}</span>
-                                        <input placeholder="Title" value={day.title} onChange={e => { const newItinerary = [...editingTour.itinerary]; newItinerary[index].title = e.target.value; setEditingTour({...editingTour, itinerary: newItinerary}); }} className="p-1 border rounded w-full" />
-                                        <textarea placeholder="Description" value={day.description} rows={1} onChange={e => { const newItinerary = [...editingTour.itinerary]; newItinerary[index].description = e.target.value; setEditingTour({...editingTour, itinerary: newItinerary}); }} className="p-1 border rounded w-full hidden sm:block" />
-                                        <button onClick={() => { const newItinerary = editingTour.itinerary.filter((_, i) => i !== index); setEditingTour({...editingTour, itinerary: newItinerary}); }} className="text-red-500 p-1"><Trash2 size={16}/></button>
-                                    </div>
-                                ))}
+                           <div className="space-y-4">
+                                <h4 className="text-sm font-bold uppercase text-safari-earth border-b pb-2">Itinerary Builder</h4>
+                                <div className="space-y-4 max-h-[40vh] overflow-y-auto p-1">
+                                    {editingTour.itinerary && editingTour.itinerary.length > 0 ? (
+                                        editingTour.itinerary.map((day, index) => (
+                                            <div key={index} className="bg-stone-50 p-4 rounded-xl border border-stone-200 relative">
+                                                <div className="flex justify-between items-start gap-4">
+                                                    <div className="flex-grow space-y-3">
+                                                         <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+                                                            <span className="font-black text-safari-leaf text-lg bg-white px-3 py-1 rounded-lg border flex-shrink-0">Day {day.day}</span>
+                                                            <div className="w-full">
+                                                                <label className="text-xs font-bold text-stone-400 block">Title</label>
+                                                                <input placeholder="e.g., Arrival in Tsavo East" value={day.title} onChange={e => { const newItinerary = [...editingTour.itinerary]; newItinerary[index].title = e.target.value; setEditingTour({...editingTour, itinerary: newItinerary}); }} className="p-2 border rounded w-full" />
+                                                            </div>
+                                                        </div>
+                                                         <div>
+                                                            <label className="text-xs font-bold text-stone-400 block">Description</label>
+                                                            <textarea placeholder="Describe the day's activities..." value={day.description} rows={3} onChange={e => { const newItinerary = [...editingTour.itinerary]; newItinerary[index].description = e.target.value; setEditingTour({...editingTour, itinerary: newItinerary}); }} className="p-2 border rounded w-full text-sm" />
+                                                        </div>
+                                                    </div>
+                                                     <button onClick={() => { const newItinerary = editingTour.itinerary.filter((_, i) => i !== index); setEditingTour({...editingTour, itinerary: newItinerary}); }} className="text-red-500 hover:bg-red-100 p-2 rounded-full absolute top-2 right-2"><Trash2 size={16}/></button>
+                                                </div>
+                                            </div>
+                                        ))
+                                    ) : (
+                                        <div className="text-center py-6 text-stone-500 bg-stone-100 rounded-lg">
+                                            <p>No itinerary days yet. Add one to get started!</p>
+                                        </div>
+                                    )}
                                 </div>
-                                <button onClick={() => { const newDay = { day: editingTour.itinerary.length + 1, title: '', description: '' }; setEditingTour({...editingTour, itinerary: [...editingTour.itinerary, newDay]}); }} className="mt-2 text-sm bg-blue-100 text-blue-600 px-3 py-1 rounded">Add Day</button>
-                            </div>
+                                <button onClick={() => { const newDay = { day: editingTour.itinerary.length + 1, title: '', description: '' }; setEditingTour({...editingTour, itinerary: [...editingTour.itinerary, newDay]}); }} className="mt-2 text-sm bg-safari-leaf text-white px-4 py-2 rounded-lg font-bold flex items-center gap-2 hover:bg-green-800 transition-colors">
+                                    <Plus size={16}/> Add Day
+                                </button>
+                           </div>
                         </div>
                         <div className="p-4 sm:p-6 border-t flex justify-end gap-4 bg-stone-50 rounded-b-2xl">
                             <button onClick={() => setEditingTour(null)} className="px-4 py-2 border rounded-lg hover:bg-stone-200 font-bold text-stone-600">Cancel</button>
