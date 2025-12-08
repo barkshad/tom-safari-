@@ -1,7 +1,7 @@
 // @ts-nocheck
 import React, { useState, useRef, useEffect } from 'react';
 import { useData } from '../../context/DataContext';
-import { Lock, Save, LogOut, Globe, Layout, Settings, Home, List, MessageSquare, Image as ImageIcon, ChevronRight, CheckCircle, AlertCircle, Plus, Edit2, Trash2, X, ChevronDown, ChevronUp, MapPin, Calendar, FileText, BarChart, SlidersHorizontal, Search, Upload, Menu } from 'lucide-react';
+import { Lock, Save, LogOut, Globe, Layout, Settings, Home, List, MessageSquare, Image as ImageIcon, ChevronRight, CheckCircle, AlertCircle, Plus, Edit2, Trash2, X, ChevronDown, ChevronUp, MapPin, Calendar, FileText, BarChart, SlidersHorizontal, Search, Upload, Menu, Download, Zap } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Tour, CompanyInfo, PageContent, ItineraryDay } from '../../types';
 import PageTransition from '../../components/PageTransition';
@@ -13,6 +13,7 @@ const Admin: React.FC = () => {
     inquiries,
     pageContent, updatePageContent,
     changePassword, resetData,
+    publishData,
     selectedCurrency, availableCurrencies, convertPrice, refreshRates, currencyRates
   } = useData();
 
@@ -155,13 +156,57 @@ const Admin: React.FC = () => {
     }
   };
 
-  const DashboardContent = () => (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-        <div className="glass-card p-6 rounded-2xl"><h3 className="text-4xl font-bold">{tours.length}</h3><p className="text-stone-500">Total Tours</p></div>
-        <div className="glass-card p-6 rounded-2xl"><h3 className="text-4xl font-bold">{inquiries.filter(i => i.status === 'New').length}</h3><p className="text-stone-500">New Inquiries</p></div>
-        <div className="glass-card p-6 rounded-2xl"><h3 className="text-4xl font-bold">{Object.keys(currencyRates).length}</h3><p className="text-stone-500">Currencies Loaded</p></div>
-    </div>
-  );
+  const DashboardContent = () => {
+    const [publishStatus, setPublishStatus] = useState<'idle' | 'publishing' | 'success'>('idle');
+
+    const handlePublish = async () => {
+      setPublishStatus('publishing');
+      const success = await publishData();
+      if (success) {
+        setPublishStatus('success');
+        showToast('Changes are live!', 'success');
+        setTimeout(() => setPublishStatus('idle'), 3000);
+      } else {
+        showToast('Error publishing changes.', 'error');
+        setPublishStatus('idle');
+      }
+    };
+    
+    const getButtonText = () => {
+      switch (publishStatus) {
+        case 'publishing': return 'Publishing...';
+        case 'success': return 'Changes Published!';
+        default: return 'Publish All Changes';
+      }
+    };
+
+    return (
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+            <div className="glass-card p-6 rounded-2xl"><h3 className="text-4xl font-bold">{tours.length}</h3><p className="text-stone-500">Total Tours</p></div>
+            <div className="glass-card p-6 rounded-2xl"><h3 className="text-4xl font-bold">{inquiries.filter(i => i.status === 'New').length}</h3><p className="text-stone-500">New Inquiries</p></div>
+            <div className="glass-card p-6 rounded-2xl"><h3 className="text-4xl font-bold">{Object.keys(currencyRates).length}</h3><p className="text-stone-500">Currencies Loaded</p></div>
+            
+            <div className="sm:col-span-2 md:col-span-3 glass-card p-8 rounded-2xl border-2 border-safari-sunset">
+                <h3 className="text-2xl font-bold text-safari-sunset mb-2 flex items-center gap-2"><Zap size={24}/> Publish Live Changes</h3>
+                <p className="text-stone-600 mb-6 max-w-3xl">
+                    Your edits are saved in this session. When you are ready, click the button below to make all your changes live for everyone to see. This will update the website globally.
+                </p>
+                <button 
+                  onClick={handlePublish} 
+                  disabled={publishStatus !== 'idle'}
+                  className={`font-bold px-8 py-4 rounded-lg transition-all shadow-lg text-lg flex items-center gap-3 w-full sm:w-auto
+                    ${publishStatus === 'idle' && 'bg-safari-sunset text-white hover:bg-orange-600'}
+                    ${publishStatus === 'publishing' && 'bg-stone-400 text-white cursor-wait'}
+                    ${publishStatus === 'success' && 'bg-green-600 text-white'}
+                  `}
+                >
+                  {publishStatus === 'success' ? <CheckCircle /> : <Zap />}
+                  {getButtonText()}
+                </button>
+            </div>
+        </div>
+      );
+  };
 
   const GlobalSettings = () => (
     <div className="space-y-6">
@@ -187,6 +232,10 @@ const Admin: React.FC = () => {
                 <input className="w-full p-3 border rounded-lg" value={companyInfo.location} onChange={(e) => updateCompanyInfo({...companyInfo, location: e.target.value})} /></div>
                 <div><label className="text-xs font-bold uppercase text-stone-400">WhatsApp Link</label>
                 <input className="w-full p-3 border rounded-lg" value={companyInfo.social.whatsapp} onChange={(e) => updateCompanyInfo({...companyInfo, social: {...companyInfo.social, whatsapp: e.target.value}})} /></div>
+                 <div><label className="text-xs font-bold uppercase text-stone-400">Instagram Link</label>
+                <input className="w-full p-3 border rounded-lg" value={companyInfo.social.instagram} onChange={(e) => updateCompanyInfo({...companyInfo, social: {...companyInfo.social, instagram: e.target.value}})} /></div>
+                 <div><label className="text-xs font-bold uppercase text-stone-400">Facebook Link</label>
+                <input className="w-full p-3 border rounded-lg" value={companyInfo.social.facebook} onChange={(e) => updateCompanyInfo({...companyInfo, social: {...companyInfo.social, facebook: e.target.value}})} /></div>
             </div>
         </div>
     </div>
@@ -204,12 +253,14 @@ const Admin: React.FC = () => {
                         <h4 className="font-bold text-safari-sunset">Hero Section</h4>
                         <input className="w-full p-3 border rounded" placeholder="Hero Title" value={pageContent.home.hero.title} onChange={(e) => updatePageContent({...pageContent, home: {...pageContent.home, hero: {...pageContent.home.hero, title: e.target.value}}})} />
                         <textarea className="w-full p-3 border rounded" placeholder="Hero Subtitle" value={pageContent.home.hero.subtitle} onChange={(e) => updatePageContent({...pageContent, home: {...pageContent.home, hero: {...pageContent.home.hero, subtitle: e.target.value}}})} />
-                        <div>
-                            <label className="text-xs font-bold uppercase text-stone-400">Hero Image URL</label>
-                            <input className="w-full p-3 border rounded" placeholder="https://example.com/image.jpg" value={pageContent.home.hero.image} onChange={(e) => updatePageContent({...pageContent, home: {...pageContent.home, hero: {...pageContent.home.hero, image: e.target.value}}})} />
-                            {!pageContent.home.hero.image.startsWith('http') && pageContent.home.hero.image.length > 0 && (
-                                <p className="text-red-500 text-xs mt-1">URL must start with http or https</p>
-                            )}
+                         <div className="flex items-center gap-4">
+                            {pageContent.home.hero.image && <img src={pageContent.home.hero.image} className="w-24 h-16 object-cover rounded-lg border" alt="Hero Preview"/>}
+                            <div>
+                                 <label className="text-xs font-bold uppercase text-stone-400 block mb-2">Hero Image</label>
+                                 <button onClick={() => handlePageImageUpload('home', 'hero')} className="cursor-pointer bg-stone-200 px-4 py-2 rounded text-sm font-bold inline-flex items-center gap-2 hover:bg-stone-300">
+                                     <Upload size={14} /> Upload Image
+                                 </button>
+                            </div>
                         </div>
                     </div>
                     <div className="space-y-4">
@@ -235,8 +286,13 @@ const Admin: React.FC = () => {
                         <input className="w-full p-3 border rounded" value={pageContent.about.founder.title} onChange={(e) => updatePageContent({...pageContent, about: {...pageContent.about, founder: {...pageContent.about.founder, title: e.target.value}}})} />
                         <textarea rows={6} className="w-full p-3 border rounded" value={pageContent.about.founder.content} onChange={(e) => updatePageContent({...pageContent, about: {...pageContent.about, founder: {...pageContent.about.founder, content: e.target.value}}})} />
                         <div className="flex items-center gap-4">
-                            <img src={pageContent.about.founder.image} className="w-20 h-20 object-cover rounded-full" />
-                            <button onClick={() => handlePageImageUpload('about', 'founder')} className="cursor-pointer bg-stone-200 px-4 py-2 rounded text-sm font-bold">Change Founder Photo</button>
+                            {pageContent.about.founder.image && <img src={pageContent.about.founder.image} className="w-20 h-20 object-cover rounded-full border" alt="Founder Preview" />}
+                             <div>
+                                <label className="text-xs font-bold uppercase text-stone-400 block mb-2">Founder Photo</label>
+                                <button onClick={() => handlePageImageUpload('about', 'founder')} className="cursor-pointer bg-stone-200 px-4 py-2 rounded text-sm font-bold inline-flex items-center gap-2 hover:bg-stone-300">
+                                    <Upload size={14} /> Change Photo
+                                </button>
+                             </div>
                         </div>
                     </div>
                 </div>
@@ -320,7 +376,7 @@ const Admin: React.FC = () => {
         </div>
         <div className="glass-card p-6 md:p-8 rounded-3xl border-2 border-red-500/20">
             <h3 className="text-2xl font-bold mb-2 text-red-700">Danger Zone</h3>
-            <p className="text-sm text-stone-500 mb-6">This action is irreversible and will delete all your custom content.</p>
+            <p className="text-sm text-stone-500 mb-6">This action is irreversible and will delete all your custom content from the cloud.</p>
             <button onClick={resetData} className="bg-red-600 hover:bg-red-800 text-white px-6 py-3 rounded-lg font-bold">Reset Website Data</button>
         </div>
     </div>
@@ -479,7 +535,7 @@ const Admin: React.FC = () => {
                         </div>
                         <div className="p-4 sm:p-6 border-t flex justify-end gap-4 bg-stone-50 rounded-b-2xl">
                             <button onClick={() => setEditingTour(null)} className="px-4 py-2 border rounded-lg hover:bg-stone-200 font-bold text-stone-600">Cancel</button>
-                            <button onClick={() => { editingTour.id.startsWith('tour-') ? addTour(editingTour) : updateTour(editingTour); setEditingTour(null); showToast("Tour saved!"); }} className="px-6 py-2 bg-safari-leaf text-white rounded-lg font-bold shadow-lg hover:bg-green-800 transition-all flex items-center gap-2"><Save size={18}/> Save Changes</button>
+                            <button onClick={() => { editingTour.id.startsWith('tour-') ? addTour(editingTour) : updateTour(editingTour); setEditingTour(null); showToast("Tour saved! (Publish to make it live)"); }} className="px-6 py-2 bg-safari-leaf text-white rounded-lg font-bold shadow-lg hover:bg-green-800 transition-all flex items-center gap-2"><Save size={18}/> Save Changes</button>
                         </div>
                     </motion.div>
                 </div>

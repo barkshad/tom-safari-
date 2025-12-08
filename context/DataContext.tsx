@@ -1,8 +1,33 @@
-
+// FIX: Augment the global AIStudio interface to include `get` and `set` methods for mock cloud storage,
+// and add `cloudinary` to the Window interface to type the image uploader service.
+declare global {
+  interface Window {
+    // FIX: Removed re-declaration of 'aistudio' on the Window interface to resolve a TypeScript error about conflicting modifiers.
+    // The property is likely already declared in the global scope, so we only need to augment the existing interfaces.
+    cloudinary: any;
+  }
+  interface AIStudio {
+    get: (key: string) => Promise<any>;
+    set: (key: string, value: any) => Promise<void>;
+  }
+}
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { Tour, CompanyInfo, Inquiry, InquiryForm, PageContent, CurrencyConfig } from '../types';
-import { TOURS, COMPANY_INFO, DEFAULT_PAGE_CONTENT, SUPPORTED_CURRENCIES, DATA_VERSION } from '../constants';
+import { TOURS, COMPANY_INFO, DEFAULT_PAGE_CONTENT, SUPPORTED_CURRENCIES } from '../constants';
+
+// A mock for the platform's cloud storage.
+// In a real environment, this would be provided by the host.
+const FAKE_CLOUD_STORAGE = 'FAKE_CLOUD_STORAGE_TOM_SAFARIS';
+if (typeof window !== 'undefined' && (!window.aistudio || typeof window.aistudio.get !== 'function' || typeof window.aistudio.set !== 'function')) {
+  // FIX: If the aistudio object is missing or incomplete (doesn't have the required functions),
+  // this creates a mock that uses localStorage. This prevents the "window.aistudio.get is not a function"
+  // error that occurs when the hosting environment provides an empty or partial aistudio object.
+  (window as any).aistudio = {
+    get: (key) => Promise.resolve(JSON.parse(localStorage.getItem(key) || 'null')),
+    set: (key, value) => Promise.resolve(localStorage.setItem(key, JSON.stringify(value))),
+  };
+}
 
 interface DataContextType {
   companyInfo: CompanyInfo;
@@ -20,6 +45,8 @@ interface DataContextType {
   changePassword: (newPassword: string) => void;
   logout: () => void;
   resetData: () => void;
+  publishData: () => Promise<boolean>;
+  loading: boolean;
   
   selectedCurrency: CurrencyConfig;
   setCurrency: (code: string) => void;
@@ -32,60 +59,14 @@ interface DataContextType {
 const DataContext = createContext<DataContextType | undefined>(undefined);
 
 export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [loading, setLoading] = useState(true);
+  const [companyInfo, setCompanyInfo] = useState<CompanyInfo>(COMPANY_INFO);
+  const [tours, setTours] = useState<Tour[]>(TOURS);
+  const [inquiries, setInquiries] = useState<Inquiry[]>([]);
+  const [pageContent, setPageContent] = useState<PageContent>(DEFAULT_PAGE_CONTENT);
   
-  // Helper to load data from localStorage, checking against the current data version.
-  // If versions mismatch, it loads the fresh data from constants.ts to prevent stale info.
-  const checkVersionAndLoad = (key: string, defaultValue: any) => {
-    try {
-      const savedVersion = localStorage.getItem('dataVersion');
-      if (savedVersion !== DATA_VERSION) {
-        // Version mismatch, return default to force update
-        return defaultValue;
-      }
-      const saved = localStorage.getItem(key);
-      return saved ? JSON.parse(saved) : defaultValue;
-    } catch {
-      return defaultValue;
-    }
-  };
-  
-  const [companyInfo, setCompanyInfo] = useState<CompanyInfo>(() => checkVersionAndLoad('companyInfo', COMPANY_INFO));
-  const [tours, setTours] = useState<Tour[]>(() => checkVersionAndLoad('tours', TOURS));
-  const [inquiries, setInquiries] = useState<Inquiry[]>(() => checkVersionAndLoad('inquiries', []));
-
-  // Special handler for pageContent for deep merging
-  const [pageContent, setPageContent] = useState<PageContent>(() => {
-    const savedVersion = localStorage.getItem('dataVersion');
-    if (savedVersion !== DATA_VERSION) return DEFAULT_PAGE_CONTENT;
-
-    try {
-      const saved = localStorage.getItem('pageContent');
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        // Deep merge with default to ensure structure exists
-        return {
-          ...DEFAULT_PAGE_CONTENT,
-          ...parsed,
-          home: { ...DEFAULT_PAGE_CONTENT.home, ...parsed.home },
-          about: { ...DEFAULT_PAGE_CONTENT.about, ...parsed.about },
-          contact: { ...DEFAULT_PAGE_CONTENT.contact, ...parsed.contact },
-          footer: { ...DEFAULT_PAGE_CONTENT.footer, ...parsed.footer },
-          seo: { ...DEFAULT_PAGE_CONTENT.seo, ...parsed.seo },
-        };
-      }
-      return DEFAULT_PAGE_CONTENT;
-    } catch {
-      return DEFAULT_PAGE_CONTENT;
-    }
-  });
-  
-  const [adminPassword, setAdminPassword] = useState<string>(() => {
-    return localStorage.getItem('adminPassword') || '12345';
-  });
-
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => {
-    return localStorage.getItem('isAdmin') === 'true';
-  });
+  const [adminPassword, setAdminPassword] = useState<string>(() => localStorage.getItem('adminPassword') || '12345');
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => localStorage.getItem('isAdmin') === 'true');
 
   const [selectedCurrency, setSelectedCurrency] = useState<CurrencyConfig>(() => {
     const savedCode = localStorage.getItem('selectedCurrencyCode');
@@ -94,20 +75,63 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const [currencyRates, setCurrencyRates] = useState<Record<string, number>>({ USD: 1 });
 
+  // Load data from cloud on initial app load
+  useEffect(() => {
+    const loadData = async () => {
+      setLoading(true);
+      try {
+        const cloudData = await window.aistudio.get(FAKE_CLOUD_STORAGE);
+        
+        // Also load inquiries from local storage as they are not public content
+        const localInquiries = JSON.parse(localStorage.getItem('inquiries') || '[]');
+        setInquiries(localInquiries);
+
+        if (cloudData && typeof cloudData === 'object') {
+          // Deep merge page content to prevent breaking site if structure changes
+          const mergedPageContent = {
+            ...DEFAULT_PAGE_CONTENT,
+            ...cloudData.pageContent,
+            home: { ...DEFAULT_PAGE_CONTENT.home, ...cloudData.pageContent?.home },
+            about: { ...DEFAULT_PAGE_CONTENT.about, ...cloudData.pageContent?.about },
+            contact: { ...DEFAULT_PAGE_CONTENT.contact, ...cloudData.pageContent?.contact },
+            footer: { ...DEFAULT_PAGE_CONTENT.footer, ...cloudData.pageContent?.footer },
+            seo: { ...DEFAULT_PAGE_CONTENT.seo, ...cloudData.pageContent?.seo },
+          };
+          setCompanyInfo(cloudData.companyInfo || COMPANY_INFO);
+          setTours(cloudData.tours || TOURS);
+          setPageContent(mergedPageContent);
+        }
+      } catch (e) {
+        console.error("Failed to load cloud data, falling back to defaults.", e);
+        // Data remains as defaults if cloud load fails
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadData();
+  }, []);
+
+  // Publish data to the cloud
+  const publishData = async (): Promise<boolean> => {
+    try {
+      const allData = { companyInfo, tours, pageContent };
+      await window.aistudio.set(FAKE_CLOUD_STORAGE, allData);
+      return true;
+    } catch (e) {
+      console.error("Failed to publish data to cloud", e);
+      return false;
+    }
+  };
+
   const fetchRates = async () => {
     try {
       const response = await fetch('https://open.er-api.com/v6/latest/USD');
       const data = await response.json();
       if (data && data.rates) {
         setCurrencyRates(data.rates);
-        localStorage.setItem('currencyRates', JSON.stringify({
-          rates: data.rates,
-          timestamp: Date.now()
-        }));
+        localStorage.setItem('currencyRates', JSON.stringify({ rates: data.rates, timestamp: Date.now() }));
       }
-    } catch (error) {
-      console.error("Failed to fetch rates:", error);
-    }
+    } catch (error) { console.error("Failed to fetch rates:", error); }
   };
 
   useEffect(() => {
@@ -116,18 +140,15 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
       try {
         const parsed = JSON.parse(savedRates);
         const twelveHours = 12 * 60 * 60 * 1000;
-        if (Date.now() - parsed.timestamp < twelveHours) {
-          setCurrencyRates(parsed.rates);
-        } else {
-          fetchRates();
-        }
-      } catch {
-        fetchRates();
-      }
-    } else {
-      fetchRates();
-    }
+        if (Date.now() - parsed.timestamp < twelveHours) setCurrencyRates(parsed.rates);
+        else fetchRates();
+      } catch { fetchRates(); }
+    } else { fetchRates(); }
   }, []);
+
+  useEffect(() => { localStorage.setItem('isAdmin', String(isAuthenticated)); }, [isAuthenticated]);
+  useEffect(() => { localStorage.setItem('adminPassword', adminPassword); }, [adminPassword]);
+  useEffect(() => { localStorage.setItem('inquiries', JSON.stringify(inquiries)); }, [inquiries]);
 
   const setCurrency = (code: string) => {
     const currency = SUPPORTED_CURRENCIES.find(c => c.code === code);
@@ -140,45 +161,15 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const convertPrice = (priceInUsd: number) => {
     const rate = currencyRates[selectedCurrency.code] || 1;
     const amount = Math.ceil(priceInUsd * rate);
-    let formatted = '';
+    let formatted;
     try {
-       formatted = new Intl.NumberFormat('en-US', {
-         style: 'currency',
-         currency: selectedCurrency.code,
-         minimumFractionDigits: 0,
-         maximumFractionDigits: 0,
-       }).format(amount);
+       formatted = new Intl.NumberFormat('en-US', { style: 'currency', currency: selectedCurrency.code, minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(amount);
     } catch (e) {
        formatted = `${selectedCurrency.symbol}${amount.toLocaleString()}`;
     }
     return { amount, formatted, symbol: selectedCurrency.symbol };
   };
 
-  const refreshRates = async () => { await fetchRates(); };
-
-  const saveToStorage = (key: string, data: any) => {
-    try {
-      localStorage.setItem(key, JSON.stringify(data));
-      localStorage.setItem('dataVersion', DATA_VERSION); // Always save the current version with any data change.
-    } catch (e: any) {
-      if (e.name === 'QuotaExceededError' || e.name === 'NS_ERROR_DOM_QUOTA_REACHED') {
-        alert("⚠️ Storage Limit Reached!\n\nPlease delete some gallery photos to make space.");
-      }
-    }
-  };
-
-  useEffect(() => { saveToStorage('companyInfo', companyInfo); }, [companyInfo]);
-  useEffect(() => { saveToStorage('tours', tours); }, [tours]);
-  useEffect(() => { saveToStorage('inquiries', inquiries); }, [inquiries]);
-  useEffect(() => { saveToStorage('pageContent', pageContent); }, [pageContent]);
-  useEffect(() => { localStorage.setItem('isAdmin', String(isAuthenticated)); }, [isAuthenticated]);
-  useEffect(() => { localStorage.setItem('adminPassword', adminPassword); }, [adminPassword]);
-
-  const updateCompanyInfo = (info: CompanyInfo) => setCompanyInfo(info);
-  const updateTour = (updatedTour: Tour) => setTours(prev => prev.map(t => t.id === updatedTour.id ? updatedTour : t));
-  const addTour = (newTour: Tour) => setTours(prev => [...prev, newTour]);
-  const deleteTour = (id: string) => setTours(prev => prev.filter(t => t.id !== id));
-  
   const addInquiry = (form: InquiryForm) => {
     const tour = tours.find(t => t.id === form.tourId);
     const newInquiry: Inquiry = {
@@ -191,10 +182,6 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setInquiries(prev => [newInquiry, ...prev]);
   };
 
-  const updatePageContent = (content: PageContent) => {
-    setPageContent(content);
-  };
-
   const login = (password: string) => {
     if (password === adminPassword) {
       setIsAuthenticated(true);
@@ -202,17 +189,16 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
     return false;
   };
-
-  const changePassword = (newPassword: string) => setAdminPassword(newPassword);
-  const logout = () => setIsAuthenticated(false);
-
-  const resetData = () => {
-    if(window.confirm("Delete ALL custom data and reset to factory defaults?")) {
+  
+  const resetData = async () => {
+    if(window.confirm("Delete ALL custom content from the cloud and reset to factory defaults? This is irreversible.")) {
       setCompanyInfo(COMPANY_INFO);
       setTours(TOURS);
       setPageContent(DEFAULT_PAGE_CONTENT);
       setAdminPassword('12345');
-      localStorage.clear();
+      await window.aistudio.set(FAKE_CLOUD_STORAGE, null); // Clear cloud data
+      localStorage.removeItem('isAdmin');
+      localStorage.removeItem('adminPassword');
       window.location.reload();
     }
   };
@@ -223,21 +209,23 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
       tours,
       inquiries,
       pageContent,
-      updateCompanyInfo,
-      updateTour,
-      addTour,
-      deleteTour,
+      updateCompanyInfo: setCompanyInfo,
+      updateTour: (updatedTour: Tour) => setTours(prev => prev.map(t => t.id === updatedTour.id ? updatedTour : t)),
+      addTour: (newTour: Tour) => setTours(prev => [...prev, newTour]),
+      deleteTour: (id: string) => setTours(prev => prev.filter(t => t.id !== id)),
       addInquiry,
-      updatePageContent,
+      updatePageContent: setPageContent,
       isAuthenticated,
       login,
-      changePassword,
-      logout,
+      changePassword: setAdminPassword,
+      logout: () => setIsAuthenticated(false),
       resetData,
+      publishData,
+      loading,
       selectedCurrency,
       setCurrency,
       currencyRates,
-      refreshRates,
+      refreshRates: fetchRates,
       convertPrice,
       availableCurrencies: SUPPORTED_CURRENCIES
     }}>

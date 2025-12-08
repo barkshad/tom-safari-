@@ -1,12 +1,20 @@
 
+
 // @ts-nocheck
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Facebook, Instagram, Mail, MapPin, Phone, MessageCircle, Lock, Edit2 } from 'lucide-react';
+import { Mail, MapPin, Phone, Lock, Edit2 } from 'lucide-react';
 import { useData } from '../context/DataContext';
+import { InstagramIcon, FacebookIcon, WhatsAppIcon } from './SocialIcons';
 
 const Footer: React.FC = () => {
   const { companyInfo, pageContent, isAuthenticated } = useData();
+  
+  const socialLinks = [
+    { name: 'Instagram', href: companyInfo.social.instagram, icon: InstagramIcon },
+    { name: 'Facebook', href: companyInfo.social.facebook, icon: FacebookIcon },
+    { name: 'WhatsApp', href: companyInfo.social.whatsapp, icon: WhatsAppIcon },
+  ].filter(link => link.href && link.href !== '#');
 
   return (
     <footer className="bg-stone-900 text-stone-300 relative group">
@@ -25,9 +33,19 @@ const Footer: React.FC = () => {
               {pageContent.footer.aboutText}
             </p>
             <div className="flex space-x-4">
-              <a href={companyInfo.social.facebook} target="_blank" rel="noopener noreferrer" className="hover:text-safari-gold transition-colors"><Facebook className="w-5 h-5" /></a>
-              <a href={companyInfo.social.instagram} target="_blank" rel="noopener noreferrer" className="hover:text-safari-gold transition-colors"><Instagram className="w-5 h-5" /></a>
-              <a href={companyInfo.social.whatsapp} target="_blank" rel="noopener noreferrer" className="hover:text-safari-gold transition-colors"><MessageCircle className="w-5 h-5" /></a>
+              {socialLinks.map(social => (
+                 <a 
+                    key={social.name}
+                    href={social.href} 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className="text-stone-400 hover:text-white transition-colors"
+                    aria-label={social.name}
+                    title={social.name}
+                 >
+                    <social.icon size={24} />
+                 </a>
+              ))}
             </div>
           </div>
 
@@ -48,7 +66,7 @@ const Footer: React.FC = () => {
             <h4 className="text-lg font-bold text-white mb-4">Contact Us</h4>
             <ul className="space-y-3 text-sm">
               <li className="flex items-start">
-                <MapPin className="w-5 h-5 mr-3 text-safari-gold flex-shrink-0" />
+                <MapPin className="w-5 h-5 mr-3 text-safari-gold flex-shrink-0 mt-1" />
                 <span>{companyInfo.location}</span>
               </li>
               <li className="flex items-center">
@@ -56,7 +74,7 @@ const Footer: React.FC = () => {
                 <a href={`tel:${companyInfo.phone}`} className="hover:text-white">{companyInfo.phone}</a>
               </li>
               <li className="flex items-center">
-                <MessageCircle className="w-5 h-5 mr-3 text-safari-gold flex-shrink-0" />
+                <WhatsAppIcon className="w-5 h-5 mr-3 text-safari-gold flex-shrink-0" />
                 <a href={companyInfo.social.whatsapp} target="_blank" rel="noopener noreferrer" className="hover:text-white">WhatsApp Us</a>
               </li>
               <li className="flex items-center">

@@ -1,9 +1,10 @@
 // @ts-nocheck
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, Phone, Compass, MessageCircle, Settings, Globe } from 'lucide-react';
+import { Menu, X, Phone, Compass, Settings } from 'lucide-react';
 import { useData } from '../context/DataContext';
 import { motion, AnimatePresence } from 'framer-motion';
+import { InstagramIcon, FacebookIcon, WhatsAppIcon } from './SocialIcons';
 
 const Navbar: React.FC = () => {
   const { companyInfo, isAuthenticated, selectedCurrency, setCurrency, availableCurrencies } = useData();
@@ -19,6 +20,12 @@ const Navbar: React.FC = () => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+  
+  const socialLinks = [
+    { name: 'Instagram', href: companyInfo.social.instagram, icon: InstagramIcon, color: 'text-pink-500' },
+    { name: 'Facebook', href: companyInfo.social.facebook, icon: FacebookIcon, color: 'text-blue-600' },
+    { name: 'WhatsApp', href: companyInfo.social.whatsapp, icon: WhatsAppIcon, color: 'text-green-500' },
+  ].filter(link => link.href && link.href !== '#');
 
   const navLinks = [
     { name: 'Home', path: '/' },
@@ -147,17 +154,21 @@ const Navbar: React.FC = () => {
             )}
             
             <div className="flex items-center space-x-2 ml-4">
-              <motion.a
-                whileHover={{ scale: 1.1, rotate: 5 }}
-                whileTap={{ scale: 0.9 }}
-                href={companyInfo.social.whatsapp}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-center w-9 h-9 bg-[#25D366] text-white rounded-full shadow-lg hover:shadow-[#25D366]/40 transition-shadow"
-                title="Chat on WhatsApp"
-              >
-                <MessageCircle className="w-5 h-5" />
-              </motion.a>
+              {socialLinks.map(social => (
+                 <motion.a
+                    key={social.name}
+                    whileHover={{ scale: 1.15, y: -2 }}
+                    whileTap={{ scale: 0.9 }}
+                    href={social.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-center w-9 h-9"
+                    title={social.name}
+                    aria-label={`Visit our ${social.name} page`}
+                 >
+                    <social.icon className={scrolled ? social.color : 'text-white'} size={28} />
+                 </motion.a>
+              ))}
 
               <motion.a
                 whileHover={{ scale: 1.05 }}
@@ -255,14 +266,25 @@ const Navbar: React.FC = () => {
                   Admin Dashboard
                 </Link>
               )}
+              
+              <div className="border-t border-stone-200/50 my-4"></div>
 
-              <div className="pt-4 space-y-3 pb-2">
-                <a
-                  href={companyInfo.social.whatsapp}
-                  className="flex items-center justify-center w-full px-4 py-3 bg-[#25D366] text-white rounded-xl hover:shadow-lg font-bold"
-                >
-                  <MessageCircle className="w-5 h-5 mr-2" /> WhatsApp Us
-                </a>
+              <div className="flex justify-center items-center space-x-6 pb-4">
+                  {socialLinks.map((social) => (
+                     <a
+                        key={social.name}
+                        href={social.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="p-2.5"
+                        aria-label={`Visit our ${social.name} page`}
+                      >
+                       <social.icon className={social.color} size={32} />
+                     </a>
+                  ))}
+              </div>
+
+              <div className="space-y-3">
                 <a
                   href={`tel:${companyInfo.phone}`}
                   className="flex items-center justify-center w-full px-4 py-3 bg-safari-leaf text-white rounded-xl hover:shadow-lg font-bold"

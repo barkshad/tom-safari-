@@ -12,7 +12,9 @@ export const COMPANY_INFO = {
   social: {
     facebook: "#",
     instagram: "https://www.instagram.com/madeda_thomas?igsh=eTA0czUxejI2ZnZp",
-    whatsapp: "https://wa.me/254792150200"
+    whatsapp: "https://wa.me/254792150200",
+    tiktok: "#",
+    youtube: "#"
   }
 };
 
