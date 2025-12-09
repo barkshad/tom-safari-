@@ -35,7 +35,7 @@ export const DEFAULT_PAGE_CONTENT: PageContent = {
     hero: {
       title: "Cruise the Wild",
       subtitle: "Experience the thrill of the wild with Kenya's premier safari expert, Tom 'Cruse' Madeda.",
-      image: "https://images.unsplash.com/photo-1521638235882-f544103851a7?q=80&w=2500&auto=format&fit=crop"
+      image: "https://i.ibb.co/Yh4wV0n/tsavo-safari-hero.jpg"
     },
     welcome: {
       title: "Welcome to Cruse Experiences",
