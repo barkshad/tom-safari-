@@ -1,4 +1,3 @@
-
 // @ts-nocheck
 import React, { useState, useRef, useEffect } from 'react';
 import { useData } from '../../context/DataContext';
@@ -382,7 +381,7 @@ const Admin: React.FC = () => {
     <div>
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
             <h2 className="text-2xl font-bold">Manage Tours</h2>
-            <button onClick={() => setEditingTour({ id: `tour-${Date.now()}`, name: 'New Tour', durationDays: 1, priceUsd: 0, priceGbp: 0, image: '', shortDescription: '', fullDescription: '', highlights: [], itinerary: [], featured: false, category: 'Safari', group: 'Road Safari', gallery: [], keywords: '' })} className="bg-safari-leaf text-white px-4 py-2 rounded-lg flex items-center gap-2"><Plus/> Add Tour</button>
+            <button onClick={() => setEditingTour({ id: `tour-${Date.now()}`, name: 'New Tour', durationDays: 1, priceUsd: 0, priceGbp: 0, image: '', shortDescription: '', fullDescription: '', highlights: [''], itinerary: [{day: 1, title: '', description: ''}], featured: false, category: 'Safari', group: 'Road Safari', gallery: [], keywords: '' })} className="bg-safari-leaf text-white px-4 py-2 rounded-lg flex items-center gap-2"><Plus/> Add Tour</button>
         </div>
         <div className="glass-card rounded-2xl overflow-x-auto">
             <table className="w-full min-w-[600px]">
@@ -445,6 +444,43 @@ const Admin: React.FC = () => {
   );
   
   const activeTabName = sidebarItems.find(item => item.id === activeTab)?.label || 'Dashboard';
+  
+  const handleTourChange = (field: string, value: any) => {
+    if (!editingTour) return;
+    setEditingTour(prev => ({...prev, [field]: value}));
+  };
+
+  const handleItineraryChange = (index: number, field: keyof ItineraryDay, value: string | number) => {
+    if (!editingTour) return;
+    const newItinerary = [...editingTour.itinerary];
+    newItinerary[index] = { ...newItinerary[index], [field]: value };
+    setEditingTour(prev => ({ ...prev, itinerary: newItinerary }));
+  };
+  
+  const addItineraryDay = () => {
+    if (!editingTour) return;
+    const newDay: ItineraryDay = { day: editingTour.itinerary.length + 1, title: '', description: '' };
+    setEditingTour(prev => ({ ...prev, itinerary: [...prev.itinerary, newDay] }));
+  };
+
+  const removeItineraryDay = (index: number) => {
+    if (!editingTour) return;
+    const newItinerary = editingTour.itinerary.filter((_, i) => i !== index).map((day, i) => ({ ...day, day: i + 1 }));
+    setEditingTour(prev => ({ ...prev, itinerary: newItinerary }));
+  };
+
+  const handleGalleryUpload = (url: string) => {
+    if (!editingTour) return;
+    const newGallery = [...(editingTour.gallery || []), url];
+    setEditingTour(prev => ({ ...prev, gallery: newGallery }));
+  };
+
+  const removeGalleryImage = (index: number) => {
+    if (!editingTour) return;
+    const newGallery = editingTour.gallery?.filter((_, i) => i !== index);
+    setEditingTour(prev => ({ ...prev, gallery: newGallery }));
+  };
+
 
   return (
     <PageTransition>
@@ -481,16 +517,79 @@ const Admin: React.FC = () => {
 
         <AnimatePresence>
             {editingTour && (
-                <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-2 sm:p-4 z-50 backdrop-blur-sm">
-                    <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.9, opacity: 0 }} className="bg-white rounded-2xl w-full max-w-sm sm:max-w-xl md:max-w-2xl lg:max-w-4xl max-h-[90vh] flex flex-col">
-                        <div className="p-4 sm:p-6 border-b flex justify-between items-center bg-stone-50 rounded-t-2xl">
+                <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-2 sm:p-4 z-[100] backdrop-blur-sm">
+                    <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.9, opacity: 0 }} className="bg-white rounded-2xl w-full max-w-7xl max-h-[90vh] flex flex-col shadow-2xl">
+                        <div className="p-4 sm:p-6 border-b flex justify-between items-center bg-stone-50 rounded-t-2xl sticky top-0">
                             <h2 className="text-lg sm:text-xl font-bold flex items-center gap-2"><Edit2 size={18}/> Edit Tour: {editingTour.name}</h2>
                             <button onClick={() => setEditingTour(null)} className="p-2 hover:bg-stone-200 rounded-full"><X /></button>
                         </div>
-                        <div className="p-4 sm:p-6 space-y-8 overflow-y-auto">
-                           {/* Tour Editor Form Content */}
+                        <div className="p-4 sm:p-6 grid grid-cols-1 lg:grid-cols-5 gap-8 overflow-y-auto">
+                            {/* Column 1: Core Details & Itinerary */}
+                            <div className="lg:col-span-3 space-y-6">
+                                <div className="p-6 rounded-2xl bg-white border">
+                                    <h3 className="font-bold text-lg mb-4">Core Details</h3>
+                                    <div className="space-y-4">
+                                        <div><label className="text-xs font-bold uppercase text-stone-400">Tour Name</label><input type="text" value={editingTour.name} onChange={e => handleTourChange('name', e.target.value)} className="w-full p-3 border rounded-lg" /></div>
+                                        <div><label className="text-xs font-bold uppercase text-stone-400">Short Description</label><textarea rows={3} value={editingTour.shortDescription} onChange={e => handleTourChange('shortDescription', e.target.value)} className="w-full p-3 border rounded-lg" /></div>
+                                        <div><label className="text-xs font-bold uppercase text-stone-400">Full Description</label><textarea rows={6} value={editingTour.fullDescription} onChange={e => handleTourChange('fullDescription', e.target.value)} className="w-full p-3 border rounded-lg" /></div>
+                                    </div>
+                                </div>
+                                <div className="p-6 rounded-2xl bg-white border">
+                                    <h3 className="font-bold text-lg mb-4">Itinerary Builder</h3>
+                                    <div className="space-y-4">
+                                        {editingTour.itinerary.map((day, index) => (
+                                            <div key={index} className="p-4 border rounded-lg bg-stone-50/50 relative">
+                                                <button onClick={() => removeItineraryDay(index)} className="absolute top-2 right-2 p-1 text-red-500 hover:bg-red-100 rounded-full"><Trash2 size={14} /></button>
+                                                <h4 className="font-bold mb-2">Day {day.day}</h4>
+                                                <input type="text" placeholder="Day Title" value={day.title} onChange={e => handleItineraryChange(index, 'title', e.target.value)} className="w-full p-2 border rounded-md mb-2" />
+                                                <textarea rows={3} placeholder="Day Description" value={day.description} onChange={e => handleItineraryChange(index, 'description', e.target.value)} className="w-full p-2 border rounded-md" />
+                                            </div>
+                                        ))}
+                                    </div>
+                                    <button onClick={addItineraryDay} className="mt-4 bg-blue-500 text-white px-4 py-2 text-sm font-bold rounded-lg flex items-center gap-2"><Plus size={16}/> Add Day</button>
+                                </div>
+                            </div>
+
+                            {/* Column 2: Media & Settings */}
+                            <div className="lg:col-span-2 space-y-6">
+                                <div className="p-6 rounded-2xl bg-white border">
+                                     <h3 className="font-bold text-lg mb-4">Settings</h3>
+                                     <div className="grid grid-cols-2 gap-4">
+                                         <div><label className="text-xs font-bold uppercase text-stone-400">Price (USD)</label><input type="number" value={editingTour.priceUsd} onChange={e => handleTourChange('priceUsd', Number(e.target.value))} className="w-full p-3 border rounded-lg" /></div>
+                                         <div><label className="text-xs font-bold uppercase text-stone-400">Duration (Days)</label><input type="number" value={editingTour.durationDays} onChange={e => handleTourChange('durationDays', Number(e.target.value))} className="w-full p-3 border rounded-lg" /></div>
+                                         <div><label className="text-xs font-bold uppercase text-stone-400">Category</label>
+                                            <select value={editingTour.category} onChange={e => handleTourChange('category', e.target.value)} className="w-full p-3 border rounded-lg bg-white"><option>Safari</option><option>Coastal</option><option>Trek</option><option>Day Trip</option></select>
+                                         </div>
+                                         <div><label className="text-xs font-bold uppercase text-stone-400">Group</label>
+                                            <select value={editingTour.group} onChange={e => handleTourChange('group', e.target.value)} className="w-full p-3 border rounded-lg bg-white"><option>Excursion</option><option>Road Safari</option><option>Flight Safari</option><option>Trek</option><option>Custom</option></select>
+                                         </div>
+                                         <div className="col-span-2 flex items-center justify-between p-3 border rounded-lg">
+                                            <label className="font-bold text-sm">Featured Tour?</label>
+                                            <button onClick={() => handleTourChange('featured', !editingTour.featured)} className={`relative inline-flex items-center h-6 rounded-full w-11 transition-colors ${editingTour.featured ? 'bg-safari-emerald' : 'bg-stone-300'}`}>
+                                              <span className={`inline-block w-4 h-4 transform bg-white rounded-full transition-transform ${editingTour.featured ? 'translate-x-6' : 'translate-x-1'}`} />
+                                            </button>
+                                         </div>
+                                     </div>
+                                </div>
+                                <div className="p-6 rounded-2xl bg-white border">
+                                     <h3 className="font-bold text-lg mb-4">Media</h3>
+                                     <CloudinaryImageUploader label="Cover Image" currentImageUrl={editingTour.image} onUploadSuccess={(url) => handleTourChange('image', url)} />
+                                     <div>
+                                         <h4 className="font-bold text-sm mb-2">Image Gallery</h4>
+                                         <div className="grid grid-cols-3 gap-2 mb-2">
+                                             {(editingTour.gallery || []).map((img, index) => (
+                                                 <div key={index} className="relative group">
+                                                     <img src={img} className="w-full h-20 object-cover rounded" />
+                                                     <button onClick={() => removeGalleryImage(index)} className="absolute top-1 right-1 p-1 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity"><Trash2 size={12}/></button>
+                                                 </div>
+                                             ))}
+                                         </div>
+                                         <CloudinaryImageUploader label="Add to gallery" onUploadSuccess={handleGalleryUpload} />
+                                     </div>
+                                </div>
+                            </div>
                         </div>
-                        <div className="p-4 sm:p-6 border-t flex justify-end gap-4 bg-stone-50 rounded-b-2xl">
+                        <div className="p-4 sm:p-6 border-t flex justify-end gap-4 bg-stone-50 rounded-b-2xl sticky bottom-0">
                             <button onClick={() => setEditingTour(null)} className="px-4 py-2 border rounded-lg hover:bg-stone-200 font-bold text-stone-600">Cancel</button>
                             <button onClick={() => { editingTour.id.startsWith('tour-') ? addTour(editingTour) : updateTour(editingTour); setEditingTour(null); showToast("Tour saved and is now live!"); }} className="px-6 py-2 bg-safari-leaf text-white rounded-lg font-bold shadow-lg hover:bg-green-800 transition-all flex items-center gap-2"><Save size={18}/> Save Changes</button>
                         </div>
@@ -531,7 +630,7 @@ const Admin: React.FC = () => {
         
         <AnimatePresence>
           {toast && (
-            <motion.div initial={{ y: -100, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: -100, opacity: 0 }} className={`fixed top-5 right-5 p-4 rounded-lg text-white font-bold flex items-center gap-3 ${toast.type === 'success' ? 'bg-green-500' : 'bg-red-500'} shadow-2xl z-50`}>
+            <motion.div initial={{ y: -100, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: -100, opacity: 0 }} className={`fixed top-5 right-5 p-4 rounded-lg text-white font-bold flex items-center gap-3 ${toast.type === 'success' ? 'bg-green-500' : 'bg-red-500'} shadow-2xl z-[200]`}>
               {toast.type === 'success' ? <CheckCircle /> : <AlertCircle />} {toast.message}
             </motion.div>
           )}
