@@ -1,4 +1,5 @@
 
+
 import { Tour, PageContent, CurrencyConfig, CompanyInfo, BlogPost } from './types';
 
 export const DATA_VERSION = "5.0"; // Force production futuristic style refresh
@@ -33,34 +34,96 @@ export const SUPPORTED_CURRENCIES: CurrencyConfig[] = [
 
 export const SAMPLE_BLOG_POSTS: BlogPost[] = [
   {
-    id: "post-1",
-    slug: "5-essentials-for-your-first-kenyan-safari",
-    title: "5 Essentials for Your First Kenyan Safari",
-    excerpt: "Packing for a safari can be tricky. Here is our guide to the must-have items for a comfortable and exciting adventure in the bush.",
-    content: "A safari is a trip of a lifetime, but packing for it requires some thought. Unlike a typical vacation, you'll be spending a lot of time in a vehicle, in varied temperatures, and surrounded by nature. Here are the five absolute essentials to bring:\n\n1. **Layered Clothing:** Temperatures can swing wildly from chilly pre-dawn game drives to hot afternoons. Pack lightweight layers: t-shirts, long-sleeved shirts, a fleece or warm jacket, and a waterproof windbreaker. Neutral colors like khaki, olive, and brown are best as they don't distract wildlife.\n\n2. **A Good Camera and Binoculars:** Don't rely on your phone! A dedicated camera with a good zoom lens will capture those incredible wildlife moments. Equally important are binoculars. Often, the most interesting sightings are at a distance, and a good pair of binoculars brings the action right to you.\n\n3. **Sun Protection:** The African sun is intense. A wide-brimmed hat, high-SPF sunscreen, and sunglasses are non-negotiable to protect you from sunburn and glare, allowing you to enjoy the views comfortably.\n\n4. **Comfortable, Closed-Toe Shoes:** You'll be getting in and out of the safari vehicle and may do some light walking. Sturdy, comfortable shoes like trail runners or light hiking boots are perfect. Avoid sandals or open shoes to protect your feet from dust and insects.\n\n5. **A Sense of Adventure:** The most important item! A safari is unpredictable. Some days you'll see the entire Big Five; other days might be quieter. Embrace the journey, trust your guide, and be open to the magic of the wild. Every day in the bush is a unique experience.",
-    image: "https://images.unsplash.com/photo-1523393665780-69d6797f1cc5?q=80&w=800&auto=format&fit=crop",
-    category: "Travel Tips",
-    date: "October 12, 2023",
+    id: "post-tsavo-east-guide",
+    slug: "what-to-expect-on-a-tsavo-east-safari-from-the-coast",
+    title: "What to Expect on a Tsavo East Safari from the Coast",
+    excerpt: "Starting your safari from Mombasa or Diani? Here’s a step-by-step breakdown of what makes a Tsavo East adventure so special and why it's the perfect introduction to the Kenyan bush.",
+    content: `For many visitors enjoying Kenya's beautiful coastline, the call of the wild is never far away. A common question we get is, "How does a safari work if we're staying in Mombasa or Diani?" The answer lies in Tsavo East National Park, a vast and accessible wilderness that offers an incredible safari experience without complex travel logistics.
+
+**Your Safari Day, Step-by-Step**
+
+A typical Tsavo East safari from the coast is designed for maximum wildlife viewing and comfort. Here’s what you can expect:
+
+1.  **Early Start:** Your adventure begins with an early morning pick-up from your coastal hotel. This allows us to reach the park as the animals are most active.
+2.  **The Journey In:** The drive to the park entrance is an experience in itself, as you watch the landscape transform from coastal greenery to the iconic red-earth savannah of Tsavo.
+3.  **First Game Drive:** Upon entering the park, your first game drive begins immediately. Your guide, an expert in the local terrain and animal behavior, will navigate the park's network of roads in search of its famous inhabitants.
+4.  **Lunch at a Safari Lodge:** You'll arrive at your safari lodge or camp in time for lunch. This is a chance to relax, enjoy a delicious meal, and often watch animals from the comfort of the lodge's viewing decks, which typically overlook a watering hole.
+5.  **Afternoon Game Drive:** After a period of relaxation during the heat of the day, you'll head out for an afternoon game drive. The golden light of the late afternoon provides stunning photographic opportunities.
+6.  **Sundowners and Dinner:** You'll return to your lodge as the sun sets for a relaxing evening, enjoying dinner and the sounds of the African bush.
+
+**Wildlife and Scenery to Expect**
+
+Tsavo East is famous for its "Red Elephants," which get their color from dusting themselves with the park's iron-rich red soil. Beyond these gentle giants, you are likely to see lions, giraffes, zebras, buffaloes, and a vast array of birdlife. The landscape is characterized by its vast, open plains, the Galana River, and the impressive Mudanda Rock.
+
+**Why Tsavo East is Ideal for First-Timers**
+
+Its proximity to the coast makes Tsavo East the perfect safari destination for those on a beach holiday. It offers a genuine and exciting taste of the wild without requiring extra flights or long travel days, making it an efficient and unforgettable adventure.
+
+*Ready to experience the magic of Tsavo for yourself?*
+**View our Tsavo East safari packages and let's start planning.**`,
+    image: "https://images.unsplash.com/photo-1597930232210-907350a6210c?q=80&w=2070&auto=format&fit=crop",
+    category: "Safari Guide",
+    date: "October 26, 2023",
   },
   {
-    id: "post-2",
-    slug: "the-great-migration-when-and-where-to-go",
-    title: "The Great Migration: When and Where to Go",
-    excerpt: "Witnessing the Great Migration is a bucket-list experience. Learn the best times to visit the Maasai Mara to catch the action.",
-    content: "The Great Wildebeest Migration is one of the most spectacular wildlife events on the planet. Over a million wildebeest, accompanied by zebras and gazelles, journey in a clockwise circle through the Serengeti in Tanzania and the Maasai Mara in Kenya. The key to witnessing it is timing.\n\nThe most dramatic part of this journey for visitors to Kenya is the Mara River crossing. This typically happens between **July and October**. During these months, the herds pour into the Maasai Mara National Reserve from the Serengeti, facing the perilous, crocodile-infested waters of the Mara River.\n\n**Best time to visit:** Booking your safari between late July and September gives you the highest chance of seeing multiple river crossings. The drama is intense, as the animals must evade predators both in the water and on the banks.\n\nWhile this is the peak season, the Maasai Mara offers incredible game viewing year-round. But if the Great Migration is your primary goal, aim for that late summer to early autumn window. It's an experience that will stay with you forever.",
-    image: "https://images.unsplash.com/photo-1535940357668-439589d89d6e?q=80&w=800&auto=format&fit=crop",
-    category: "Wildlife",
-    date: "September 05, 2023",
+    id: "post-mombasa-city-tour",
+    slug: "why-a-mombasa-city-tour-is-more-than-just-sightseeing",
+    title: "Why a Mombasa City Tour Is More Than Just Sightseeing",
+    excerpt: "Discover the rich history, vibrant culture, and hidden stories that make a guided tour of Mombasa an unforgettable cultural deep-dive, far beyond a simple checklist of sights.",
+    content: `Many visitors to Kenya's coast are drawn by the promise of white-sand beaches and turquoise waters. While the relaxation is unparalleled, it's easy to overlook the vibrant heart of the region: Mombasa. A city tour here is often underestimated, but it's a journey through centuries of history, culture, and trade that shaped the entire East African coast.
+
+**Key Stops That Tell a Story**
+
+A well-guided tour of Mombasa is about connecting with its living history. Here are the key stops that offer more than just a photo opportunity:
+
+-   **Fort Jesus:** This UNESCO World Heritage site is the city's most iconic landmark. But it's more than just a fort; it's a testament to the battles fought between the Portuguese and Omani Arabs for control of this strategic port. Standing on its ramparts, you can almost hear the echoes of history.
+-   **Mombasa Old Town:** Wandering the narrow, winding streets of the Old Town is like stepping back in time. The architecture is a beautiful fusion of Arabic, Swahili, and European influences, with intricately carved doors and balconies that tell stories of the families who lived there.
+-   **The Spice Market (Marikiti):** This is a sensory explosion. The air is thick with the aroma of cardamom, cloves, and turmeric. A visit here isn't just about seeing spices; it's about understanding the trade routes that have connected Mombasa to the world for centuries.
+-   **The Elephant Tusks:** While a popular photo spot, the iconic tusks on Moi Avenue were originally built to commemorate a visit from Queen Elizabeth. They symbolize the gateway to a city of adventure and history.
+
+**Who is this tour best for?**
+
+A Mombasa city tour is perfect for families, history enthusiasts, and any first-time visitor who wants to understand the cultural context of the beautiful coast they are visiting. It provides a rich, educational experience that perfectly complements a relaxing beach holiday.
+
+*Ready to uncover the soul of Mombasa?*
+**Book a Mombasa city tour with us and experience its history firsthand.**`,
+    image: "https://images.unsplash.com/photo-1598233379891-10d223910243?q=80&w=2070&auto=format&fit=crop",
+    category: "Cultural Experiences",
+    date: "October 22, 2023",
   },
   {
-    id: "post-3",
-    slug: "exploring-lamu-a-journey-back-in-time",
-    title: "Exploring Lamu: A Journey Back in Time",
-    excerpt: "Beyond the wildlife, Kenya's coast offers rich history. Discover the magic of Lamu Old Town and its Swahili heritage.",
-    content: "While Kenya is famous for its safaris, its coastline holds treasures of a different kind. The island of Lamu, a UNESCO World Heritage site, is a place where time seems to stand still. There are no cars on the island; the primary modes of transport are donkeys and dhows (traditional sailing boats).\n\nThe heart of the island is Lamu Old Town, the oldest and best-preserved Swahili settlement in East Africa. Wandering its narrow, winding streets is like stepping into another century. The architecture is a unique blend of Swahili, Arabic, Persian, Indian, and European influences, with intricately carved wooden doors and beautiful coral stone buildings.\n\n**Things to do in Lamu:**\n- **Explore the Old Town:** Get lost in the alleyways and discover hidden courtyards, bustling markets, and ancient mosques.\n- **Sail on a Dhow:** A sunset dhow cruise is a magical experience, offering stunning views of the coast as the sky changes color.\n- **Relax on Shela Beach:** Just a short walk from the town, this pristine, 12km-long beach is perfect for relaxing and swimming.\n- **Visit the Lamu Museum:** Learn about the rich history and culture of the Swahili people.\n\nA trip to Lamu is the perfect way to unwind after an exciting safari, offering a peaceful and culturally rich contrast to the adventure of the bush.",
-    image: "https://images.unsplash.com/photo-1590523741831-ab7e8b8f9c7f?q=80&w=800&auto=format&fit=crop",
-    category: "Destinations",
-    date: "August 20, 2023",
+    id: "post-coast-day-trips",
+    slug: "choosing-the-right-day-trip-while-staying-at-the-coast",
+    title: "Choosing the Right Day Trip While Staying at the Coast",
+    excerpt: "With limited time, picking the perfect excursion can be tough. We break down the most popular coastal day trips to help you choose between adventure, relaxation, and culture.",
+    content: `A stay on the Kenyan coast offers a perfect base for exploration, but with so many options, choosing the right day trip can be a challenge. How do you decide when your time is limited? As local guides, we help our guests find the perfect fit based on their interests.
+
+Here’s a comparison of popular coast-based day trips to help you decide:
+
+**For the Marine Life Enthusiast: Wasini Island Dhow Trip**
+
+-   **Experience:** This is a day of pure coastal bliss. You'll sail on a traditional dhow, snorkel or dive in the crystal-clear waters of the Kisite-Mpunguti Marine Park, and look for dolphins. The day ends with a delicious Swahili seafood lunch on Wasini Island.
+-   **Best for:** Relaxation, snorkeling, and marine life lovers.
+
+**For the Wildlife Seeker (on a small scale): Shimba Hills National Reserve**
+
+-   **Experience:** Just a short drive from the coast, Shimba Hills offers a taste of the safari experience. It's home to the rare Sable Antelope, as well as elephants, giraffes, and buffalo. The tour often includes a visit to the beautiful Sheldrick Falls.
+-   **Best for:** A quick and easy wildlife fix without committing to a multi-day safari.
+
+**For the Nature & Conservation Lover: Haller Park**
+
+-   **Experience:** This is a remarkable conservation story. What was once a barren limestone quarry has been transformed into a thriving nature sanctuary. You can feed giraffes by hand, see giant tortoises, and learn about the park's successful ecosystem restoration.
+-   **Best for:** Families and anyone interested in wildlife conservation.
+
+**Our Advice from the Ground**
+
+The best choice depends on your priorities. If you want the classic "under the sea" experience, Wasini is unmatched. If you're craving a glimpse of terrestrial wildlife and lush landscapes, Shimba Hills is perfect. And for an interactive and educational day, Haller Park is a fantastic choice.
+
+*Still not sure which trip is right for you?*
+**Contact us to plan the perfect day trip based on your interests and schedule.**`,
+    image: "https://images.unsplash.com/photo-1616423830495-83e9a7e6c0c2?q=80&w=2070&auto=format&fit=crop",
+    category: "Travel Planning",
+    date: "October 18, 2023",
   }
 ];
 

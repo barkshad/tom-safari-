@@ -1,4 +1,5 @@
 
+
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { Tour, CompanyInfo, Inquiry, InquiryForm, PageContent, CurrencyConfig, BlogPost } from '../types';
 import { TOURS, COMPANY_INFO, DEFAULT_PAGE_CONTENT, SUPPORTED_CURRENCIES, SAMPLE_BLOG_POSTS } from '../constants';
@@ -117,9 +118,9 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
           setData({
             companyInfo: mergedCompanyInfo,
-            tours: cloudData.tours || TOURS,
+            tours: cloudData.tours && cloudData.tours.length > 0 ? cloudData.tours : TOURS,
             pageContent: mergedPageContent,
-            blogPosts: cloudData.blogPosts || SAMPLE_BLOG_POSTS,
+            blogPosts: cloudData.blogPosts && cloudData.blogPosts.length > 0 ? cloudData.blogPosts : SAMPLE_BLOG_POSTS,
           });
         } else {
            console.log("No live data in Firestore. Using default content. Admin can seed data from the settings panel.");

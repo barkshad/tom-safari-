@@ -617,8 +617,14 @@ const Admin: React.FC = () => {
                           <button onClick={() => setEditingPost(null)} className="px-4 py-2 border rounded-lg font-bold">Cancel</button>
                           <button onClick={() => {
                             const postToSave = { ...editingPost, slug: generateSlug(editingPost.title) };
-                            const isNewPost = postToSave.id.startsWith('post-');
-                            isNewPost ? addBlogPost(postToSave) : updateBlogPost(postToSave);
+                            const isExistingPost = blogPosts.some(p => p.id === postToSave.id);
+                            
+                            if (isExistingPost) {
+                              updateBlogPost(postToSave);
+                            } else {
+                              addBlogPost(postToSave);
+                            }
+
                             setEditingPost(null);
                             showToast("Post saved!");
                           }} className="px-6 py-2 bg-safari-leaf text-white rounded-lg font-bold">Save Post</button>
