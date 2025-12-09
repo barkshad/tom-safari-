@@ -1,5 +1,6 @@
 
 
+
 export interface Tour {
   id: string;
   name: string;
@@ -95,6 +96,7 @@ export interface CompanyInfo {
     instagram: string;
     whatsapp: string;
   };
+  animationsEnabled: boolean;
 }
 
 export interface CurrencyConfig {

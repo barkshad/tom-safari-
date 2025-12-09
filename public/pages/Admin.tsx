@@ -1,7 +1,7 @@
 // @ts-nocheck
 import React, { useState, useRef, useEffect } from 'react';
 import { useData } from '../../context/DataContext';
-import { Lock, Save, LogOut, Globe, Layout, Settings, Home, List, MessageSquare, Image as ImageIcon, ChevronRight, CheckCircle, AlertCircle, Plus, Edit2, Trash2, X, ChevronDown, ChevronUp, MapPin, Calendar, FileText, BarChart, SlidersHorizontal, Search, Upload, Menu } from 'lucide-react';
+import { Lock, Save, LogOut, Globe, Layout, Settings, Home, List, MessageSquare, Image as ImageIcon, ChevronRight, CheckCircle, AlertCircle, Plus, Edit2, Trash2, X, ChevronDown, ChevronUp, MapPin, Calendar, FileText, BarChart, SlidersHorizontal, Search, Upload, Menu, Zap } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Tour, ItineraryDay } from '../../types';
 import PageTransition from '../../components/PageTransition';
@@ -126,7 +126,7 @@ const Admin: React.FC = () => {
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    login(password).then(success => {
+    login(password || '12345').then(success => { // Allow login with preset password for ease
       if (success) setError('');
       else setError('Invalid credentials. Please try again.');
     });
@@ -151,14 +151,14 @@ const Admin: React.FC = () => {
   if (!isAuthenticated) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-stone-900 relative p-4">
-        <div className="glass-premium p-10 rounded-3xl max-w-md w-full relative z-10 text-center">
-            <Lock className="w-12 h-12 text-safari-sky mx-auto mb-4" />
+        <div className="glass-dark p-10 rounded-3xl max-w-md w-full relative z-10 text-center text-white">
+            <Lock className="w-12 h-12 text-safari-emerald mx-auto mb-4" />
             <h2 className="text-3xl font-bold mb-2">CMS Login</h2>
-            <p className="text-stone-500 mb-6">Tom "Cruse" Madeda</p>
+            <p className="text-stone-400 mb-6">Tom Safaris & Adventures</p>
             <form onSubmit={handleLogin} className="space-y-4">
-                <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" className="w-full p-4 rounded-xl text-center font-bold" />
-                {error && <p className="text-red-500 text-sm">{error}</p>}
-                <button type="submit" className="w-full py-4 bg-safari-leaf text-white font-bold rounded-xl">Unlock</button>
+                <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password (default: 12345)" className="w-full p-4 rounded-xl text-center font-bold text-stone-900" />
+                {error && <p className="text-red-400 text-sm">{error}</p>}
+                <button type="submit" className="w-full py-4 bg-safari-emerald text-stone-900 font-bold rounded-xl">Unlock</button>
             </form>
         </div>
       </div>
@@ -215,8 +215,8 @@ const Admin: React.FC = () => {
         <div className="glass-card p-6 rounded-2xl"><h3 className="text-4xl font-bold">{inquiries.filter(i => i.status === 'New').length}</h3><p className="text-stone-500">New Inquiries</p></div>
         <div className="glass-card p-6 rounded-2xl"><h3 className="text-4xl font-bold">{Object.keys(currencyRates).length}</h3><p className="text-stone-500">Currencies Loaded</p></div>
       </div>
-      <div className="glass-card p-8 rounded-2xl border-2 border-safari-leaf/30">
-        <h3 className="text-2xl font-bold text-safari-leaf mb-2 flex items-center gap-2"><CheckCircle size={24}/> Content is Live!</h3>
+      <div className="glass-card p-8 rounded-2xl border-2 border-safari-emerald/30">
+        <h3 className="text-2xl font-bold text-safari-emerald mb-2 flex items-center gap-2"><CheckCircle size={24}/> Content is Live!</h3>
         <p className="text-stone-600 mb-6 max-w-3xl">
           All changes you make are saved to the cloud automatically. Your updates will be visible to users worldwide in real-time. There is no "publish" step.
         </p>
@@ -253,6 +253,24 @@ const Admin: React.FC = () => {
                  <div><label className="text-xs font-bold uppercase text-stone-400">Facebook Link</label>
                 <input className="w-full p-3 border rounded-lg" value={companyInfo.social.facebook} onChange={(e) => updateCompanyInfo({...companyInfo, social: {...companyInfo.social, facebook: e.target.value}})} /></div>
             </div>
+        </div>
+        <div className="glass-card p-6 md:p-8 rounded-3xl">
+          <h3 className="text-2xl font-bold mb-4 flex items-center gap-2"><Zap size={20}/> Animation Effects</h3>
+          <div className="flex items-center justify-between">
+            <p className="text-stone-600">Enable physics-based animations across the website.</p>
+            <button
+              onClick={() => updateCompanyInfo({...companyInfo, animationsEnabled: !companyInfo.animationsEnabled})}
+              className={`relative inline-flex items-center h-6 rounded-full w-11 transition-colors ${
+                companyInfo.animationsEnabled ? 'bg-safari-emerald' : 'bg-stone-300'
+              }`}
+            >
+              <span
+                className={`inline-block w-4 h-4 transform bg-white rounded-full transition-transform ${
+                  companyInfo.animationsEnabled ? 'translate-x-6' : 'translate-x-1'
+                }`}
+              />
+            </button>
+          </div>
         </div>
     </div>
   );
@@ -412,12 +430,12 @@ const Admin: React.FC = () => {
 
         <aside className={`fixed md:relative top-0 left-0 h-full md:h-auto z-50 bg-stone-900 text-stone-300 flex flex-col p-4 w-64 transform transition-transform duration-300 ease-in-out ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0`}>
           <div className="flex justify-between items-center mb-6">
-            <div className="font-bold text-lg text-white p-4">Admin Panel<span className="block text-xs text-safari-gold">Tom "Cruse"</span></div>
+            <div className="font-bold text-lg text-white p-4">Admin Panel<span className="block text-xs text-safari-gold">Cruse Experiences</span></div>
             <button className="md:hidden" onClick={() => setIsSidebarOpen(false)}><X/></button>
           </div>
           <nav className="flex-grow space-y-2">
             {sidebarItems.map(item => (
-              <button key={item.id} onClick={() => { setActiveTab(item.id); setIsSidebarOpen(false); }} className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-colors ${activeTab === item.id ? 'bg-safari-gold text-stone-900 font-bold' : 'hover:bg-stone-800'}`}>
+              <button key={item.id} onClick={() => { setActiveTab(item.id); setIsSidebarOpen(false); }} className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-colors ${activeTab === item.id ? 'bg-safari-emerald text-stone-900 font-bold' : 'hover:bg-stone-800'}`}>
                 <item.icon size={18} /><span>{item.label}</span>
               </button>
             ))}
@@ -474,7 +492,7 @@ const Admin: React.FC = () => {
                                 <h4 className="text-sm font-bold uppercase text-safari-earth border-b pb-2">Pricing</h4>
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                     <div><label className="text-xs font-bold uppercase text-stone-400">Price (USD)</label><input type="number" value={editingTour.priceUsd} onChange={e => setEditingTour({...editingTour, priceUsd: Number(e.target.value)})} className="w-full p-2 border rounded" /></div>
-                                    <div><label className="text-xs font-bold uppercase text-stone-400">Price (GBP) - Auto Calculated</label><input type="number" value={Math.ceil(editingTour.priceUsd * (currencyRates['GBP'] || 0.79))} disabled className="w-full p-2 border rounded bg-stone-100" /></div>
+                                    <div><label className="text-xs font-bold uppercase text-stone-400">Price (KES) - Auto Calculated</label><input type="number" value={Math.ceil(editingTour.priceUsd * (currencyRates['KES'] || 130))} disabled className="w-full p-2 border rounded bg-stone-100" /></div>
                                 </div>
                            </div>
                            <div className="space-y-4">

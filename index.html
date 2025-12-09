@@ -26,33 +26,39 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700;900&family=Work+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Playfair+Display:wght@700;800;900&display=swap" rel="stylesheet">
     <script>
       tailwind.config = {
         theme: {
           extend: {
             fontFamily: {
-              sans: ['"Work Sans"', 'sans-serif'],
-              serif: ['"Merriweather"', 'serif'],
+              sans: ['"Space Grotesk"', 'sans-serif'],
+              serif: ['"Playfair Display"', 'serif'],
             },
             colors: {
               safari: {
-                sand: '#fffcf5',    /* Lighter, warmer dry grass background */
-                earth: '#8b5e3c',   /* Keep the classic earth brown */
-                leaf: '#6b705c',    /* Olive/Acacia Green (Savanna style) instead of deep forest */
-                gold: '#d4af37',    /* Classic gold */
-                sunset: '#c05621',  /* Burnt orange */
-                sky: '#7dd3fc',     /* NEW: Light Blue Pinch (Sky-400 equivalent) */
-                blue: '#0ea5e9'     /* Slightly deeper blue for text/icons */
+                sand: '#f7f3ed',
+                earth: '#5a4a3e',
+                leaf: '#4d5c47',
+                gold: '#e2b34a',
+                sunset: '#d96c3b',
+                sky: '#87ceeb',
+                blue: '#00a8e8',
+                emerald: '#00c49a',
               }
             },
             animation: {
               'float': 'float 6s ease-in-out infinite',
+              'glow': 'glow 4s ease-in-out infinite',
             },
             keyframes: {
               float: {
                 '0%, 100%': { transform: 'translateY(0)' },
                 '50%': { transform: 'translateY(-10px)' },
+              },
+              glow: {
+                '0%, 100%': { 'text-shadow': '0 0 5px rgba(0, 196, 154, 0.5), 0 0 10px rgba(0, 196, 154, 0.3)' },
+                '50%': { 'text-shadow': '0 0 20px rgba(0, 196, 154, 0.8), 0 0 30px rgba(0, 196, 154, 0.5)' },
               }
             }
           }
@@ -61,61 +67,46 @@
     </script>
     <style>
       /* Custom scrollbar for better aesthetics */
-      ::-webkit-scrollbar {
-        width: 8px;
-      }
-      ::-webkit-scrollbar-track {
-        background: #f1f1f1; 
-      }
-      ::-webkit-scrollbar-thumb {
-        background: #8b5e3c; 
-        border-radius: 4px;
-      }
-      ::-webkit-scrollbar-thumb:hover {
-        background: #6d4c32; 
-      }
-      .hero-pattern {
-        background-color: #6b705c;
-        background-image: url("https://www.transparenttextures.com/patterns/cubes.png");
-      }
-      
-      /* --- PREMIUM GLASMORPHISM SYSTEM --- */
-      .glass-premium {
-        background: rgba(255, 255, 255, 0.65);
-        backdrop-filter: blur(16px);
-        -webkit-backdrop-filter: blur(16px);
-        border: 1px solid rgba(255, 255, 255, 0.5);
-        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
-      }
-      .glass-dark {
-        background: rgba(23, 23, 23, 0.7);
-        backdrop-filter: blur(16px);
-        -webkit-backdrop-filter: blur(16px);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
-      }
-      .glass-blue {
-        background: rgba(125, 211, 252, 0.15);
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
-        border: 1px solid rgba(125, 211, 252, 0.3);
-        box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
-      }
+      ::-webkit-scrollbar { width: 8px; }
+      ::-webkit-scrollbar-track { background: #1a1a1a; }
+      ::-webkit-scrollbar-thumb { background: #4d5c47; border-radius: 4px; }
+      ::-webkit-scrollbar-thumb:hover { background: #6b705c; }
+
+      /* --- FUTURISTIC 2025 GLASMORPHISM SYSTEM --- */
       .glass-card {
-        background: rgba(255, 255, 255, 0.7);
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
-        border: 1px solid rgba(255, 255, 255, 0.6);
-        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Springy transition */
+        background: rgba(255, 255, 255, 0.6);
+        -webkit-backdrop-filter: blur(20px);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.4);
+        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
       }
       .glass-card:hover {
-        background: rgba(255, 255, 255, 0.9);
-        border-color: rgba(255, 255, 255, 0.9);
-        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        background: rgba(255, 255, 255, 0.8);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
         transform: translateY(-5px);
       }
+      .glass-dark {
+        background: rgba(10, 10, 10, 0.65);
+        -webkit-backdrop-filter: blur(20px);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+      }
+      .glass-nav {
+        background: rgba(255, 255, 255, 0.1);
+        -webkit-backdrop-filter: blur(24px);
+        backdrop-filter: blur(24px);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+      }
+      .neon-glow-emerald {
+        box-shadow: 0 0 5px #00c49a, 0 0 15px #00c49a, 0 0 30px #00c49a;
+      }
+      .text-glow-gold {
+        text-shadow: 0 0 8px rgba(226, 179, 74, 0.8);
+      }
       .text-gradient-gold {
-        background: linear-gradient(to right, #8b5e3c, #d4af37);
+        background: linear-gradient(to right, #e2b34a, #ffd700);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
       }

@@ -1,8 +1,8 @@
 // @ts-nocheck
 import React, { Suspense, lazy } from 'react';
 import { HashRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
-import { AnimatePresence } from 'framer-motion';
-import { DataProvider } from './context/DataContext';
+import { AnimatePresence, MotionConfig } from 'framer-motion';
+import { DataProvider, useData } from './context/DataContext';
 import MainLayout from './components/MainLayout';
 import SEOUpdater from './components/SEOUpdater';
 import LoadingSpinner from './components/LoadingSpinner';
@@ -45,9 +45,11 @@ const AnimatedRoutes: React.FC = () => {
   );
 };
 
-function App() {
+const AppContent: React.FC = () => {
+  const { companyInfo } = useData();
+
   return (
-    <DataProvider>
+    <MotionConfig reducedMotion={companyInfo?.animationsEnabled === false ? "always" : "user"}>
       <Router>
         <ScrollToTop />
         <SEOUpdater />
@@ -57,6 +59,14 @@ function App() {
           </div>
         </Suspense>
       </Router>
+    </MotionConfig>
+  );
+}
+
+function App() {
+  return (
+    <DataProvider>
+      <AppContent />
     </DataProvider>
   );
 }

@@ -51,7 +51,7 @@ const TourDetails: React.FC = () => {
           <div className="absolute inset-0 bg-gradient-to-t from-safari-sand via-transparent to-black/30"></div>
           
           <div className="absolute top-28 left-4 md:left-12 z-20">
-              <Link to="/tours" className="glass-premium px-4 py-2 rounded-full text-stone-800 text-sm font-bold flex items-center hover:bg-white transition-colors">
+              <Link to="/tours" className="glass-nav px-4 py-2 rounded-full text-white text-sm font-bold flex items-center hover:bg-white/20 transition-colors">
                   <ArrowLeft className="w-4 h-4 mr-2" /> Back to Tours
               </Link>
           </div>
@@ -63,9 +63,6 @@ const TourDetails: React.FC = () => {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.2 }}
               >
-                  <div className="flex items-center space-x-2 text-safari-sunset mb-2 font-bold tracking-wider uppercase text-sm glass-premium inline-flex px-3 py-1 rounded-full">
-                      <CloudSun className="w-4 h-4" /> <span>{tour.category} Safari</span>
-                  </div>
                   <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-serif font-black text-white mb-6 leading-none drop-shadow-2xl">{tour.name}</h1>
               </motion.div>
             </div>
@@ -87,7 +84,7 @@ const TourDetails: React.FC = () => {
                 
                 <div className="flex flex-wrap gap-3">
                   {tour.highlights.map((highlight, index) => (
-                    <span key={index} className="px-4 py-2 rounded-lg bg-safari-sky/10 text-stone-700 font-bold text-sm border border-safari-sky/20">
+                    <span key={index} className="px-4 py-2 rounded-lg bg-safari-emerald/10 text-stone-700 font-bold text-sm border border-safari-emerald/20">
                       ✨ {highlight}
                     </span>
                   ))}
@@ -99,7 +96,7 @@ const TourDetails: React.FC = () => {
                     className="glass-card p-6 sm:p-8 md:p-12 rounded-[2rem]"
                 >
                   <h2 className="text-3xl font-serif font-bold text-stone-800 mb-10">Itinerary</h2>
-                  <div className="space-y-12 border-l-2 border-stone-200 ml-4 pl-6 sm:pl-10">
+                  <div className="space-y-12 border-l-2 border-safari-emerald/30 ml-4 pl-6 sm:pl-10">
                     {tour.itinerary.map((day, idx) => (
                       <motion.div 
                           key={day.day} 
@@ -140,7 +137,7 @@ const TourDetails: React.FC = () => {
                   initial={{ opacity: 0, x: 20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.4 }}
-                  className="glass-premium rounded-[2rem] p-6 sm:p-8 sticky top-28 border border-white/60 shadow-2xl"
+                  className="glass-card rounded-[2rem] p-6 sm:p-8 sticky top-28 shadow-2xl"
               >
                 <div className="flex justify-between items-end mb-6 border-b border-stone-200 pb-6">
                     <div>
@@ -152,7 +149,7 @@ const TourDetails: React.FC = () => {
                 
                 <Link 
                   to={`/contact?tour=${tour.id}`} 
-                  className="block w-full text-center py-5 bg-safari-sunset text-white font-bold rounded-xl hover:bg-stone-900 transition-all shadow-lg hover:shadow-xl mb-6 text-lg"
+                  className="block w-full text-center py-5 bg-safari-emerald text-stone-900 font-bold rounded-xl hover:bg-safari-leaf hover:text-white transition-all shadow-lg hover:shadow-xl mb-6 text-lg"
                 >
                   Request Booking
                 </Link>

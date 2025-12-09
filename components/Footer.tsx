@@ -1,5 +1,3 @@
-
-
 // @ts-nocheck
 import React from 'react';
 import { Link } from 'react-router-dom';
@@ -17,18 +15,20 @@ const Footer: React.FC = () => {
   ].filter(link => link.href && link.href !== '#');
 
   return (
-    <footer className="bg-stone-900 text-stone-300 relative group">
+    <footer className="bg-stone-900 text-stone-300 relative group overflow-hidden">
+      <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-5"></div>
+      <div className="absolute top-0 left-0 w-1/2 h-1/2 bg-safari-emerald/5 rounded-full blur-[150px]"></div>
       {isAuthenticated && (
-         <div className="absolute top-4 right-4">
+         <div className="absolute top-4 right-4 z-10">
              <Link to="/admin" className="p-2 bg-safari-sunset text-white rounded-full flex items-center gap-2 text-xs font-bold uppercase"><Edit2 className="w-3 h-3" /> Edit Footer</Link>
          </div>
       )}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           
           {/* Brand Column */}
           <div>
-            <h3 className="text-2xl font-serif text-safari-gold mb-4">{companyInfo.name}</h3>
+            <h3 className="text-2xl font-serif text-safari-gold mb-4 text-glow-gold">{companyInfo.name}</h3>
             <p className="text-sm leading-relaxed mb-6">
               {pageContent.footer.aboutText}
             </p>

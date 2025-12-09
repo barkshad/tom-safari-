@@ -15,7 +15,7 @@ const Navbar: React.FC = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
+      setScrolled(window.scrollY > 50);
     };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
@@ -43,33 +43,28 @@ const Navbar: React.FC = () => {
       animate={{ y: 0 }}
       transition={{ type: "spring", stiffness: 100, damping: 20 }}
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled 
-          ? 'py-2' 
-          : 'py-4'
+        scrolled ? 'py-2' : 'py-4'
       }`}
     >
-      {/* Floating Glass Pill Container */}
       <div className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 transition-all duration-300 ${
-          scrolled 
-            ? 'glass-premium rounded-full shadow-lg mx-4 mt-2' 
-            : 'bg-transparent'
+          scrolled ? 'glass-nav rounded-full shadow-lg mx-4 mt-2' : 'bg-transparent'
       }`}>
         <div className="flex justify-between h-16 items-center px-2">
           {/* Logo Section */}
           <div className="flex-shrink-0 flex items-center">
             <Link to="/" className="flex items-center space-x-2 group">
               <motion.div
-                whileHover={{ rotate: 180, scale: 1.1 }}
+                whileHover={{ rotate: 360, scale: 1.1 }}
                 transition={{ type: "spring", stiffness: 200 }}
-                className="bg-safari-sky/20 p-2 rounded-full border border-safari-sky/30 backdrop-blur-sm"
+                className="bg-safari-sky/10 p-2 rounded-full border border-safari-sky/20 backdrop-blur-sm"
               >
-                <Compass className="h-6 w-6 text-safari-sunset" />
+                <Compass className="h-6 w-6 text-safari-emerald" />
               </motion.div>
               <div className="flex flex-col">
-                <span className={`font-serif font-bold text-lg md:text-xl transition-colors leading-none ${scrolled ? 'text-stone-800' : 'text-stone-800 lg:text-white lg:drop-shadow-md'}`}>
-                    Tom "Cruse" Madeda
+                <span className={`font-serif font-bold text-lg md:text-xl transition-colors leading-none ${scrolled ? 'text-stone-800' : 'text-white drop-shadow-md'}`}>
+                    Cruse Experiences
                 </span>
-                <span className={`text-[10px] tracking-widest uppercase font-bold ${scrolled ? 'text-safari-blue' : 'text-safari-blue lg:text-safari-sand'}`}>Safaris & Adventure</span>
+                <span className={`text-[10px] tracking-widest uppercase font-bold ${scrolled ? 'text-safari-blue' : 'text-safari-sand/80'}`}>by Tom Madeda</span>
               </div>
             </Link>
           </div>
@@ -85,13 +80,13 @@ const Navbar: React.FC = () => {
                 {isActive(link.path) && (
                   <motion.div 
                     layoutId="nav-pill"
-                    className="absolute inset-0 bg-safari-sky/20 rounded-full"
+                    className="absolute inset-0 bg-safari-emerald/10 rounded-full border border-safari-emerald/20"
                     transition={{ type: "spring", stiffness: 300, damping: 30 }}
                   />
                 )}
                 <span className={`relative z-10 text-sm font-medium transition-colors duration-200 ${
                   isActive(link.path) 
-                    ? 'text-safari-blue font-bold' 
+                    ? 'text-safari-emerald font-bold' 
                     : scrolled ? 'text-stone-600 group-hover:text-safari-earth' : 'text-stone-100 hover:text-white drop-shadow-sm'
                 }`}>
                   {link.name}
@@ -124,17 +119,17 @@ const Navbar: React.FC = () => {
                       animate={{ opacity: 1, y: 0, scale: 1 }}
                       exit={{ opacity: 0, y: 10, scale: 0.95 }}
                       transition={{ type: "spring", stiffness: 300, damping: 25 }}
-                      className="absolute right-0 mt-2 w-48 glass-premium rounded-xl shadow-2xl border border-white/40 z-20 max-h-96 overflow-y-auto p-1"
+                      className="absolute right-0 mt-2 w-56 glass-dark rounded-xl shadow-2xl z-20 max-h-96 overflow-y-auto p-1"
                     >
                       {availableCurrencies.map(currency => (
                         <motion.button
                           key={currency.code}
-                          whileHover={{ x: 5, backgroundColor: 'rgba(125, 211, 252, 0.2)' }}
+                          whileHover={{ x: 5, backgroundColor: 'rgba(0, 196, 154, 0.1)' }}
                           onClick={() => {
                             setCurrency(currency.code);
                             setCurrencyOpen(false);
                           }}
-                          className={`w-full text-left px-3 py-2 flex items-center space-x-3 rounded-lg transition-colors mb-1 ${selectedCurrency.code === currency.code ? 'bg-safari-sand text-safari-earth font-bold border border-safari-gold/20' : 'text-stone-600'}`}
+                          className={`w-full text-left px-3 py-2 flex items-center space-x-3 rounded-lg transition-colors mb-1 ${selectedCurrency.code === currency.code ? 'bg-safari-emerald/20 text-safari-emerald font-bold' : 'text-stone-300'}`}
                         >
                           <span className="text-xl">{currency.flag}</span>
                           <span className="flex-grow text-sm">{currency.name}</span>
@@ -152,34 +147,6 @@ const Navbar: React.FC = () => {
                 <Settings className="w-3 h-3 mr-1" /> Admin
               </Link>
             )}
-            
-            <div className="flex items-center space-x-2 ml-4">
-              {socialLinks.map(social => (
-                 <motion.a
-                    key={social.name}
-                    whileHover={{ scale: 1.15, y: -2 }}
-                    whileTap={{ scale: 0.9 }}
-                    href={social.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center justify-center w-9 h-9"
-                    title={social.name}
-                    aria-label={`Visit our ${social.name} page`}
-                 >
-                    <social.icon className={scrolled ? social.color : 'text-white'} size={28} />
-                 </motion.a>
-              ))}
-
-              <motion.a
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                href={`tel:${companyInfo.phone}`}
-                className="hidden lg:flex items-center px-4 py-2 bg-safari-leaf text-white rounded-full shadow-lg hover:shadow-safari-leaf/40 hover:bg-stone-700 transition-all text-sm font-bold"
-              >
-                <Phone className="w-3 h-3 mr-2" />
-                Book Now
-              </motion.a>
-            </div>
           </div>
 
           {/* Mobile Menu Button */}
@@ -203,35 +170,6 @@ const Navbar: React.FC = () => {
         </div>
       </div>
       
-      {/* Mobile Currency Dropdown */}
-      <AnimatePresence>
-        {currencyOpen && (
-          <motion.div 
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: 'auto', opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            className="md:hidden glass-premium border-b border-stone-200 overflow-hidden mx-4 mt-2 rounded-xl"
-          >
-             <div className="grid grid-cols-2 gap-2 p-3">
-                 {availableCurrencies.map(currency => (
-                    <button
-                        key={currency.code}
-                        onClick={() => {
-                            setCurrency(currency.code);
-                            setCurrencyOpen(false);
-                        }}
-                        className={`flex items-center space-x-2 p-2 rounded-lg transition-colors ${selectedCurrency.code === currency.code ? 'bg-safari-sky/20 border border-safari-sky/30' : 'hover:bg-white/50'}`}
-                    >
-                        <span className="text-xl">{currency.flag}</span>
-                        <span className="text-sm font-bold text-stone-700">{currency.code}</span>
-                    </button>
-                 ))}
-             </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* Mobile Menu Dropdown */}
       <AnimatePresence>
         {isOpen && (
           <motion.div 
@@ -239,7 +177,7 @@ const Navbar: React.FC = () => {
             animate={{ opacity: 1, height: 'auto', scale: 1 }}
             exit={{ opacity: 0, height: 0, scale: 0.95 }}
             transition={{ type: "spring", stiffness: 200, damping: 25 }}
-            className="md:hidden glass-premium mt-2 mx-4 rounded-2xl overflow-hidden shadow-2xl border border-white/40"
+            className="md:hidden glass-dark mt-2 mx-4 rounded-2xl overflow-hidden shadow-2xl"
           >
             <div className="px-4 pt-4 pb-6 space-y-2">
               {navLinks.map((link) => (
@@ -249,8 +187,8 @@ const Navbar: React.FC = () => {
                   onClick={() => setIsOpen(false)}
                   className={`block px-4 py-3 rounded-xl text-base font-bold transition-all ${
                     isActive(link.path)
-                      ? 'bg-safari-sky/20 text-safari-blue translate-x-2'
-                      : 'text-stone-600 hover:bg-white/50 hover:text-safari-earth'
+                      ? 'bg-safari-emerald/20 text-safari-emerald translate-x-2'
+                      : 'text-stone-300 hover:bg-white/10 hover:text-white'
                   }`}
                 >
                   {link.name}
@@ -261,13 +199,13 @@ const Navbar: React.FC = () => {
                 <Link
                   to="/admin"
                   onClick={() => setIsOpen(false)}
-                  className="block px-4 py-3 rounded-xl text-base font-bold text-red-600 bg-red-50 hover:bg-red-100 mt-2"
+                  className="block px-4 py-3 rounded-xl text-base font-bold text-red-400 bg-red-500/10 hover:bg-red-500/20 mt-2"
                 >
                   Admin Dashboard
                 </Link>
               )}
               
-              <div className="border-t border-stone-200/50 my-4"></div>
+              <div className="border-t border-white/10 my-4"></div>
 
               <div className="flex justify-center items-center space-x-6 pb-4">
                   {socialLinks.map((social) => (
@@ -279,7 +217,7 @@ const Navbar: React.FC = () => {
                         className="p-2.5"
                         aria-label={`Visit our ${social.name} page`}
                       >
-                       <social.icon className={social.color} size={32} />
+                       <social.icon className="text-white" size={32} />
                      </a>
                   ))}
               </div>
@@ -287,7 +225,7 @@ const Navbar: React.FC = () => {
               <div className="space-y-3">
                 <a
                   href={`tel:${companyInfo.phone}`}
-                  className="flex items-center justify-center w-full px-4 py-3 bg-safari-leaf text-white rounded-xl hover:shadow-lg font-bold"
+                  className="flex items-center justify-center w-full px-4 py-3 bg-safari-emerald text-stone-900 rounded-xl hover:shadow-lg font-bold"
                 >
                   <Phone className="w-5 h-5 mr-2" /> Call Us
                 </a>

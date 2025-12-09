@@ -1,4 +1,3 @@
-
 // @ts-nocheck
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
@@ -49,7 +48,7 @@ const Contact: React.FC = () => {
       <div className="bg-stone-900 py-24 text-center relative overflow-hidden">
         <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="relative z-10">
-            <h1 className="text-5xl font-serif font-bold text-white">{pageContent.contact.intro.title}</h1>
+            <h1 className="text-5xl font-serif font-bold text-white text-glow-gold">{pageContent.contact.intro.title}</h1>
             <p className="text-stone-400 mt-2 text-lg">{pageContent.contact.intro.content}</p>
         </motion.div>
       </div>
@@ -59,7 +58,7 @@ const Contact: React.FC = () => {
           
           {/* Contact Information */}
           <motion.div initial={{ opacity: 0, x: -30 }} animate={{ opacity: 1, x: 0 }} className="space-y-8">
-            <div className="glass-premium p-8 space-y-8 rounded-3xl">
+            <div className="glass-card p-8 space-y-8 rounded-3xl">
               <div className="flex items-start group">
                 <div className="bg-white p-4 rounded-full mr-5 shadow-sm group-hover:scale-110 transition-transform">
                   <Phone className="w-6 h-6 text-safari-earth" />
@@ -98,7 +97,7 @@ const Contact: React.FC = () => {
           </motion.div>
 
           {/* Form */}
-          <motion.div initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.2 }} className="glass-card p-10 rounded-[2rem] border-t-8 border-safari-leaf">
+          <motion.div initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.2 }} className="glass-card p-10 rounded-[2rem] border-t-8 border-safari-emerald">
             {submitted ? (
               <div className="h-full flex flex-col items-center justify-center text-center py-12">
                 <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} className="w-24 h-24 bg-green-100 text-green-600 rounded-full flex items-center justify-center mb-6"><Send className="w-12 h-12" /></motion.div>
@@ -110,21 +109,21 @@ const Contact: React.FC = () => {
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div><h2 className="text-2xl font-serif font-bold text-stone-800">Booking Inquiry</h2><p className="text-stone-500">Tell us about your dream trip.</p></div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div><label className="block text-xs font-bold text-stone-500 uppercase mb-2">Full Name</label><input type="text" name="name" required className="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-xl focus:ring-2 focus:ring-safari-leaf outline-none" value={formData.name} onChange={handleChange} /></div>
-                  <div><label className="block text-xs font-bold text-stone-500 uppercase mb-2">Email</label><input type="email" name="email" required className="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-xl focus:ring-2 focus:ring-safari-leaf outline-none" value={formData.email} onChange={handleChange} /></div>
+                  <div><label className="block text-xs font-bold text-stone-500 uppercase mb-2">Full Name</label><input type="text" name="name" required className="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-xl focus:ring-2 focus:ring-safari-emerald outline-none" value={formData.name} onChange={handleChange} /></div>
+                  <div><label className="block text-xs font-bold text-stone-500 uppercase mb-2">Email</label><input type="email" name="email" required className="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-xl focus:ring-2 focus:ring-safari-emerald outline-none" value={formData.email} onChange={handleChange} /></div>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div><label className="block text-xs font-bold text-stone-500 uppercase mb-2">Phone</label><input type="tel" name="phone" className="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-xl focus:ring-2 focus:ring-safari-leaf outline-none" value={formData.phone} onChange={handleChange} /></div>
-                  <div><label className="block text-xs font-bold text-stone-500 uppercase mb-2">Travelers</label><input type="number" name="travelers" min="1" className="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-xl focus:ring-2 focus:ring-safari-leaf outline-none" value={formData.travelers} onChange={handleChange} /></div>
+                  <div><label className="block text-xs font-bold text-stone-500 uppercase mb-2">Phone</label><input type="tel" name="phone" className="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-xl focus:ring-2 focus:ring-safari-emerald outline-none" value={formData.phone} onChange={handleChange} /></div>
+                  <div><label className="block text-xs font-bold text-stone-500 uppercase mb-2">Travelers</label><input type="number" name="travelers" min="1" className="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-xl focus:ring-2 focus:ring-safari-emerald outline-none" value={formData.travelers} onChange={handleChange} /></div>
                 </div>
                 <div><label className="block text-xs font-bold text-stone-500 uppercase mb-2">Interested Tour</label>
-                  <select name="tourId" className="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-xl focus:ring-2 focus:ring-safari-leaf outline-none" value={formData.tourId} onChange={handleChange}>
+                  <select name="tourId" className="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-xl focus:ring-2 focus:ring-safari-emerald outline-none" value={formData.tourId} onChange={handleChange}>
                     <option value="">-- General Inquiry --</option>
                     {tours.map(tour => (<option key={tour.id} value={tour.id}>{tour.name}</option>))}
                   </select>
                 </div>
-                <div><label className="block text-xs font-bold text-stone-500 uppercase mb-2">Message</label><textarea name="message" rows={4} className="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-xl focus:ring-2 focus:ring-safari-leaf outline-none" value={formData.message} onChange={handleChange}></textarea></div>
-                <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} type="submit" className="w-full py-4 bg-safari-leaf text-white font-bold rounded-xl hover:bg-green-900 transition-colors shadow-lg text-lg uppercase tracking-wide">Submit Inquiry</motion.button>
+                <div><label className="block text-xs font-bold text-stone-500 uppercase mb-2">Message</label><textarea name="message" rows={4} className="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-xl focus:ring-2 focus:ring-safari-emerald outline-none" value={formData.message} onChange={handleChange}></textarea></div>
+                <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} type="submit" className="w-full py-4 bg-safari-emerald text-stone-900 font-bold rounded-xl hover:bg-safari-leaf hover:text-white transition-colors shadow-lg text-lg uppercase tracking-wide">Submit Inquiry</motion.button>
               </form>
             )}
           </motion.div>

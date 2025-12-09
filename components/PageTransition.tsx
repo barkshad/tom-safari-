@@ -6,18 +6,38 @@ interface PageTransitionProps {
   children: React.ReactNode;
 }
 
+const pageVariants = {
+  initial: {
+    opacity: 0,
+    y: 20,
+    filter: 'blur(5px)',
+  },
+  in: {
+    opacity: 1,
+    y: 0,
+    filter: 'blur(0px)',
+  },
+  out: {
+    opacity: 0,
+    y: -20,
+    filter: 'blur(5px)',
+  },
+};
+
+const pageTransition = {
+  type: 'spring',
+  stiffness: 100,
+  damping: 20,
+};
+
 const PageTransition: React.FC<PageTransitionProps> = ({ children }) => {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 15 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -15 }}
-      transition={{ 
-        type: "spring", 
-        stiffness: 100, 
-        damping: 20,
-        mass: 1 
-      }}
+      initial="initial"
+      animate="in"
+      exit="out"
+      variants={pageVariants}
+      transition={pageTransition}
       className="w-full h-full"
     >
       {children}

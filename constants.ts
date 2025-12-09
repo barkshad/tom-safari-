@@ -1,40 +1,44 @@
-import { Tour, PageContent, CurrencyConfig } from './types';
+import { Tour, PageContent, CurrencyConfig, CompanyInfo } from './types';
 
-export const DATA_VERSION = "4.0"; // Force production responsive style refresh
+export const DATA_VERSION = "5.0"; // Force production futuristic style refresh
 
-export const COMPANY_INFO = {
-  name: "Tom 'Cruse' Madeda Safaris",
+export const COMPANY_INFO: CompanyInfo = {
+  name: "Tom Safaris & Adventures – Cruse Experiences",
   ownerName: "Tom 'Cruse' Madeda",
   email: "info@tomsafaris.co.ke",
   phone: "+254 792 150 200",
   location: "Titanic Plaza, Kilifi, Kenya",
-  slogan: "Turning your travel dreams into extraordinary experiences – Hosted by Tom 'Cruse'",
+  slogan: "Extraordinary journeys, hosted by 'Cruse'. Mission possible.",
   social: {
     facebook: "#",
     instagram: "https://www.instagram.com/madeda_thomas?igsh=eTA0czUxejI2ZnZp",
     whatsapp: "https://wa.me/254792150200",
-    tiktok: "#",
-    youtube: "#"
-  }
+  },
+  animationsEnabled: true,
 };
 
 export const SUPPORTED_CURRENCIES: CurrencyConfig[] = [
   { code: 'USD', name: 'US Dollar', symbol: '$', flag: '🇺🇸' },
+  { code: 'KES', name: 'Kenyan Shilling', symbol: 'KSh', flag: '🇰🇪' },
   { code: 'GBP', name: 'British Pound', symbol: '£', flag: '🇬🇧' },
   { code: 'EUR', name: 'Euro', symbol: '€', flag: '🇪🇺' },
-  { code: 'KES', name: 'Kenyan Shilling', symbol: 'KSh', flag: '🇰🇪' },
-  // Add other currencies as needed
+  { code: 'AED', name: 'UAE Dirham', symbol: 'AED', flag: '🇦🇪' },
+  { code: 'AUD', name: 'Australian Dollar', symbol: 'A$', flag: '🇦🇺' },
+  { code: 'CAD', name: 'Canadian Dollar', symbol: 'C$', flag: '🇨🇦' },
+  { code: 'ZAR', name: 'South African Rand', symbol: 'R', flag: '🇿🇦' },
+  { code: 'INR', name: 'Indian Rupee', symbol: '₹', flag: '🇮🇳' },
+  { code: 'JPY', name: 'Japanese Yen', symbol: '¥', flag: '🇯🇵' },
 ];
 
 export const DEFAULT_PAGE_CONTENT: PageContent = {
   home: {
     hero: {
-      title: "Cruise the Wild with Tom 'Cruse'",
+      title: "Cruise the Wild",
       subtitle: "Experience the thrill of the wild with Kenya's premier safari expert, Tom 'Cruse' Madeda.",
-      image: "https://share.google/images/2bwfbvx4i34vzVT0v"
+      image: "https://images.unsplash.com/photo-1521638235882-f544103851a7?q=80&w=2500&auto=format&fit=crop"
     },
     welcome: {
-      title: "Welcome to Tom 'Cruse' Madeda Safaris",
+      title: "Welcome to Cruse Experiences",
       content: "We are a Kilifi-based safari and adventure tour operator dedicated to organizing wildlife, coastal, and adventure tours across Kenya."
     },
     features: [
@@ -54,7 +58,7 @@ export const DEFAULT_PAGE_CONTENT: PageContent = {
       image: "https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?q=80&w=2000"
     },
     philosophy: {
-      content: "At Tom 'Cruse' Madeda Safaris, we are passionate about creating unforgettable experiences. Led by Tom 'Cruse' himself, our dedicated team prioritizes safety, sustainability, and exceptional service to ensure your mission is always possible."
+      content: "At Tom Safaris & Adventures, we are passionate about creating unforgettable experiences. Led by Tom 'Cruse' himself, our dedicated team prioritizes safety, sustainability, and exceptional service to ensure your mission is always possible."
     },
     founder: {
       title: "Meet Our Founder",
@@ -89,7 +93,7 @@ export const TOURS: Tour[] = [
     id: "marine-park-full-day-excursion",
     name: "Marine Park Full-Day Excursion",
     durationDays: 1, priceUsd: 150, priceGbp: 0,
-    image: "https://images.unsplash.com/photo-1544551763-77ef2d0cfc6c?q=80&w=1000",
+    image: "https://images.unsplash.com/photo-1590523741831-ab7e8b8f9c7f?q=80&w=1974&auto=format&fit=crop",
     category: 'Coastal', group: 'Excursion', featured: false,
     shortDescription: "Discover the underwater treasures of Mombasa's Marine Park.",
     fullDescription: "A full day dedicated to exploring the vibrant coral reefs and marine life. Includes a glass-bottom boat tour, snorkeling, and a fresh seafood lunch on a pristine island.",
@@ -101,7 +105,7 @@ export const TOURS: Tour[] = [
     id: "new-adventure-big-game-fishing",
     name: "New Adventure Big-Game Fishing",
     durationDays: 1, priceUsd: 450, priceGbp: 0,
-    image: "https://images.unsplash.com/photo-1520645521318-f03a712f0e67?q=80&w=1000",
+    image: "https://images.unsplash.com/photo-1581424956326-6178a168a6ed?q=80&w=1932&auto=format&fit=crop",
     category: 'Coastal', group: 'Excursion', featured: false,
     shortDescription: "A thrilling deep-sea fishing adventure in the Indian Ocean.",
     fullDescription: "Charter a professional fishing boat and head into the deep waters to test your skills against marlin, sailfish, tuna, and other big game fish. All equipment and expert guidance provided.",
@@ -111,9 +115,9 @@ export const TOURS: Tour[] = [
   },
   {
     id: "new-adventure-sunset-cruise",
-    name: "New Adventure – Sunset Cruise",
+    name: "New Adventure – Sunset Dhow Cruise",
     durationDays: 1, priceUsd: 30, priceGbp: 0,
-    image: "https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?q=80&w=1000",
+    image: "https://images.unsplash.com/photo-1582882894396-3e1572a1843a?q=80&w=1964&auto=format&fit=crop",
     category: 'Coastal', group: 'Excursion', featured: false,
     shortDescription: "Experience a magical sunset aboard a traditional dhow.",
     fullDescription: "Enjoy a relaxing evening cruise along the coast as the sun sets over the Indian Ocean. A perfect romantic or family experience with snacks and refreshments.",
@@ -127,7 +131,7 @@ export const TOURS: Tour[] = [
     id: "adventure-safari-3-days-tsavo",
     name: "Adventure Safari – 3 Days (Tsavo East & West)",
     durationDays: 3, priceUsd: 450, priceGbp: 0,
-    image: "https://images.unsplash.com/photo-1523726491678-bf852e717f6a?q=80&w=1000",
+    image: "https://images.unsplash.com/photo-1605303493132-845d3e236592?q=80&w=1974&auto=format&fit=crop",
     category: 'Safari', group: 'Road Safari', featured: true,
     shortDescription: "Classic adventure through Kenya's iconic Tsavo National Parks.",
     fullDescription: "Experience a classic 3-day adventure through Tsavo East and Tsavo West — two of Kenya’s most iconic wildlife destinations. Expect red elephants, vast savannahs, rhino sanctuary stops, and breathtaking landscapes.",
@@ -143,7 +147,7 @@ export const TOURS: Tour[] = [
     id: "3-day-tsavo-east-salt-lick-safari",
     name: "3-Day Tsavo East & Salt Lick Safari",
     durationDays: 3, priceUsd: 650, priceGbp: 0,
-    image: "https://images.unsplash.com/photo-1499951666687-d1a296d1152a?q=80&w=1000",
+    image: "https://images.unsplash.com/photo-1620675239334-a347338a0c20?q=80&w=2070&auto=format&fit=crop",
     category: 'Safari', group: 'Road Safari', featured: true,
     shortDescription: "See Tsavo's red elephants and stay at the magical Salt Lick Lodge.",
     fullDescription: "A classic 3-day safari through the vast plains of Tsavo East, home to the world-famous red elephants. Your journey ends with a magical stay at Taita Hills & Salt Lick Safari Lodge, where elephants gather at the watering holes right below your room.",
@@ -159,7 +163,7 @@ export const TOURS: Tour[] = [
     id: "3-day-amboseli-express-safari",
     name: "3-Day Amboseli Express Safari",
     durationDays: 3, priceUsd: 680, priceGbp: 0,
-    image: "https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?q=80&w=1000",
+    image: "https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?q=80&w=2071&auto=format&fit=crop",
     category: 'Safari', group: 'Road Safari', featured: true,
     shortDescription: "Unforgettable views of Mt. Kilimanjaro and its elephant herds.",
     fullDescription: "Welcome to Amboseli — the land where Mount Kilimanjaro paints the sky. This hidden gem offers unforgettable views, peaceful landscapes, and some of Kenya’s best elephant sightings.",
@@ -175,7 +179,7 @@ export const TOURS: Tour[] = [
     id: "the-sunset-safari-3-days",
     name: "The Sunset Safari (3 Days)",
     durationDays: 3, priceUsd: 500, priceGbp: 0,
-    image: "https://images.unsplash.com/photo-1516426122078-c23e76319801?q=80&w=1000",
+    image: "https://images.unsplash.com/photo-1473580044384-7ba9967e16a0?q=80&w=2070&auto=format&fit=crop",
     category: 'Safari', group: 'Road Safari', featured: false,
     shortDescription: "A relaxing safari focused on golden hour game drives.",
     fullDescription: "A relaxing safari combining classic game drives with special sunset excursions, offering perfect opportunities for scenic photography and tranquil wildlife viewing.",

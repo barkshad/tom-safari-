@@ -102,8 +102,14 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
             footer: { ...DEFAULT_PAGE_CONTENT.footer, ...cloudData.pageContent?.footer },
             seo: { ...DEFAULT_PAGE_CONTENT.seo, ...cloudData.pageContent?.seo },
           };
+          
+          const mergedCompanyInfo = {
+            ...COMPANY_INFO,
+            ...cloudData.companyInfo,
+          };
+
           setData({
-            companyInfo: cloudData.companyInfo || COMPANY_INFO,
+            companyInfo: mergedCompanyInfo,
             tours: cloudData.tours || TOURS,
             pageContent: mergedPageContent
           });

@@ -1,4 +1,3 @@
-
 // @ts-nocheck
 import React from 'react';
 import { Link } from 'react-router-dom';
@@ -12,7 +11,7 @@ const About: React.FC = () => {
   
   return (
     <PageTransition>
-    <div className="bg-white">
+    <div className="bg-safari-sand">
       {/* Header */}
       <div className="relative h-[60vh] flex items-center justify-center overflow-hidden group">
         <EditTrigger sectionName="About Hero" className="top-24 right-4" />
@@ -22,7 +21,7 @@ const About: React.FC = () => {
         </motion.div>
         
         <div className="relative z-10 text-center">
-            <motion.h1 initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="text-5xl md:text-7xl font-serif font-bold text-white mb-4">
+            <motion.h1 initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="text-5xl md:text-7xl font-serif font-bold text-white mb-4 text-glow-gold">
                 {pageContent.about.hero.title}
             </motion.h1>
             <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3, duration: 0.8 }} className="text-stone-300 text-xl md:text-2xl font-light">
@@ -33,13 +32,22 @@ const About: React.FC = () => {
 
       <div className="max-w-4xl mx-auto px-4 py-20 sm:px-6 lg:px-8 group relative">
         <EditTrigger sectionName="Philosophy" className="top-4 right-4 text-stone-900 border-stone-200" />
-        <motion.div initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }} className="prose prose-lg prose-stone mx-auto">
+        <motion.div 
+          initial={{ opacity: 0, y: 40 }} 
+          whileInView={{ opacity: 1, y: 0 }} 
+          viewport={{ once: true }} 
+          transition={{ duration: 0.8 }} 
+          className="prose prose-lg prose-stone mx-auto"
+        >
           <h2 className="text-3xl font-serif font-bold text-stone-900 mb-8">Our Philosophy</h2>
-          <div className="glass-premium border-l-4 border-safari-gold p-8 rounded-r-2xl italic text-xl text-stone-700 mb-10 shadow-sm">
+          <div className="glass-card border-l-4 border-safari-gold p-8 rounded-r-2xl italic text-xl text-stone-700 mb-10 shadow-lg">
             "{pageContent.about.philosophy.content}"
           </div>
 
-          <motion.div whileHover={{ y: -5 }} className="mt-20 bg-stone-900 text-white p-10 rounded-3xl flex flex-col md:flex-row items-center gap-10 shadow-2xl relative overflow-hidden group">
+          <motion.div 
+            whileHover={{ y: -5, scale: 1.02 }}
+            className="mt-20 glass-dark text-white p-10 rounded-3xl flex flex-col md:flex-row items-center gap-10 shadow-2xl relative overflow-hidden group"
+          >
             <EditTrigger sectionName="Founder Bio" className="top-4 right-4" />
             <img src={pageContent.about.founder.image} alt="Founder" className="w-40 h-40 rounded-full object-cover shadow-lg border-4 border-safari-gold relative z-10" />
             <div className="text-center md:text-left relative z-10">
@@ -48,7 +56,7 @@ const About: React.FC = () => {
                 <p className="text-stone-300 mb-6 leading-relaxed text-sm">
                     {pageContent.about.founder.content}
                 </p>
-                <Link to="/contact" className="inline-block px-6 py-3 bg-safari-sunset text-white font-bold rounded-full hover:bg-orange-600 transition-colors shadow-lg">
+                <Link to="/contact" className="inline-block px-6 py-3 bg-safari-emerald text-stone-900 font-bold rounded-full hover:bg-white transition-colors shadow-lg">
                     Plan your trip with "Cruse" &rarr;
                 </Link>
             </div>
