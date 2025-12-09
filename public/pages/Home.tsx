@@ -104,7 +104,18 @@ const Home: React.FC = () => {
               viewport={{ once: true, amount: 0.5 }} 
               className="text-center max-w-3xl mx-auto mb-20"
             >
-              <div className="flex justify-center mb-4"><Sun className="w-12 h-12 text-safari-gold" /></div>
+              <div className="flex justify-center mb-4">
+                <motion.div
+                  animate={{ rotate: 360 }}
+                  transition={{
+                    duration: 8,
+                    repeat: Infinity,
+                    ease: "linear",
+                  }}
+                >
+                  <Sun className="w-12 h-12 text-safari-gold" />
+                </motion.div>
+              </div>
               <h2 className="text-4xl font-serif font-bold text-stone-900 mb-4">{pageContent.home.welcome.title}</h2>
               <p className="text-xl text-stone-600 leading-relaxed font-sans font-light">{pageContent.home.welcome.content}</p>
             </motion.div>
