@@ -1,5 +1,15 @@
 
-
+export interface BlogPost {
+  id: string;
+  slug: string;
+  title: string;
+  excerpt: string;
+  content: string;
+  image: string;
+  category: string;
+  date: string;
+  featured?: boolean;
+}
 
 export interface Tour {
   id: string;
@@ -16,7 +26,6 @@ export interface Tour {
   featured: boolean;
   category: 'Safari' | 'Coastal' | 'Trek' | 'Day Trip';
   group: 'Excursion' | 'Road Safari' | 'Flight Safari' | 'Trek' | 'Custom';
-  // FIX: Added optional 'keywords' property to allow for SEO keywords on tour objects.
   keywords?: string;
 }
 
@@ -86,7 +95,7 @@ export interface PageContent {
 
 export interface CompanyInfo {
   name: string;
-  ownerName: string; // Added Owner Name
+  ownerName: string;
   email: string;
   phone: string;
   location: string;

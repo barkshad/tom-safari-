@@ -1,3 +1,4 @@
+
 // @ts-nocheck
 import React, { Suspense, lazy } from 'react';
 import { HashRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
@@ -13,6 +14,7 @@ const About = lazy(() => import('./public/pages/About'));
 const Tours = lazy(() => import('./public/pages/Tours'));
 const TourDetails = lazy(() => import('./public/pages/TourDetails'));
 const Blog = lazy(() => import('./public/pages/Blog'));
+const BlogPost = lazy(() => import('./public/pages/BlogPost'));
 const Contact = lazy(() => import('./public/pages/Contact'));
 const Admin = lazy(() => import('./public/pages/Admin'));
 
@@ -38,6 +40,7 @@ const AnimatedRoutes: React.FC = () => {
           <Route path="/tours" element={<Tours />} />
           <Route path="/tours/:id" element={<TourDetails />} />
           <Route path="/blog" element={<Blog />} />
+          <Route path="/blog/:slug" element={<BlogPost />} />
           <Route path="/contact" element={<Contact />} />
         </Route>
       </Routes>

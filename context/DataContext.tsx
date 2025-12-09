@@ -1,6 +1,7 @@
+
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { Tour, CompanyInfo, Inquiry, InquiryForm, PageContent, CurrencyConfig } from '../types';
-import { TOURS, COMPANY_INFO, DEFAULT_PAGE_CONTENT, SUPPORTED_CURRENCIES } from '../constants';
+import { Tour, CompanyInfo, Inquiry, InquiryForm, PageContent, CurrencyConfig, BlogPost } from '../types';
+import { TOURS, COMPANY_INFO, DEFAULT_PAGE_CONTENT, SUPPORTED_CURRENCIES, SAMPLE_BLOG_POSTS } from '../constants';
 import { db, auth } from '../firebase';
 import { doc, getDoc, setDoc, collection, addDoc, getDocs, query, orderBy } from 'firebase/firestore';
 import { onAuthStateChanged, signInWithEmailAndPassword, signOut, updatePassword, User } from 'firebase/auth';
@@ -9,17 +10,22 @@ interface CloudData {
   companyInfo: CompanyInfo;
   tours: Tour[];
   pageContent: PageContent;
+  blogPosts: BlogPost[];
 }
 
 interface DataContextType {
   companyInfo: CompanyInfo;
   tours: Tour[];
+  blogPosts: BlogPost[];
   inquiries: Inquiry[];
   pageContent: PageContent;
   updateCompanyInfo: (info: CompanyInfo) => void;
   updateTour: (updatedTour: Tour) => void;
   addTour: (newTour: Tour) => void;
   deleteTour: (id: string) => void;
+  addBlogPost: (post: BlogPost) => void;
+  updateBlogPost: (post: BlogPost) => void;
+  deleteBlogPost: (id: string) => void;
   addInquiry: (form: InquiryForm) => void;
   updatePageContent: (content: PageContent) => void;
   isAuthenticated: boolean;
@@ -50,7 +56,8 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [data, setData] = useState<CloudData>({
     companyInfo: COMPANY_INFO,
     tours: TOURS,
-    pageContent: DEFAULT_PAGE_CONTENT
+    pageContent: DEFAULT_PAGE_CONTENT,
+    blogPosts: SAMPLE_BLOG_POSTS,
   });
 
   const [inquiries, setInquiries] = useState<Inquiry[]>([]);
@@ -111,7 +118,8 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
           setData({
             companyInfo: mergedCompanyInfo,
             tours: cloudData.tours || TOURS,
-            pageContent: mergedPageContent
+            pageContent: mergedPageContent,
+            blogPosts: cloudData.blogPosts || SAMPLE_BLOG_POSTS,
           });
         } else {
            console.log("No live data in Firestore. Using default content. Admin can seed data from the settings panel.");
@@ -234,6 +242,33 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
     });
   };
 
+  const addBlogPost = (post: BlogPost) => {
+    setData(prevData => {
+        const newPosts = [...prevData.blogPosts, post];
+        const newData = { ...prevData, blogPosts: newPosts };
+        saveData(newData);
+        return newData;
+    });
+  };
+
+  const updateBlogPost = (post: BlogPost) => {
+    setData(prevData => {
+        const newPosts = prevData.blogPosts.map(p => p.id === post.id ? post : p);
+        const newData = { ...prevData, blogPosts: newPosts };
+        saveData(newData);
+        return newData;
+    });
+  };
+
+  const deleteBlogPost = (id: string) => {
+    setData(prevData => {
+        const newPosts = prevData.blogPosts.filter(p => p.id !== id);
+        const newData = { ...prevData, blogPosts: newPosts };
+        saveData(newData);
+        return newData;
+    });
+  };
+
   const addInquiry = async (form: InquiryForm) => {
     const tour = data.tours.find(t => t.id === form.tourId);
     const newInquiry: Inquiry = {
@@ -275,7 +310,12 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
   
   const resetData = async () => {
     if(window.confirm("Delete ALL custom content from the cloud and reset to factory defaults? This is irreversible.")) {
-      const defaultData = { companyInfo: COMPANY_INFO, tours: TOURS, pageContent: DEFAULT_PAGE_CONTENT };
+      const defaultData = { 
+          companyInfo: COMPANY_INFO, 
+          tours: TOURS, 
+          pageContent: DEFAULT_PAGE_CONTENT,
+          blogPosts: SAMPLE_BLOG_POSTS
+      };
       setData(defaultData);
       await saveData(defaultData);
       window.location.reload();
@@ -286,12 +326,16 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
     <DataContext.Provider value={{
       companyInfo: data.companyInfo,
       tours: data.tours,
+      blogPosts: data.blogPosts,
       pageContent: data.pageContent,
       inquiries,
       updateCompanyInfo,
       updateTour,
       addTour,
       deleteTour,
+      addBlogPost,
+      updateBlogPost,
+      deleteBlogPost,
       addInquiry,
       updatePageContent,
       isAuthenticated,

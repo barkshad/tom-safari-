@@ -1,4 +1,5 @@
-import { Tour, PageContent, CurrencyConfig, CompanyInfo } from './types';
+
+import { Tour, PageContent, CurrencyConfig, CompanyInfo, BlogPost } from './types';
 
 export const DATA_VERSION = "5.0"; // Force production futuristic style refresh
 
@@ -29,6 +30,40 @@ export const SUPPORTED_CURRENCIES: CurrencyConfig[] = [
   { code: 'INR', name: 'Indian Rupee', symbol: '₹', flag: '🇮🇳' },
   { code: 'JPY', name: 'Japanese Yen', symbol: '¥', flag: '🇯🇵' },
 ];
+
+export const SAMPLE_BLOG_POSTS: BlogPost[] = [
+  {
+    id: "post-1",
+    slug: "5-essentials-for-your-first-kenyan-safari",
+    title: "5 Essentials for Your First Kenyan Safari",
+    excerpt: "Packing for a safari can be tricky. Here is our guide to the must-have items for a comfortable and exciting adventure in the bush.",
+    content: "A safari is a trip of a lifetime, but packing for it requires some thought. Unlike a typical vacation, you'll be spending a lot of time in a vehicle, in varied temperatures, and surrounded by nature. Here are the five absolute essentials to bring:\n\n1. **Layered Clothing:** Temperatures can swing wildly from chilly pre-dawn game drives to hot afternoons. Pack lightweight layers: t-shirts, long-sleeved shirts, a fleece or warm jacket, and a waterproof windbreaker. Neutral colors like khaki, olive, and brown are best as they don't distract wildlife.\n\n2. **A Good Camera and Binoculars:** Don't rely on your phone! A dedicated camera with a good zoom lens will capture those incredible wildlife moments. Equally important are binoculars. Often, the most interesting sightings are at a distance, and a good pair of binoculars brings the action right to you.\n\n3. **Sun Protection:** The African sun is intense. A wide-brimmed hat, high-SPF sunscreen, and sunglasses are non-negotiable to protect you from sunburn and glare, allowing you to enjoy the views comfortably.\n\n4. **Comfortable, Closed-Toe Shoes:** You'll be getting in and out of the safari vehicle and may do some light walking. Sturdy, comfortable shoes like trail runners or light hiking boots are perfect. Avoid sandals or open shoes to protect your feet from dust and insects.\n\n5. **A Sense of Adventure:** The most important item! A safari is unpredictable. Some days you'll see the entire Big Five; other days might be quieter. Embrace the journey, trust your guide, and be open to the magic of the wild. Every day in the bush is a unique experience.",
+    image: "https://images.unsplash.com/photo-1523393665780-69d6797f1cc5?q=80&w=800&auto=format&fit=crop",
+    category: "Travel Tips",
+    date: "October 12, 2023",
+  },
+  {
+    id: "post-2",
+    slug: "the-great-migration-when-and-where-to-go",
+    title: "The Great Migration: When and Where to Go",
+    excerpt: "Witnessing the Great Migration is a bucket-list experience. Learn the best times to visit the Maasai Mara to catch the action.",
+    content: "The Great Wildebeest Migration is one of the most spectacular wildlife events on the planet. Over a million wildebeest, accompanied by zebras and gazelles, journey in a clockwise circle through the Serengeti in Tanzania and the Maasai Mara in Kenya. The key to witnessing it is timing.\n\nThe most dramatic part of this journey for visitors to Kenya is the Mara River crossing. This typically happens between **July and October**. During these months, the herds pour into the Maasai Mara National Reserve from the Serengeti, facing the perilous, crocodile-infested waters of the Mara River.\n\n**Best time to visit:** Booking your safari between late July and September gives you the highest chance of seeing multiple river crossings. The drama is intense, as the animals must evade predators both in the water and on the banks.\n\nWhile this is the peak season, the Maasai Mara offers incredible game viewing year-round. But if the Great Migration is your primary goal, aim for that late summer to early autumn window. It's an experience that will stay with you forever.",
+    image: "https://images.unsplash.com/photo-1535940357668-439589d89d6e?q=80&w=800&auto=format&fit=crop",
+    category: "Wildlife",
+    date: "September 05, 2023",
+  },
+  {
+    id: "post-3",
+    slug: "exploring-lamu-a-journey-back-in-time",
+    title: "Exploring Lamu: A Journey Back in Time",
+    excerpt: "Beyond the wildlife, Kenya's coast offers rich history. Discover the magic of Lamu Old Town and its Swahili heritage.",
+    content: "While Kenya is famous for its safaris, its coastline holds treasures of a different kind. The island of Lamu, a UNESCO World Heritage site, is a place where time seems to stand still. There are no cars on the island; the primary modes of transport are donkeys and dhows (traditional sailing boats).\n\nThe heart of the island is Lamu Old Town, the oldest and best-preserved Swahili settlement in East Africa. Wandering its narrow, winding streets is like stepping into another century. The architecture is a unique blend of Swahili, Arabic, Persian, Indian, and European influences, with intricately carved wooden doors and beautiful coral stone buildings.\n\n**Things to do in Lamu:**\n- **Explore the Old Town:** Get lost in the alleyways and discover hidden courtyards, bustling markets, and ancient mosques.\n- **Sail on a Dhow:** A sunset dhow cruise is a magical experience, offering stunning views of the coast as the sky changes color.\n- **Relax on Shela Beach:** Just a short walk from the town, this pristine, 12km-long beach is perfect for relaxing and swimming.\n- **Visit the Lamu Museum:** Learn about the rich history and culture of the Swahili people.\n\nA trip to Lamu is the perfect way to unwind after an exciting safari, offering a peaceful and culturally rich contrast to the adventure of the bush.",
+    image: "https://images.unsplash.com/photo-1590523741831-ab7e8b8f9c7f?q=80&w=800&auto=format&fit=crop",
+    category: "Destinations",
+    date: "August 20, 2023",
+  }
+];
+
 
 export const DEFAULT_PAGE_CONTENT: PageContent = {
   home: {
