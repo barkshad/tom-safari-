@@ -40,6 +40,30 @@ const Home: React.FC = () => {
   const parallaxBgX = useTransform(mouseX, (v) => -v * 1);
   const parallaxBgY = useTransform(mouseY, (v) => -v * 1);
 
+  const sentence = {
+    hidden: { opacity: 1 },
+    visible: {
+      opacity: 1,
+      transition: {
+        delay: 0.3,
+        staggerChildren: 0.04,
+      },
+    },
+  };
+
+  const letter = {
+    hidden: { opacity: 0, y: 50 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        type: "spring",
+        stiffness: 300,
+        damping: 20
+      },
+    },
+  };
+
 
   return (
     <PageTransition>
@@ -71,13 +95,26 @@ const Home: React.FC = () => {
             className="relative z-10 text-center px-4 max-w-5xl mx-auto"
           >
             <motion.div 
-              initial={{ opacity: 0, scale: 0.9 }} 
-              animate={{ opacity: 1, scale: 1 }} 
-              transition={{ duration: 0.8, delay: 0.2 }}
+              initial={{ opacity: 0 }} 
+              animate={{ opacity: 1 }} 
+              transition={{ duration: 0.8 }}
             >
-              <h1 className="text-6xl md:text-8xl lg:text-9xl font-serif font-black text-white mb-6 leading-[0.9] drop-shadow-2xl text-glow-gold">
-                {pageContent.home.hero.title}
-              </h1>
+              <motion.h1
+                variants={sentence}
+                initial="hidden"
+                animate="visible"
+                className="text-6xl md:text-8xl lg:text-9xl font-serif font-black text-white mb-6 leading-[0.9] drop-shadow-2xl text-glow-gold flex flex-wrap justify-center"
+              >
+                {pageContent.home.hero.title.split(" ").map((word, wordIndex) => (
+                  <span key={wordIndex} className="inline-block whitespace-nowrap mr-4 md:mr-6">
+                    {word.split("").map((char, charIndex) => (
+                      <motion.span key={charIndex} variants={letter} className="inline-block">
+                        {char}
+                      </motion.span>
+                    ))}
+                  </span>
+                ))}
+              </motion.h1>
               <p className="text-lg md:text-2xl text-stone-200 mb-10 font-light max-w-3xl mx-auto drop-shadow-md leading-relaxed">
                 {pageContent.home.hero.subtitle}
               </p>
