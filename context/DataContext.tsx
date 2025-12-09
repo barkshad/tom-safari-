@@ -71,7 +71,10 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, []);
   
   const saveData = async (newData: CloudData) => {
-    if (!isAuthenticated) return;
+    if (!auth.currentUser) {
+        console.warn("Save attempted while not authenticated. Aborting.");
+        return;
+    }
     setSaving(true);
     try {
       await setDoc(doc(db, DB_COLLECTION, DB_DOC_ID), newData, { merge: true });
@@ -106,12 +109,9 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
           });
         } else {
            console.log("No live data in Firestore. Using default content. Admin can seed data from the settings panel.");
-           // If no document exists, the app will use the default state initialized above.
-           // No write operation is performed for an unauthenticated user, which fixes the permissions error.
         }
       } catch (e) {
         console.error("Failed to load public cloud data, falling back to defaults.", e);
-        // Fallback to default state is implicit as useState is initialized with it.
       } finally {
         setLoading(false);
       }
@@ -135,7 +135,6 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
           console.error("Failed to load inquiries. Check Firestore rules.", e);
         }
       } else {
-        // Clear inquiries on logout
         setInquiries([]);
       }
     };
@@ -187,36 +186,46 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const updateCompanyInfo = (info: CompanyInfo) => {
-    const newData = { ...data, companyInfo: info };
-    setData(newData);
-    saveData(newData);
+    setData(prevData => {
+        const newData = { ...prevData, companyInfo: info };
+        saveData(newData);
+        return newData;
+    });
   };
 
   const updateTour = (updatedTour: Tour) => {
-    const newTours = data.tours.map(t => t.id === updatedTour.id ? updatedTour : t);
-    const newData = { ...data, tours: newTours };
-    setData(newData);
-    saveData(newData);
+    setData(prevData => {
+        const newTours = prevData.tours.map(t => t.id === updatedTour.id ? updatedTour : t);
+        const newData = { ...prevData, tours: newTours };
+        saveData(newData);
+        return newData;
+    });
   };
   
   const addTour = (newTour: Tour) => {
-    const newTours = [...data.tours, newTour];
-    const newData = { ...data, tours: newTours };
-    setData(newData);
-    saveData(newData);
+    setData(prevData => {
+        const newTours = [...prevData.tours, newTour];
+        const newData = { ...prevData, tours: newTours };
+        saveData(newData);
+        return newData;
+    });
   };
   
   const deleteTour = (id: string) => {
-    const newTours = data.tours.filter(t => t.id !== id);
-    const newData = { ...data, tours: newTours };
-    setData(newData);
-    saveData(newData);
+    setData(prevData => {
+        const newTours = prevData.tours.filter(t => t.id !== id);
+        const newData = { ...prevData, tours: newTours };
+        saveData(newData);
+        return newData;
+    });
   };
   
   const updatePageContent = (content: PageContent) => {
-    const newData = { ...data, pageContent: content };
-    setData(newData);
-    saveData(newData);
+    setData(prevData => {
+        const newData = { ...prevData, pageContent: content };
+        saveData(newData);
+        return newData;
+    });
   };
 
   const addInquiry = async (form: InquiryForm) => {
@@ -229,14 +238,13 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
       submittedAt: new Date().toISOString()
     };
     await addDoc(collection(db, "inquiries"), newInquiry);
-    // If admin is logged in, refresh inquiries list
     if (isAuthenticated) {
         setInquiries(prev => [newInquiry, ...prev]);
     }
   };
 
   const login = async (password: string) => {
-    const email = 'admin@tomsafaris.co.ke'; // Hardcoded admin email
+    const email = 'admin@tomsafaris.co.ke';
     try {
       await signInWithEmailAndPassword(auth, email, password);
       return true;
