@@ -45,7 +45,17 @@ const Tours: React.FC = () => {
           className="glass-card rounded-3xl shadow-xl mb-12 overflow-hidden"
         >
             <div className="p-8 border-b border-stone-200/50 flex items-center bg-white/50">
-                <Sun className="w-8 h-8 text-safari-sunset mr-4" />
+                <motion.div
+                  animate={{ rotate: 360 }}
+                  transition={{
+                    duration: 8,
+                    repeat: Infinity,
+                    ease: "linear",
+                  }}
+                  className="mr-4"
+                >
+                  <Sun className="w-8 h-8 text-safari-sunset" />
+                </motion.div>
                 <h2 className="text-3xl font-serif font-bold text-stone-900">Excursions from Mombasa</h2>
             </div>
             
