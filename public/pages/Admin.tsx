@@ -7,6 +7,7 @@ import { Tour, ItineraryDay } from '../../types';
 import PageTransition from '../../components/PageTransition';
 import { storage } from '../../firebase';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
+import imageCompression from 'browser-image-compression';
 
 const FirebaseImageUploader: React.FC<{
   onUploadSuccess: (url: string) => void;
@@ -14,35 +15,56 @@ const FirebaseImageUploader: React.FC<{
   label: string;
 }> = ({ onUploadSuccess, currentImageUrl, label }) => {
   const [uploadProgress, setUploadProgress] = useState(0);
-  const [isUploading, setIsUploading] = useState(false);
+  const [status, setStatus] = useState<'idle' | 'compressing' | 'uploading'>('idle');
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    setIsUploading(true);
-    setUploadProgress(0);
-    const storageRef = ref(storage, `images/${Date.now()}_${file.name}`);
-    const uploadTask = uploadBytesResumable(storageRef, file);
+    setStatus('compressing');
+    
+    const options = {
+      maxSizeMB: 1,
+      maxWidthOrHeight: 1920,
+      useWebWorker: true
+    }
 
-    uploadTask.on('state_changed',
-      (snapshot) => {
-        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        setUploadProgress(progress);
-      },
-      (error) => {
-        console.error("Upload failed:", error);
-        setIsUploading(false);
-        // Add user-facing error message here
-      },
-      () => {
-        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-          onUploadSuccess(downloadURL);
-          setIsUploading(false);
-        });
-      }
-    );
+    try {
+      const compressedFile = await imageCompression(file, options);
+      setStatus('uploading');
+      setUploadProgress(0);
+
+      const storageRef = ref(storage, `images/${Date.now()}_${compressedFile.name}`);
+      const uploadTask = uploadBytesResumable(storageRef, compressedFile);
+
+      uploadTask.on('state_changed',
+        (snapshot) => {
+          const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          setUploadProgress(progress);
+        },
+        (error) => {
+          console.error("Upload failed:", error);
+          setStatus('idle');
+        },
+        () => {
+          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+            onUploadSuccess(downloadURL);
+            setStatus('idle');
+          });
+        }
+      );
+
+    } catch (error) {
+      console.error("Image compression failed:", error);
+      setStatus('idle');
+    }
+  };
+  
+  const getButtonText = () => {
+    if (status === 'compressing') return 'Compressing...';
+    if (status === 'uploading') return `Uploading... ${Math.round(uploadProgress)}%`;
+    return 'Choose Image';
   };
 
   return (
@@ -51,11 +73,11 @@ const FirebaseImageUploader: React.FC<{
       <div className="flex items-center gap-4">
         {currentImageUrl && <img src={currentImageUrl} className="w-24 h-16 object-cover rounded-lg border" alt="Preview"/>}
         <div className="flex-grow">
-          <button onClick={() => fileInputRef.current?.click()} className="cursor-pointer bg-stone-200 px-4 py-2 rounded text-sm font-bold inline-flex items-center gap-2 hover:bg-stone-300" disabled={isUploading}>
-            <Upload size={14} /> {isUploading ? `Uploading... ${Math.round(uploadProgress)}%` : 'Choose Image'}
+          <button onClick={() => fileInputRef.current?.click()} className="cursor-pointer bg-stone-200 px-4 py-2 rounded text-sm font-bold inline-flex items-center gap-2 hover:bg-stone-300" disabled={status !== 'idle'}>
+            <Upload size={14} /> {getButtonText()}
           </button>
           <input type="file" ref={fileInputRef} onChange={handleFileChange} className="hidden" accept="image/*" />
-          {isUploading && (
+          {status === 'uploading' && (
             <div className="w-full bg-stone-200 rounded-full h-1.5 mt-2">
               <div className="bg-safari-leaf h-1.5 rounded-full" style={{ width: `${uploadProgress}%` }}></div>
             </div>

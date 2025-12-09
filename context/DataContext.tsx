@@ -105,13 +105,13 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
             pageContent: mergedPageContent
           });
         } else {
-           console.log("No data in Firestore. Seeding with default content.");
-           const defaultData = { companyInfo: COMPANY_INFO, tours: TOURS, pageContent: DEFAULT_PAGE_CONTENT };
-           await setDoc(docRef, defaultData);
-           setData(defaultData);
+           console.log("No live data in Firestore. Using default content. Admin can seed data from the settings panel.");
+           // If no document exists, the app will use the default state initialized above.
+           // No write operation is performed for an unauthenticated user, which fixes the permissions error.
         }
       } catch (e) {
         console.error("Failed to load public cloud data, falling back to defaults.", e);
+        // Fallback to default state is implicit as useState is initialized with it.
       } finally {
         setLoading(false);
       }
