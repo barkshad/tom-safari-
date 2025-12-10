@@ -1,6 +1,6 @@
 import { Tour, PageContent, CurrencyConfig, CompanyInfo, BlogPost } from './types';
 
-export const DATA_VERSION = "5.1"; // Force refresh for new tour data
+export const DATA_VERSION = "5.2"; // Force refresh for new tour data
 
 export const COMPANY_INFO: CompanyInfo = {
   name: "Tom Safaris",
@@ -287,6 +287,86 @@ export const TOURS: Tour[] = [
       { day: 2, title: "Culture & Spice", description: "Spice farm tour, Swahili cooking lesson, Stone Town exploration, and Forodhani market." },
       { day: 3, title: "Adventure (Safari Blue)", description: "Traditional dhow sailing, sandbank relaxation, and BBQ seafood lunch." },
       { day: 4, title: "Nature & Icons", description: "Jozani Forest (Red Colobus monkeys), Mtende Beach, and The Rock Restaurant photo stop." }
+    ]
+  },
+
+  // --- 7. Wasini Island Dolphin Safari (NEW) ---
+  {
+    id: "wasini-island-dolphin-safari",
+    name: "Wasini Island & Kisite Marine Park",
+    durationDays: 1,
+    priceUsd: 135,
+    priceGbp: 110,
+    image: "https://images.unsplash.com/photo-1582967788606-a171f1080ca8?q=80&w=2070", // Dolphin
+    category: 'Coastal',
+    group: 'Excursion',
+    featured: false,
+    shortDescription: "Swim with dolphins and snorkel in Kenya's premier marine park.",
+    fullDescription: "A full day dhow cruise to Kisite Mpunguti Marine Park. Spot dolphins, snorkel in crystal clear waters teeming with marine life, and enjoy a fresh Swahili seafood lunch on Wasini Island.",
+    highlights: ["Dolphin Spotting", "Snorkeling", "Seafood Lunch", "Traditional Dhow"],
+    keywords: "wasini island, kisite mpunguti, dolphin safari kenya, snorkeling mombasa",
+    itinerary: [
+      { day: 1, title: "Full Day Marine Adventure", description: "Pick up from hotel. Drive to Shimoni. Dhow cruise to marine park for snorkeling. Lunch on Wasini Island. Visit coral garden/slave caves. Return to hotel." }
+    ]
+  },
+
+  // --- 8. Mombasa City Tour (NEW) ---
+  {
+    id: "mombasa-city-haller-park",
+    name: "Mombasa City & Haller Park",
+    durationDays: 1,
+    priceUsd: 120,
+    priceGbp: 95,
+    image: "https://images.unsplash.com/photo-1590439471364-192aa70c0b53?q=80&w=1974", // Fort Jesus vibes
+    category: 'Day Trip',
+    group: 'Excursion',
+    featured: false,
+    shortDescription: "Explore the history of Fort Jesus and the nature of Haller Park.",
+    fullDescription: "Dive into the rich history of Mombasa with a guided tour of Fort Jesus and Old Town, followed by an afternoon of nature at Haller Park, a reclaimed quarry that is now a thriving ecosystem.",
+    highlights: ["Fort Jesus (UNESCO)", "Old Town Walking Tour", "Elephant Tusks", "Haller Park Giraffes"],
+    keywords: "mombasa city tour, fort jesus, haller park, mombasa day trip",
+    itinerary: [
+      { day: 1, title: "History & Nature", description: "Morning visit to Fort Jesus and Old Town. Lunch in town. Afternoon at Haller Park to feed giraffes. Return to hotel." }
+    ]
+  },
+
+  // --- 9. Malindi & Watamu Explorer (NEW) ---
+  {
+    id: "malindi-watamu-explorer",
+    name: "Malindi & Watamu Explorer",
+    durationDays: 1,
+    priceUsd: 150,
+    priceGbp: 120,
+    image: "https://images.unsplash.com/photo-1534701960699-363132d73315?q=80&w=2000", // Coastal/Watamu
+    category: 'Coastal',
+    group: 'Excursion',
+    featured: false,
+    shortDescription: "Discover Gede Ruins and the beautiful Watamu coastline.",
+    fullDescription: "A journey north to the ancient Swahili settlement of Gede Ruins, nestled in a forest. Visit the Vasco da Gama pillar in Malindi and relax on the pristine white sands of Watamu.",
+    highlights: ["Gede Ruins", "Vasco da Gama Pillar", "Falconry of Kenya", "Watamu Marine Park"],
+    keywords: "malindi tour, watamu beach, gede ruins, coastal excursion",
+    itinerary: [
+      { day: 1, title: "North Coast Adventure", description: "Drive north to Kilifi and Watamu. Guided tour of Gede Ruins. Pizza lunch in Malindi. Visit Vasco da Gama pillar. Return." }
+    ]
+  },
+
+  // --- 10. Tsavo East Day Trip (NEW) ---
+  {
+    id: "tsavo-east-day-trip",
+    name: "Tsavo East Day Safari",
+    durationDays: 1,
+    priceUsd: 200,
+    priceGbp: 160,
+    image: "https://images.unsplash.com/photo-1550160248-038c3666f2a8?q=80&w=2070", // Red Elephants
+    category: 'Safari',
+    group: 'Road Safari', 
+    featured: false,
+    shortDescription: "A quick but intense dose of wildlife from the coast.",
+    fullDescription: "Perfect for those short on time. Enter Tsavo East through Bachuma gate and spend the day searching for the famous Red Elephants, lions, and buffaloes before returning to the coast for dinner.",
+    highlights: ["Red Elephants", "Aruba Dam", "Big Five", "Savannah Landscapes"],
+    keywords: "tsavo east day trip, mombasa safari, red elephants",
+    itinerary: [
+      { day: 1, title: "Bush to Beach", description: "05:00 Pickup. Drive to Tsavo East. Morning game drive. Lunch at Voi Safari Lodge. Afternoon game drive. Return to coast by 18:00." }
     ]
   }
 ];
