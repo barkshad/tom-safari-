@@ -80,6 +80,26 @@ const CloudinaryImageUploader: React.FC<{
   );
 };
 
+const SaveStatus = ({ saving }: { saving: boolean }) => (
+  <div className="flex items-center gap-2 text-sm font-bold transition-colors">
+    {saving ? (
+      <>
+        <motion.div
+          animate={{ rotate: 360 }}
+          transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
+          className="w-4 h-4 border-2 border-stone-400 border-t-safari-gold rounded-full"
+        />
+        <span className="text-stone-500">Saving...</span>
+      </>
+    ) : (
+      <>
+        <CheckCircle size={16} className="text-green-500" />
+        <span className="text-stone-500">All changes saved</span>
+      </>
+    )}
+  </div>
+);
+
 const Admin: React.FC = () => {
   const { 
     isAuthenticated, login, logout, companyInfo, updateCompanyInfo,
@@ -173,41 +193,7 @@ const Admin: React.FC = () => {
     { id: 'settings', label: 'System', icon: Settings }
   ];
 
-  const SaveStatus = () => (
-    <div className="flex items-center gap-2 text-sm font-bold transition-colors">
-      {saving ? (
-        <>
-          <motion.div
-            animate={{ rotate: 360 }}
-            transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
-            className="w-4 h-4 border-2 border-stone-400 border-t-safari-gold rounded-full"
-          />
-          <span className="text-stone-500">Saving...</span>
-        </>
-      ) : (
-        <>
-          <CheckCircle size={16} className="text-green-500" />
-          <span className="text-stone-500">All changes saved</span>
-        </>
-      )}
-    </div>
-  );
-
-  const renderContent = () => {
-    switch(activeTab) {
-      case 'dashboard': return <DashboardContent />;
-      case 'global': return <GlobalSettings />;
-      case 'pages': return <PageEditor />;
-      case 'seo': return <SEOEditor />;
-      case 'tours': return <ToursManager />;
-      case 'inquiries': return <InquiriesManager />;
-      case 'settings': return <SystemSettings />;
-      case 'blog': return <BlogManager />;
-      default: return null;
-    }
-  };
-
-  const DashboardContent = () => (
+  const renderDashboardContent = () => (
     <div className="space-y-6">
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
         <div className="glass-card p-6 rounded-2xl"><h3 className="text-4xl font-bold">{tours.length}</h3><p className="text-stone-500">Total Tours</p></div>
@@ -224,7 +210,7 @@ const Admin: React.FC = () => {
     </div>
   );
 
-  const GlobalSettings = () => (
+  const renderGlobalSettings = () => (
     <div className="space-y-6">
         <div className="glass-card p-6 md:p-8 rounded-3xl">
             <h3 className="text-2xl font-bold mb-6">Company Identity</h3>
@@ -275,7 +261,7 @@ const Admin: React.FC = () => {
     </div>
   );
 
-  const PageEditor = () => (
+  const renderPageEditor = () => (
     <div className="space-y-4">
         <div className="glass-card rounded-2xl overflow-hidden">
             <button onClick={() => setExpandedSection(expandedSection === 'home' ? null : 'home')} className="w-full p-6 flex justify-between items-center bg-stone-100/50 hover:bg-stone-200/50 font-bold text-lg text-left">
@@ -335,7 +321,7 @@ const Admin: React.FC = () => {
     </div>
   );
 
-  const SEOEditor = () => (
+  const renderSEOEditor = () => (
       <div className="glass-card p-6 md:p-8 rounded-3xl space-y-8">
           <h3 className="text-2xl font-bold">SEO & Metadata</h3>
           {['home', 'about', 'tours', 'contact', 'blog'].map((page) => (
@@ -350,7 +336,7 @@ const Admin: React.FC = () => {
       </div>
   );
   
-  const BlogManager = () => (
+  const renderBlogManager = () => (
     <div>
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-bold">Manage Safari Stories</h2>
@@ -377,7 +363,7 @@ const Admin: React.FC = () => {
     </div>
   );
 
-  const ToursManager = () => (
+  const renderToursManager = () => (
     <div>
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
             <h2 className="text-2xl font-bold">Manage Tours</h2>
@@ -404,7 +390,7 @@ const Admin: React.FC = () => {
     </div>
   );
   
-  const InquiriesManager = () => (
+  const renderInquiriesManager = () => (
       <div>
         <h2 className="text-2xl font-bold mb-6">Inquiries</h2>
         <div className="glass-card rounded-2xl overflow-x-auto">
@@ -425,7 +411,7 @@ const Admin: React.FC = () => {
       </div>
   );
 
-  const SystemSettings = () => (
+  const renderSystemSettings = () => (
     <div className="space-y-6">
         <div className="glass-card p-6 md:p-8 rounded-3xl">
             <h3 className="text-2xl font-bold mb-6">Security</h3>
@@ -444,6 +430,20 @@ const Admin: React.FC = () => {
   );
   
   const activeTabName = sidebarItems.find(item => item.id === activeTab)?.label || 'Dashboard';
+  
+  const renderContent = () => {
+    switch(activeTab) {
+      case 'dashboard': return renderDashboardContent();
+      case 'global': return renderGlobalSettings();
+      case 'pages': return renderPageEditor();
+      case 'seo': return renderSEOEditor();
+      case 'tours': return renderToursManager();
+      case 'inquiries': return renderInquiriesManager();
+      case 'settings': return renderSystemSettings();
+      case 'blog': return renderBlogManager();
+      default: return null;
+    }
+  };
   
   const handleTourChange = (field: string, value: any) => {
     if (!editingTour) return;
@@ -510,7 +510,7 @@ const Admin: React.FC = () => {
         <main className="flex-1 p-4 sm:p-6 md:p-8 overflow-y-auto">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-3">
               <h1 className="text-3xl font-bold text-stone-800">{activeTabName}</h1>
-              <SaveStatus />
+              <SaveStatus saving={saving} />
           </div>
           {renderContent()}
         </main>
