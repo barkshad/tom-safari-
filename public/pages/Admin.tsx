@@ -1,10 +1,16 @@
 // @ts-nocheck
 import React, { useState, useRef, useEffect } from 'react';
 import { useData } from '../../context/DataContext';
-import { Lock, Save, LogOut, Globe, Layout, Settings, Home, List, MessageSquare, Image as ImageIcon, ChevronRight, CheckCircle, AlertCircle, Plus, Edit2, Trash2, X, ChevronDown, ChevronUp, MapPin, Calendar, FileText, BarChart, SlidersHorizontal, Search, Upload, Menu, Zap } from 'lucide-react';
+import { Lock, Save, LogOut, Globe, Layout, Settings, Home, List, MessageSquare, Image as ImageIcon, ChevronRight, CheckCircle, AlertCircle, Plus, Edit2, Trash2, X, ChevronDown, ChevronUp, MapPin, Calendar, FileText, BarChart, SlidersHorizontal, Search, Upload, Menu, Zap, PlayCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Tour, ItineraryDay, BlogPost } from '../../types';
 import PageTransition from '../../components/PageTransition';
+
+// Helper to check for video
+const isVideo = (url: string | undefined) => {
+  if (!url) return false;
+  return url.match(/\.(mp4|webm|ogg|mov)$/i) || url.includes('/video/upload/');
+};
 
 // Reverting to Cloudinary Widget for reliable CDN uploads
 const CloudinaryImageUploader: React.FC<{
@@ -24,8 +30,9 @@ const CloudinaryImageUploader: React.FC<{
         folder: 'tomsafaris',
         sources: ['local', 'url', 'camera'],
         multiple: false,
-        clientAllowedFormats: ['image'],
-        maxImageFileSize: 5000000, // 5MB
+        clientAllowedFormats: ['image', 'video'],
+        maxImageFileSize: 10000000, // 10MB
+        maxVideoFileSize: 50000000, // 50MB
         styles: {
             palette: {
                 window: "#FFFFFF",
@@ -64,7 +71,11 @@ const CloudinaryImageUploader: React.FC<{
       <label className="text-xs font-bold uppercase text-stone-400 block mb-2">{label}</label>
       <div className="flex items-center gap-4">
         {currentImageUrl ? (
-          <img src={currentImageUrl} className="w-24 h-16 object-cover rounded-lg border border-stone-200" alt="Preview"/>
+          isVideo(currentImageUrl) ? (
+            <video src={currentImageUrl} className="w-24 h-16 object-cover rounded-lg border border-stone-200" autoPlay muted loop />
+          ) : (
+            <img src={currentImageUrl} className="w-24 h-16 object-cover rounded-lg border border-stone-200" alt="Preview"/>
+          )
         ) : (
             <div className="w-24 h-16 bg-stone-100 rounded-lg border border-stone-200 flex items-center justify-center text-stone-400">
                 <ImageIcon size={20} />
@@ -72,7 +83,7 @@ const CloudinaryImageUploader: React.FC<{
         )}
         <div className="flex-grow">
           <button onClick={openWidget} className="cursor-pointer bg-safari-emerald/10 text-safari-emerald border border-safari-emerald/20 px-4 py-2 rounded-lg text-sm font-bold inline-flex items-center gap-2 hover:bg-safari-emerald hover:text-white transition-all">
-            <Upload size={14} /> Upload to CDN
+            <Upload size={14} /> Upload Media
           </button>
         </div>
       </div>
@@ -113,6 +124,7 @@ const Admin: React.FC = () => {
   } = useData();
 
   const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('admin@tomsafaris.co.ke');
   const [error, setError] = useState('');
   const [activeTab, setActiveTab] = useState<'dashboard' | 'global' | 'pages' | 'seo' | 'tours' | 'inquiries' | 'settings' | 'blog'>('dashboard');
   const [editingTour, setEditingTour] = useState<Tour | null>(null);
@@ -143,7 +155,7 @@ const Admin: React.FC = () => {
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    login(password || '12345').then(success => { 
+    login(email, password || '12345').then(success => { 
       if (success) setError('');
       else setError('Invalid credentials. Please try again.');
     });
@@ -173,6 +185,7 @@ const Admin: React.FC = () => {
             <h2 className="text-3xl font-bold mb-2">CMS Login</h2>
             <p className="text-stone-400 mb-6">Tom Safaris & Adventures</p>
             <form onSubmit={handleLogin} className="space-y-4">
+                <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Admin Email" className="w-full p-4 rounded-xl text-center font-bold text-stone-900" />
                 <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password (default: 12345)" className="w-full p-4 rounded-xl text-center font-bold text-stone-900" />
                 {error && <p className="text-red-400 text-sm">{error}</p>}
                 <button type="submit" className="w-full py-4 bg-safari-emerald text-stone-900 font-bold rounded-xl">Unlock</button>
@@ -204,7 +217,7 @@ const Admin: React.FC = () => {
       <div className="glass-card p-8 rounded-2xl border-2 border-safari-emerald/30">
         <h3 className="text-2xl font-bold text-safari-emerald mb-2 flex items-center gap-2"><CheckCircle size={24}/> CDN Connected & Live</h3>
         <p className="text-stone-600 mb-6 max-w-3xl">
-          Your image uploads are now powered by Cloudinary CDN for maximum speed. All content changes are saved to the cloud database in real-time.
+          Your media uploads are powered by Cloudinary CDN. You can now upload **Videos** and **Images** directly.
         </p>
       </div>
     </div>
@@ -274,7 +287,7 @@ const Admin: React.FC = () => {
                         <input className="w-full p-3 border rounded" placeholder="Hero Title" value={pageContent.home.hero.title} onChange={(e) => updatePageContent({...pageContent, home: {...pageContent.home, hero: {...pageContent.home.hero, title: e.target.value}}})} />
                         <textarea className="w-full p-3 border rounded" placeholder="Hero Subtitle" value={pageContent.home.hero.subtitle} onChange={(e) => updatePageContent({...pageContent, home: {...pageContent.home, hero: {...pageContent.home.hero, subtitle: e.target.value}}})} />
                         <CloudinaryImageUploader
-                            label="Hero Image"
+                            label="Hero Background Media (Image or Video)"
                             currentImageUrl={pageContent.home.hero.image}
                             onUploadSuccess={(url) => {
                                 const newContent = JSON.parse(JSON.stringify(pageContent));
@@ -573,13 +586,17 @@ const Admin: React.FC = () => {
                                 </div>
                                 <div className="p-6 rounded-2xl bg-white border">
                                      <h3 className="font-bold text-lg mb-4">Media</h3>
-                                     <CloudinaryImageUploader label="Cover Image" currentImageUrl={editingTour.image} onUploadSuccess={(url) => handleTourChange('image', url)} />
+                                     <CloudinaryImageUploader label="Cover Media (Image/Video)" currentImageUrl={editingTour.image} onUploadSuccess={(url) => handleTourChange('image', url)} />
                                      <div>
-                                         <h4 className="font-bold text-sm mb-2">Image Gallery</h4>
+                                         <h4 className="font-bold text-sm mb-2">Image/Video Gallery</h4>
                                          <div className="grid grid-cols-3 gap-2 mb-2">
                                              {(editingTour.gallery || []).map((img, index) => (
                                                  <div key={index} className="relative group">
-                                                     <img src={img} className="w-full h-20 object-cover rounded" />
+                                                     {isVideo(img) ? (
+                                                       <video src={img} className="w-full h-20 object-cover rounded" />
+                                                     ) : (
+                                                       <img src={img} className="w-full h-20 object-cover rounded" />
+                                                     )}
                                                      <button onClick={() => removeGalleryImage(index)} className="absolute top-1 right-1 p-1 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity"><Trash2 size={12}/></button>
                                                  </div>
                                              ))}

@@ -30,6 +30,8 @@ const TourDetails: React.FC = () => {
     if(tour.image) return [tour.image];
     return []; 
   };
+  
+  const isVideo = (url: string) => url?.match(/\.(mp4|webm|ogg|mov)$/i) || url?.includes('/video/upload/');
 
   const galleryImages = getDisplayImages();
 
@@ -46,7 +48,11 @@ const TourDetails: React.FC = () => {
               transition={{ duration: 1.5, ease: "easeOut" }}
               className="w-full h-full"
           >
-              <img src={tour.image} alt={tour.name} className="w-full h-full object-cover" loading="eager"/>
+              {isVideo(tour.image) ? (
+                 <video src={tour.image} className="w-full h-full object-cover" autoPlay muted loop playsInline />
+              ) : (
+                 <img src={tour.image} alt={tour.name} className="w-full h-full object-cover" loading="eager"/>
+              )}
           </motion.div>
           <div className="absolute inset-0 bg-gradient-to-t from-safari-sand via-transparent to-black/30"></div>
           
@@ -124,7 +130,11 @@ const TourDetails: React.FC = () => {
                               whileHover={{ scale: 1.05 }}
                               className="aspect-square rounded-2xl overflow-hidden shadow-md"
                           >
-                              <img src={img} className="w-full h-full object-cover" loading="lazy" />
+                              {isVideo(img) ? (
+                                  <video src={img} className="w-full h-full object-cover" controls />
+                              ) : (
+                                  <img src={img} className="w-full h-full object-cover" loading="lazy" />
+                              )}
                           </motion.div>
                       ))}
                   </div>

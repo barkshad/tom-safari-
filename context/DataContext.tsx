@@ -1,5 +1,3 @@
-
-
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { Tour, CompanyInfo, Inquiry, InquiryForm, PageContent, CurrencyConfig, BlogPost } from '../types';
 import { TOURS, COMPANY_INFO, DEFAULT_PAGE_CONTENT, SUPPORTED_CURRENCIES, SAMPLE_BLOG_POSTS } from '../constants';
@@ -30,7 +28,7 @@ interface DataContextType {
   addInquiry: (form: InquiryForm) => void;
   updatePageContent: (content: PageContent) => void;
   isAuthenticated: boolean;
-  login: (password: string) => Promise<boolean>;
+  login: (email: string, password: string) => Promise<boolean>;
   changePassword: (newPassword: string) => Promise<boolean>;
   logout: () => void;
   resetData: () => void;
@@ -285,8 +283,7 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
-  const login = async (password: string) => {
-    const email = 'admin@tomsafaris.co.ke';
+  const login = async (email: string, password: string) => {
     try {
       await signInWithEmailAndPassword(auth, email, password);
       return true;

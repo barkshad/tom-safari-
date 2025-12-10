@@ -1,7 +1,7 @@
 // @ts-nocheck
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Star } from 'lucide-react';
+import { ArrowRight, Star, PlayCircle } from 'lucide-react';
 import { Tour } from '../types';
 import { useData } from '../context/DataContext';
 import { motion } from 'framer-motion';
@@ -9,6 +9,8 @@ import { motion } from 'framer-motion';
 interface TourCardProps {
   tour: Tour;
 }
+
+const isVideo = (url: string) => url?.match(/\.(mp4|webm|ogg|mov)$/i) || url?.includes('/video/upload/');
 
 const TourCard: React.FC<TourCardProps> = ({ tour }) => {
   const { convertPrice, selectedCurrency } = useData();
@@ -28,14 +30,19 @@ const TourCard: React.FC<TourCardProps> = ({ tour }) => {
         transition={{ type: "spring", stiffness: 200, damping: 30 }}
         className="glass-card h-full rounded-3xl overflow-hidden flex flex-col relative z-10 border-2 border-transparent group-hover:border-safari-emerald/30"
       >
-        <div className="relative h-64 overflow-hidden">
-          <motion.img 
-            whileHover={{ scale: 1.1 }}
-            transition={{ duration: 0.5, ease: "easeOut" }}
-            src={tour.image} 
-            alt={tour.name} 
-            className="w-full h-full object-cover"
-          />
+        <div className="relative h-64 overflow-hidden bg-stone-900">
+          {isVideo(tour.image) ? (
+             <video src={tour.image} className="w-full h-full object-cover" muted loop playsInline onMouseOver={event => event.target.play()} onMouseOut={event => event.target.pause()} />
+          ) : (
+             <motion.img 
+                whileHover={{ scale: 1.1 }}
+                transition={{ duration: 0.5, ease: "easeOut" }}
+                src={tour.image} 
+                alt={tour.name} 
+                className="w-full h-full object-cover"
+              />
+          )}
+          
           <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-black/50 to-transparent"></div>
           <div className="absolute top-4 right-4 flex flex-col items-end gap-2">
              {tour.featured && (
@@ -47,6 +54,11 @@ const TourCard: React.FC<TourCardProps> = ({ tour }) => {
                    <Star className="w-3 h-3 text-safari-gold fill-safari-gold" />
                    <span className="text-[10px] font-bold uppercase tracking-wider">Featured</span>
                 </motion.div>
+             )}
+             {isVideo(tour.image) && (
+                <div className="glass-dark p-1.5 rounded-full text-white">
+                    <PlayCircle size={14} />
+                </div>
              )}
           </div>
         </div>

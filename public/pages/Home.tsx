@@ -63,7 +63,8 @@ const Home: React.FC = () => {
       },
     },
   };
-
+  
+  const isVideo = (url) => url?.match(/\.(mp4|webm|ogg|mov)$/i) || url?.includes('/video/upload/');
 
   return (
     <PageTransition>
@@ -85,7 +86,18 @@ const Home: React.FC = () => {
             style={{ x: parallaxBgX, y: parallaxBgY, scale: scaleImg, transition: { type: 'spring', stiffness: 100, damping: 20 } }} 
             className="absolute inset-[-5%]"
           >
-            <img src={pageContent.home.hero.image} alt="Safari Hero" className="w-full h-full object-cover" loading="eager" />
+            {isVideo(pageContent.home.hero.image) ? (
+                <video 
+                    src={pageContent.home.hero.image} 
+                    className="w-full h-full object-cover" 
+                    autoPlay 
+                    loop 
+                    muted 
+                    playsInline 
+                />
+            ) : (
+                <img src={pageContent.home.hero.image} alt="Safari Hero" className="w-full h-full object-cover" loading="eager" />
+            )}
           </motion.div>
 
           <div className="absolute inset-0 bg-gradient-to-t from-stone-900/80 via-stone-900/20 to-transparent"></div>
