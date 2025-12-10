@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useData } from '../../context/DataContext';
-import { ArrowLeft, CloudSun, CheckCircle } from 'lucide-react';
+import { ArrowLeft, CloudSun, CheckCircle, XCircle } from 'lucide-react';
 import { Tour } from '../../types';
 import { motion } from 'framer-motion';
 import PageTransition from '../../components/PageTransition';
@@ -97,6 +97,7 @@ const TourDetails: React.FC = () => {
                 </div>
               </motion.div>
 
+              {/* ITINERARY SECTION */}
               {tour.itinerary && tour.itinerary.length > 0 && (
                 <motion.div 
                     className="glass-card p-6 sm:p-8 md:p-12 rounded-[2rem]"
@@ -121,6 +122,36 @@ const TourDetails: React.FC = () => {
                   </div>
                 </motion.div>
               )}
+
+              {/* INCLUSIONS & EXCLUSIONS */}
+              <motion.div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="glass-card p-8 rounded-[2rem] bg-green-50/50 border-green-100">
+                    <h3 className="text-xl font-bold text-stone-800 mb-4 flex items-center gap-2">
+                        <CheckCircle className="text-safari-emerald" size={20}/> Included
+                    </h3>
+                    <ul className="space-y-2 text-sm text-stone-600">
+                        <li className="flex items-start gap-2"><span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-safari-emerald flex-shrink-0"></span> Private 4×4 Land Cruiser (pop-up roof)</li>
+                        <li className="flex items-start gap-2"><span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-safari-emerald flex-shrink-0"></span> Professional English-speaking guide</li>
+                        <li className="flex items-start gap-2"><span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-safari-emerald flex-shrink-0"></span> Full board accommodation</li>
+                        <li className="flex items-start gap-2"><span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-safari-emerald flex-shrink-0"></span> All park & conservation fees</li>
+                        <li className="flex items-start gap-2"><span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-safari-emerald flex-shrink-0"></span> Ngorongoro crater descent fees</li>
+                        <li className="flex items-start gap-2"><span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-safari-emerald flex-shrink-0"></span> Bottled drinking water</li>
+                        <li className="flex items-start gap-2"><span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-safari-emerald flex-shrink-0"></span> Airport transfers</li>
+                    </ul>
+                </div>
+                <div className="glass-card p-8 rounded-[2rem] bg-red-50/50 border-red-100">
+                    <h3 className="text-xl font-bold text-stone-800 mb-4 flex items-center gap-2">
+                        <XCircle className="text-red-400" size={20}/> Excluded
+                    </h3>
+                    <ul className="space-y-2 text-sm text-stone-600">
+                        <li className="flex items-start gap-2"><span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-red-300 flex-shrink-0"></span> International flights</li>
+                        <li className="flex items-start gap-2"><span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-red-300 flex-shrink-0"></span> Visas & travel insurance</li>
+                        <li className="flex items-start gap-2"><span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-red-300 flex-shrink-0"></span> Tips & personal expenses</li>
+                        <li className="flex items-start gap-2"><span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-red-300 flex-shrink-0"></span> Alcoholic drinks</li>
+                        <li className="flex items-start gap-2"><span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-red-300 flex-shrink-0"></span> Optional balloon safaris</li>
+                    </ul>
+                </div>
+              </motion.div>
               
                {galleryImages.length > 0 && (
                  <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
