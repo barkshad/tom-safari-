@@ -18,20 +18,20 @@ interface DataContextType {
   blogPosts: BlogPost[];
   inquiries: Inquiry[];
   pageContent: PageContent;
-  updateCompanyInfo: (info: CompanyInfo) => void;
-  updateTour: (updatedTour: Tour) => void;
-  addTour: (newTour: Tour) => void;
-  deleteTour: (id: string) => void;
-  addBlogPost: (post: BlogPost) => void;
-  updateBlogPost: (post: BlogPost) => void;
-  deleteBlogPost: (id: string) => void;
-  addInquiry: (form: InquiryForm) => void;
-  updatePageContent: (content: PageContent) => void;
+  updateCompanyInfo: (info: CompanyInfo) => Promise<void>;
+  updateTour: (updatedTour: Tour) => Promise<void>;
+  addTour: (newTour: Tour) => Promise<void>;
+  deleteTour: (id: string) => Promise<void>;
+  addBlogPost: (post: BlogPost) => Promise<void>;
+  updateBlogPost: (post: BlogPost) => Promise<void>;
+  deleteBlogPost: (id: string) => Promise<void>;
+  addInquiry: (form: InquiryForm) => Promise<void>;
+  updatePageContent: (content: PageContent) => Promise<void>;
   isAuthenticated: boolean;
   login: (email: string, password: string) => Promise<boolean>;
   changePassword: (newPassword: string) => Promise<boolean>;
   logout: () => void;
-  resetData: () => void;
+  resetData: () => Promise<void>;
   loading: boolean;
   saving: boolean;
   
@@ -198,74 +198,58 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return { amount, formatted, symbol: selectedCurrency.symbol };
   };
 
-  const updateCompanyInfo = (info: CompanyInfo) => {
-    setData(prevData => {
-        const newData = { ...prevData, companyInfo: info };
-        saveData(newData);
-        return newData;
-    });
+  const updateCompanyInfo = async (info: CompanyInfo) => {
+    const newData = { ...data, companyInfo: info };
+    await saveData(newData);
+    setData(newData);
   };
 
-  const updateTour = (updatedTour: Tour) => {
-    setData(prevData => {
-        const newTours = prevData.tours.map(t => t.id === updatedTour.id ? updatedTour : t);
-        const newData = { ...prevData, tours: newTours };
-        saveData(newData);
-        return newData;
-    });
+  const updateTour = async (updatedTour: Tour) => {
+    const newTours = data.tours.map(t => t.id === updatedTour.id ? updatedTour : t);
+    const newData = { ...data, tours: newTours };
+    await saveData(newData);
+    setData(newData);
   };
   
-  const addTour = (newTour: Tour) => {
-    setData(prevData => {
-        const newTours = [...prevData.tours, newTour];
-        const newData = { ...prevData, tours: newTours };
-        saveData(newData);
-        return newData;
-    });
+  const addTour = async (newTour: Tour) => {
+    const newTours = [...data.tours, newTour];
+    const newData = { ...data, tours: newTours };
+    await saveData(newData);
+    setData(newData);
   };
   
-  const deleteTour = (id: string) => {
-    setData(prevData => {
-        const newTours = prevData.tours.filter(t => t.id !== id);
-        const newData = { ...prevData, tours: newTours };
-        saveData(newData);
-        return newData;
-    });
+  const deleteTour = async (id: string) => {
+    const newTours = data.tours.filter(t => t.id !== id);
+    const newData = { ...data, tours: newTours };
+    await saveData(newData);
+    setData(newData);
   };
   
-  const updatePageContent = (content: PageContent) => {
-    setData(prevData => {
-        const newData = { ...prevData, pageContent: content };
-        saveData(newData);
-        return newData;
-    });
+  const updatePageContent = async (content: PageContent) => {
+    const newData = { ...data, pageContent: content };
+    await saveData(newData);
+    setData(newData);
   };
 
-  const addBlogPost = (post: BlogPost) => {
-    setData(prevData => {
-        const newPosts = [...prevData.blogPosts, post];
-        const newData = { ...prevData, blogPosts: newPosts };
-        saveData(newData);
-        return newData;
-    });
+  const addBlogPost = async (post: BlogPost) => {
+    const newPosts = [...data.blogPosts, post];
+    const newData = { ...data, blogPosts: newPosts };
+    await saveData(newData);
+    setData(newData);
   };
 
-  const updateBlogPost = (post: BlogPost) => {
-    setData(prevData => {
-        const newPosts = prevData.blogPosts.map(p => p.id === post.id ? post : p);
-        const newData = { ...prevData, blogPosts: newPosts };
-        saveData(newData);
-        return newData;
-    });
+  const updateBlogPost = async (post: BlogPost) => {
+    const newPosts = data.blogPosts.map(p => p.id === post.id ? post : p);
+    const newData = { ...data, blogPosts: newPosts };
+    await saveData(newData);
+    setData(newData);
   };
 
-  const deleteBlogPost = (id: string) => {
-    setData(prevData => {
-        const newPosts = prevData.blogPosts.filter(p => p.id !== id);
-        const newData = { ...prevData, blogPosts: newPosts };
-        saveData(newData);
-        return newData;
-    });
+  const deleteBlogPost = async (id: string) => {
+    const newPosts = data.blogPosts.filter(p => p.id !== id);
+    const newData = { ...data, blogPosts: newPosts };
+    await saveData(newData);
+    setData(newData);
   };
 
   const addInquiry = async (form: InquiryForm) => {
@@ -314,8 +298,8 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
           pageContent: DEFAULT_PAGE_CONTENT,
           blogPosts: SAMPLE_BLOG_POSTS
       };
-      setData(defaultData);
       await saveData(defaultData);
+      setData(defaultData);
       window.location.reload();
     }
   };

@@ -1,6 +1,6 @@
 import { Tour, PageContent, CurrencyConfig, CompanyInfo, BlogPost } from './types';
 
-export const DATA_VERSION = "5.2"; // Force refresh for new tour data
+export const DATA_VERSION = "5.4"; // Force refresh for new tour data
 
 export const COMPANY_INFO: CompanyInfo = {
   name: "Tom Safaris",
@@ -148,7 +148,7 @@ export const DEFAULT_PAGE_CONTENT: PageContent = {
 };
 
 export const TOURS: Tour[] = [
-  // --- 1. 3-Day Wildlife & Cultural Safari ---
+  // --- 1. 3-Day Wildlife & Cultural Safari (UPDATED) ---
   {
     id: "3-day-wildlife-cultural-safari",
     name: "3-Day Wildlife & Cultural Safari",
@@ -160,17 +160,17 @@ export const TOURS: Tour[] = [
     group: 'Road Safari', 
     featured: true,
     shortDescription: "A powerful short safari covering Serengeti, Ngorongoro, and Maasai culture.",
-    fullDescription: "A short but powerful safari covering Tanzania’s most iconic wildlife regions, combined with authentic Maasai cultural interaction. Ideal for short visits with maximum wildlife exposure.",
+    fullDescription: "A short but powerful safari covering Tanzania’s most iconic wildlife regions, combined with authentic Maasai cultural interaction. Ideal for short visits with maximum wildlife exposure. (Alternative Route: Tarangire → Ngorongoro Crater → Lake Manyara).",
     highlights: ["Serengeti Plains", "Ngorongoro Crater", "Maasai Boma Visit", "Big Five"],
     keywords: "serengeti safari, ngorongoro crater, maasai culture, tanzania short safari",
     itinerary: [
-      { day: 1, title: "Arusha → Serengeti National Park", description: "Morning departure from Arusha. Scenic drive into the Serengeti with an afternoon game drive. Overnight in a luxury tented camp." },
-      { day: 2, title: "Serengeti → Ngorongoro Highlands", description: "Sunrise game drive in the Serengeti. Transfer toward Ngorongoro with crater views. Overnight in the highlands." },
-      { day: 3, title: "Ngorongoro Crater → Arusha", description: "Early descent into the crater for a Big Five game drive. Return to Arusha or airport drop-off in the afternoon." }
+      { day: 1, title: "Arusha → Serengeti National Park", description: "Morning departure from Arusha for a scenic drive into the Serengeti, followed by an afternoon game drive. Overnight in a luxury tented camp." },
+      { day: 2, title: "Serengeti → Ngorongoro Highlands", description: "Enjoy a sunrise game drive in the Serengeti. Later, transfer toward Ngorongoro with stunning crater views and overnight in the highlands." },
+      { day: 3, title: "Ngorongoro Crater → Arusha", description: "An early descent into the crater for a Big Five game drive. Return to Arusha or receive an airport drop-off in the afternoon." }
     ]
   },
 
-  // --- 2. Ndutu Calving Season Safari ---
+  // --- 2. Ndutu Calving Season Safari (UPDATED) ---
   {
     id: "ndutu-calving-season-safari",
     name: "Ndutu Calving Season Safari",
@@ -186,15 +186,15 @@ export const TOURS: Tour[] = [
     highlights: ["Wildebeest Calving", "Predator Action", "Ndutu Plains", "Tarangire Elephants"],
     keywords: "ndutu safari, calving season, great migration, cheetah tanzania",
     itinerary: [
-      { day: 1, title: "Arusha → Tarangire National Park", description: "Drive to Tarangire to see elephant herds and ancient baobab scenery." },
-      { day: 2, title: "Karatu → Ndutu Plains", description: "Scenic drive to the Ndutu calving grounds." },
-      { day: 3, title: "Full Day Ndutu", description: "Full day dedicated to the calving action, predator sightings, and photography." },
-      { day: 4, title: "Southern → Central Serengeti", description: "Drive into the vast plains of the Central Serengeti for big cats." },
-      { day: 5, title: "Serengeti → Ngorongoro Crater → Arusha", description: "Final game drive, descent into Ngorongoro Crater, then return to Arusha." }
+      { day: 1, title: "Arusha → Tarangire National Park", description: "Drive to Tarangire to see its famous large elephant herds and ancient baobab scenery." },
+      { day: 2, title: "Karatu → Ndutu Plains", description: "A scenic drive takes you to the Ndutu calving grounds in the Southern Serengeti ecosystem." },
+      { day: 3, title: "Full Day Ndutu", description: "A full day dedicated to the calving action, predator sightings, and incredible photographic opportunities." },
+      { day: 4, title: "Southern → Central Serengeti", description: "Drive into the vast plains of the Central Serengeti, a region famous for its big cat populations." },
+      { day: 5, title: "Serengeti → Ngorongoro Crater → Arusha", description: "Enjoy a final game drive before descending into the Ngorongoro Crater, then return to Arusha." }
     ]
   },
 
-  // --- 3. Family Safari - Tiny Trackers ---
+  // --- 3. Family Safari - Tiny Trackers (UPDATED) ---
   {
     id: "family-safari-tiny-trackers",
     name: "Family Safari – 'Tanzania Tiny Trackers'",
@@ -206,21 +206,21 @@ export const TOURS: Tour[] = [
     group: 'Road Safari', 
     featured: false,
     shortDescription: "An educational adventure for families with Junior Ranger activities.",
-    fullDescription: "An educational and fun safari designed for families (Ages 5-15), blending wildlife, learning, and adventure. Includes Junior Ranger lessons and wildlife workbooks.",
-    highlights: ["Junior Ranger Badges", "Wildlife Tracking", "Family Friendly Lodges", "Big Five"],
+    fullDescription: "An educational and fun safari designed for families (Ages 5-15), blending wildlife, learning, and adventure. Includes Junior Ranger lessons, wildlife workbooks, and nature games.",
+    highlights: ["Junior Ranger Activities", "Wildlife Workbooks & Badges", "Nature Games", "Tracking Skills"],
     keywords: "family safari tanzania, kids safari, junior ranger program",
     itinerary: [
-      { day: 1, title: "Arrival & Relaxation", description: "Arrival in Arusha, briefing, and relaxation." },
+      { day: 1, title: "Arrival & Relaxation", description: "Arrival in Arusha, briefing, and relaxation at a family-friendly lodge." },
       { day: 2, title: "Tarangire (Junior Ranger Lesson)", description: "Safari in Tarangire with a focus on elephant behavior and baobab trees." },
-      { day: 3, title: "Serengeti (Tracks & Signs)", description: "Learn to identify animal tracks and signs in the Serengeti." },
-      { day: 4, title: "Full Serengeti (Wildlife Detective)", description: "A full day of wildlife detective games and spotting big cats." },
-      { day: 5, title: "Ngorongoro Crater", description: "Descent into the crater for a classic Big Five safari." },
-      { day: 6, title: "Lake Manyara + Graduation", description: "Tree-climbing lions in Manyara followed by a Junior Ranger graduation ceremony." },
-      { day: 7, title: "Departure", description: "Transfer to the airport for departure." }
+      { day: 3, title: "Serengeti (Tracks & Signs Workshop)", description: "Learn to identify animal tracks and signs in the Serengeti." },
+      { day: 4, title: "Full Serengeti (Wildlife Detective Day)", description: "A full day of wildlife detective games and spotting big cats." },
+      { day: 5, title: "Ngorongoro Crater Safari", description: "Descent into the crater for a classic Big Five safari experience." },
+      { day: 6, title: "Lake Manyara + Graduation Ceremony", description: "Search for tree-climbing lions in Manyara, followed by a Junior Ranger graduation ceremony." },
+      { day: 7, title: "Departure", description: "Enjoy a final breakfast before your transfer to the airport for departure." }
     ]
   },
 
-  // --- 4. Great Migration River Crossing ---
+  // --- 4. Great Migration River Crossing (UPDATED) ---
   {
     id: "great-migration-river-crossing",
     name: "Great Migration River Crossing Safari",
@@ -232,22 +232,22 @@ export const TOURS: Tour[] = [
     group: 'Road Safari', 
     featured: true,
     shortDescription: "Witness the dramatic Mara River crossings in Northern Serengeti (July-Oct).",
-    fullDescription: "Witness Africa’s most dramatic wildlife spectacle. From Tarangire’s elephant herds to heart-pounding Mara River crossings, this safari delivers raw action and luxury. Best Season: July – October.",
-    highlights: ["Mara River Crossings", "Kogatende", "Big Cat Strongholds", "Luxury Camps"],
+    fullDescription: "Witness Africa’s most dramatic wildlife spectacle. From Tarangire’s elephant herds and ancient baobabs to heart-pounding Mara River crossings, this safari delivers raw action, world-class wildlife, and comfort.",
+    highlights: ["Mara River crossings (wildebeest vs crocodiles)", "Giant elephants & baobabs", "Big cat strongholds", "Sunrise descent into Ngorongoro Crater", "Luxury lodges & tented camps", "Private 4×4 with expert guide"],
     keywords: "river crossing safari, mara river, kogatende, migration safari",
     itinerary: [
-      { day: 1, title: "Kilimanjaro Airport → Arusha", description: "Arrival, briefing, and overnight in Arusha." },
-      { day: 2, title: "Arusha → Tarangire", description: "Full game drive in Tarangire National Park." },
-      { day: 3, title: "Tarangire → Central Serengeti", description: "Transfer to Central Serengeti with game viewing en-route." },
-      { day: 4, title: "Central Serengeti → Northern Serengeti", description: "Drive to Kogatende (North) to position for the crossing." },
-      { day: 5, title: "Full Day Mara River", description: "Full day waiting for and witnessing the dramatic river crossings." },
-      { day: 6, title: "Northern → Central Serengeti", description: "Game drive back towards the central plains." },
-      { day: 7, title: "Ngorongoro Crater Safari", description: "Sunrise descent into the crater for a full game drive." },
-      { day: 8, title: "Lake Manyara → Departure", description: "Short drive to Lake Manyara (optional view) and transfer to airport." }
+      { day: 1, title: "Kilimanjaro Airport → Arusha", description: "Arrival, briefing, and overnight stay to prepare for your adventure." },
+      { day: 2, title: "Arusha → Tarangire", description: "A full game drive in Tarangire National Park, home to giant elephants." },
+      { day: 3, title: "Tarangire → Central Serengeti", description: "Transfer to the heart of the Serengeti with game viewing en-route." },
+      { day: 4, title: "Central Serengeti → Northern Serengeti (Kogatende)", description: "Drive to the Kogatende area, the prime location for river crossings." },
+      { day: 5, title: "Full Day Mara River Crossings", description: "Spend a full day witnessing the dramatic river crossings." },
+      { day: 6, title: "Northern → Central Serengeti", description: "Game drive back towards the central plains, a big cat stronghold." },
+      { day: 7, title: "Ngorongoro Crater Safari", description: "An early morning descent into the Ngorongoro Crater for a Big Five safari." },
+      { day: 8, title: "Lake Manyara → Departure", description: "A short drive through the Lake Manyara area before your departure." }
     ]
   },
 
-  // --- 5. Zanzibar -> Mikumi Fly-in ---
+  // --- 5. Zanzibar -> Mikumi Fly-in (UPDATED) ---
   {
     id: "zanzibar-mikumi-fly-in",
     name: "Zanzibar → Mikumi Fly-In Safari",
@@ -259,15 +259,15 @@ export const TOURS: Tour[] = [
     group: 'Flight Safari', 
     featured: false,
     shortDescription: "A perfect one-day safari experience from Zanzibar.",
-    fullDescription: "Perfect for beach guests who want a real African safari experience in one day. Includes return flights from Zanzibar.",
+    fullDescription: "Perfect for beach guests who want a real African safari experience in one day. This fly-in package maximizes your time for wildlife viewing in Mikumi National Park.",
     highlights: ["Scenic Flight", "Mikumi National Park", "Picnic Lunch", "Full Game Drive"],
     keywords: "mikumi day trip, zanzibar safari, fly in safari",
     itinerary: [
-      { day: 1, title: "Full Day Fly-In Safari", description: "05:00 Pickup. 07:45 Arrive Mikumi for game drive. 12:30 Picnic lunch. 15:30 Flight back to Zanzibar." }
+      { day: 1, title: "Full Day Fly-In Safari", description: "05:00: Hotel pickup in Zanzibar. 07:45: Arrive at Mikumi airstrip and begin your game drive. 12:30: Enjoy a scenic picnic lunch in the park. 15:30: Board your flight back to Zanzibar." }
     ]
   },
 
-  // --- 6. Zanzibar Leisure Package ---
+  // --- 6. Zanzibar Leisure Package (UPDATED) ---
   {
     id: "4-day-zanzibar-leisure",
     name: "4-Day Zanzibar Leisure Package",
@@ -283,14 +283,14 @@ export const TOURS: Tour[] = [
     highlights: ["Mnemba Snorkeling", "Spice Farm", "Stone Town", "The Rock Restaurant"],
     keywords: "zanzibar package, stone town tour, safari blue, zanzibar holiday",
     itinerary: [
-      { day: 1, title: "Ocean & Sunset", description: "Mnemba Island snorkeling, dolphin swimming, and a sunset dhow cruise." },
-      { day: 2, title: "Culture & Spice", description: "Spice farm tour, Swahili cooking lesson, Stone Town exploration, and Forodhani market." },
-      { day: 3, title: "Adventure (Safari Blue)", description: "Traditional dhow sailing, sandbank relaxation, and BBQ seafood lunch." },
-      { day: 4, title: "Nature & Icons", description: "Jozani Forest (Red Colobus monkeys), Mtende Beach, and The Rock Restaurant photo stop." }
+      { day: 1, title: "Ocean & Sunset", description: "Snorkel at Mnemba Island, swim with dolphins and turtles, enjoy a seafood lunch, and end with a sunset dhow cruise." },
+      { day: 2, title: "Culture & Spice", description: "Take a guided tour of a local spice farm, participate in a Swahili cooking lesson, explore historic Stone Town, and visit the Forodhani night market." },
+      { day: 3, title: "Adventure (Safari Blue)", description: "Embark on a traditional dhow sailing trip, relax on a pristine sandbank, enjoy a BBQ seafood lunch, and swim in a mangrove lagoon." },
+      { day: 4, title: "Nature & Icons", description: "Visit Jozani Forest to see the rare Red Colobus monkeys, relax at Mtende Beach, and get a photo at the iconic The Rock Restaurant." }
     ]
   },
 
-  // --- 7. Wasini Island Dolphin Safari (NEW) ---
+  // --- 7. Wasini Island Dolphin Safari ---
   {
     id: "wasini-island-dolphin-safari",
     name: "Wasini Island & Kisite Marine Park",
@@ -310,7 +310,7 @@ export const TOURS: Tour[] = [
     ]
   },
 
-  // --- 8. Mombasa City Tour (NEW) ---
+  // --- 8. Mombasa City Tour ---
   {
     id: "mombasa-city-haller-park",
     name: "Mombasa City & Haller Park",
@@ -330,7 +330,7 @@ export const TOURS: Tour[] = [
     ]
   },
 
-  // --- 9. Malindi & Watamu Explorer (NEW) ---
+  // --- 9. Malindi & Watamu Explorer ---
   {
     id: "malindi-watamu-explorer",
     name: "Malindi & Watamu Explorer",
@@ -350,7 +350,7 @@ export const TOURS: Tour[] = [
     ]
   },
 
-  // --- 10. Tsavo East Day Trip (NEW) ---
+  // --- 10. Tsavo East Day Trip ---
   {
     id: "tsavo-east-day-trip",
     name: "Tsavo East Day Safari",
