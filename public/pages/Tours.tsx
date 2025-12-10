@@ -20,6 +20,7 @@ const Tours: React.FC = () => {
   const road1Night = roadSafaris.filter(t => t.durationDays === 2);
   const road2Night = roadSafaris.filter(t => t.durationDays === 3);
   const road3Night = roadSafaris.filter(t => t.durationDays === 4);
+  const road4Night = roadSafaris.filter(t => t.durationDays === 5);
   const road5Night = roadSafaris.filter(t => t.durationDays === 6);
   const road6Night = roadSafaris.filter(t => t.durationDays >= 7);
 
@@ -56,7 +57,7 @@ const Tours: React.FC = () => {
                 >
                   <Sun className="w-8 h-8 text-safari-sunset" />
                 </motion.div>
-                <h2 className="text-3xl font-serif font-bold text-stone-900">Excursions from Mombasa</h2>
+                <h2 className="text-3xl font-serif font-bold text-stone-900">Excursions & Leisure Packages</h2>
             </div>
             
             <div className="overflow-x-auto">
@@ -75,7 +76,9 @@ const Tours: React.FC = () => {
                             return (
                                 <tr key={tour.id} className="hover:bg-white/60 transition-colors">
                                     <td className="p-6 font-bold text-stone-800">{tour.name}</td>
-                                    <td className="p-6 text-stone-600 font-medium hidden sm:table-cell">{tour.durationDays === 0.5 ? '½ Day' : '1 Day'}</td>
+                                    <td className="p-6 text-stone-600 font-medium hidden sm:table-cell">
+                                        {tour.durationDays === 0.5 ? '½ Day' : `${tour.durationDays} Day${tour.durationDays > 1 ? 's' : ''}`}
+                                    </td>
                                     <td className="p-6 font-bold text-safari-leaf">
                                         {tour.priceUsd > 0 ? price.formatted : 'Inquire'}
                                     </td>
@@ -104,6 +107,7 @@ const Tours: React.FC = () => {
                 <SafariSection title="1-Night Road Safaris" tours={road1Night} />
                 <SafariSection title="2-Night Road Safaris" tours={road2Night} />
                 <SafariSection title="3-Night Road Safaris" tours={road3Night} />
+                <SafariSection title="4-Night Road Safaris" tours={road4Night} />
                 <SafariSection title="5-Night Extended Safaris" tours={road5Night} />
                 <SafariSection title="6-Night Extended Safaris & Treks" tours={[...road6Night, ...treks]} />
             </div>
