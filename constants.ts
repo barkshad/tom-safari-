@@ -7,7 +7,7 @@ export const DATA_VERSION = "5.0"; // Force production futuristic style refresh
 export const COMPANY_INFO: CompanyInfo = {
   name: "Tom Safaris & Adventures – Cruse Experiences",
   ownerName: "Tom 'Cruse' Madeda",
-  email: "info@tomsafaris.co.ke",
+  email: "admin@tomsafaris.co.ke",
   phone: "+254 792 150 200",
   location: "Titanic Plaza, Kilifi, Kenya",
   slogan: "Extraordinary journeys, hosted by 'Cruse'. Mission possible.",
