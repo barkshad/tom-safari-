@@ -431,11 +431,27 @@ const ToursManagerView = ({ showToast }: { showToast: Function }) => {
                                          <StableInput type="number" label="Duration (Days)" value={editingTour.durationDays} onChange={v => handleTourChange('durationDays', v)} />
                                          <div className="col-span-2">
                                             <label className="text-xs font-bold uppercase text-stone-400 block mb-2">Category</label>
-                                            <select value={editingTour.category} onChange={e => handleTourChange('category', e.target.value)} className="w-full p-3 border rounded-lg bg-white"><option>Safari</option><option>Coastal</option><option>Trek</option><option>Day Trip</option></select>
+                                            <select value={editingTour.category} onChange={e => handleTourChange('category', e.target.value)} className="w-full p-3 border rounded-lg bg-white">
+                                                <option value="Safari">Safari</option>
+                                                <option value="Coastal">Coastal</option>
+                                                <option value="Trek">Trek</option>
+                                                <option value="Day Trip">Day Trip</option>
+                                                <option value="Honeymoon">Honeymoon</option>
+                                                <option value="Weekend">Weekend</option>
+                                                <option value="International">International</option>
+                                            </select>
                                          </div>
                                          <div className="col-span-2">
                                             <label className="text-xs font-bold uppercase text-stone-400 block mb-2">Group</label>
-                                            <select value={editingTour.group} onChange={e => handleTourChange('group', e.target.value)} className="w-full p-3 border rounded-lg bg-white"><option>Excursion</option><option>Road Safari</option><option>Flight Safari</option><option>Trek</option><option>Custom</option></select>
+                                            <select value={editingTour.group} onChange={e => handleTourChange('group', e.target.value)} className="w-full p-3 border rounded-lg bg-white">
+                                                <option value="Excursion">Excursion</option>
+                                                <option value="Road Safari">Road Safari</option>
+                                                <option value="Flight Safari">Flight Safari</option>
+                                                <option value="Trek">Trek</option>
+                                                <option value="Custom">Custom</option>
+                                                <option value="Getaway">Getaway</option>
+                                                <option value="International">International</option>
+                                            </select>
                                          </div>
                                      </div>
                                 </div>

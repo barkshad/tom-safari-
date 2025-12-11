@@ -24,8 +24,8 @@ export interface Tour {
   highlights: string[];
   itinerary: ItineraryDay[];
   featured: boolean;
-  category: 'Safari' | 'Coastal' | 'Trek' | 'Day Trip';
-  group: 'Excursion' | 'Road Safari' | 'Flight Safari' | 'Trek' | 'Custom';
+  category: 'Safari' | 'Coastal' | 'Trek' | 'Day Trip' | 'Honeymoon' | 'International' | 'Weekend';
+  group: 'Excursion' | 'Road Safari' | 'Flight Safari' | 'Trek' | 'Custom' | 'International' | 'Getaway';
   keywords?: string;
 }
 
