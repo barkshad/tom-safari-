@@ -21,6 +21,7 @@ const StableInput = ({ value, onChange, placeholder, type = "text", label, class
   const [localValue, setLocalValue] = useState(value || "");
   
   // Sync with prop only if it changes externally and is not what we currently have
+  // (This avoids race conditions where typing is faster than the prop update)
   useEffect(() => { 
       if (value !== localValue) {
           setLocalValue(value || ""); 
@@ -28,7 +29,6 @@ const StableInput = ({ value, onChange, placeholder, type = "text", label, class
   }, [value]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    e.stopPropagation(); // Stop event bubbling
     const rawVal = e.target.value;
     const newVal = type === 'number' ? (rawVal === '' ? '' : parseFloat(rawVal)) : rawVal;
     setLocalValue(newVal);
@@ -59,7 +59,6 @@ const StableTextArea = ({ value, onChange, placeholder, rows = 4, label, classNa
   }, [value]);
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    e.stopPropagation(); // Stop event bubbling
     setLocalValue(e.target.value);
     onChange(e.target.value);
   };
@@ -403,7 +402,7 @@ const SEOEditorView = ({ showToast }: any) => {
 };
 
 const SystemSettingsView = ({ showToast }: { showToast: (msg: string, type?: 'success' | 'error') => void }) => {
-    const { changePassword, resetData, syncLocalTours, localToursCount, tours } = useData();
+    const { changePassword, resetData } = useData();
     const [newPassword, setNewPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
 
@@ -433,23 +432,6 @@ const SystemSettingsView = ({ showToast }: { showToast: (msg: string, type?: 'su
                     <button onClick={handlePasswordChange} className="bg-admin-blue text-white px-6 py-3 rounded-lg font-bold hover:bg-opacity-90 w-full">Change Password</button>
                 </div>
             </div>
-            
-            <div className="bg-white p-6 md:p-8 rounded-2xl shadow-sm border-2 border-blue-500/20">
-                <h3 className="text-xl font-bold mb-2 text-blue-700">Content Synchronization</h3>
-                <p className="text-sm text-stone-500 mb-4">
-                    <strong>Local Code:</strong> {localToursCount} Tours defined in code.<br/>
-                    <strong>Live Database:</strong> {tours.length} Tours currently live.
-                </p>
-                {localToursCount !== tours.length && (
-                    <div className="mb-4 bg-blue-50 text-blue-800 p-3 rounded-lg text-sm border border-blue-100">
-                        Mismatch detected! Your code has newer content than your database. Sync now to fix the "18 vs 7" tour count issue.
-                    </div>
-                )}
-                <button onClick={syncLocalTours} className="bg-blue-600 hover:bg-blue-800 text-white px-6 py-3 rounded-lg font-bold flex items-center gap-2 transition-all">
-                    <Globe size={18}/> Push Local Tours to Live Database
-                </button>
-            </div>
-
             <div className="bg-white p-6 md:p-8 rounded-2xl shadow-sm border-2 border-red-50">
                 <h3 className="text-xl font-bold mb-2 text-red-600">Danger Zone</h3>
                 <p className="text-sm text-stone-500 mb-6">This action is irreversible and will delete all your custom content from the cloud, resetting to factory defaults.</p>
@@ -463,8 +445,6 @@ const ToursManagerView = ({ showToast }: { showToast: (msg: string, type?: 'succ
     const { tours, addTour, updateTour, deleteTour } = useData();
     const [editingTour, setEditingTour] = useState<Tour | null>(null);
 
-    // Using StableInput completely bypasses the re-rendering focus issue
-    // because the input state is maintained locally inside StableInput
     const handleTourChange = (field: string, value: any) => {
         if (!editingTour) return;
         setEditingTour(prev => ({...prev, [field]: value}));
