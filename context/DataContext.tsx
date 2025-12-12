@@ -4,7 +4,7 @@ import { Tour, CompanyInfo, Inquiry, InquiryForm, PageContent, CurrencyConfig, B
 import { TOURS, COMPANY_INFO, DEFAULT_PAGE_CONTENT, SUPPORTED_CURRENCIES, SAMPLE_BLOG_POSTS } from '../constants';
 import { db, auth } from '../firebase';
 import { doc, getDoc, setDoc, collection, addDoc, getDocs, query, orderBy, enableNetwork, disableNetwork } from 'firebase/firestore';
-import { onAuthStateChanged, signInWithEmailAndPassword, signOut, updatePassword, User } from 'firebase/auth';
+import { onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, updatePassword, User } from 'firebase/auth';
 
 interface CloudData {
   companyInfo: CompanyInfo;
@@ -162,8 +162,6 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const fetchRates = async () => {
     if (typeof navigator !== 'undefined' && !navigator.onLine) {
-        // Silently fail or log debug message if offline
-        console.debug("Offline: Skipping currency rate fetch.");
         return;
     }
     try {
@@ -175,8 +173,8 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
         localStorage.setItem('currencyRates', JSON.stringify({ rates: data.rates, timestamp: Date.now() }));
       }
     } catch (error) { 
-        // Use warn instead of error to avoid cluttering console for non-critical failures
-        console.warn("Currency rates could not be fetched (using cached/default):", error); 
+        // Silent failure for rates
+        console.debug("Currency rates could not be fetched:", error); 
     }
   };
 
@@ -290,8 +288,25 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
     try {
       await signInWithEmailAndPassword(auth, email, password);
       return true;
-    } catch (error) {
+    } catch (error: any) {
       console.error("Firebase login failed:", error);
+      
+      // Auto-create admin user if it doesn't exist (Quick-fix for demo/fresh project)
+      if (
+        (error.code === 'auth/user-not-found' || error.code === 'auth/invalid-credential') && 
+        email === 'admin@tomsafaris.co.ke'
+      ) {
+        try {
+           console.log("Attempting to create admin user...");
+           await createUserWithEmailAndPassword(auth, email, password);
+           return true;
+        } catch (createError: any) {
+           console.error("Failed to create admin user:", createError);
+           // If creation failed (e.g. 'auth/email-already-in-use' but login failed?), return false
+           return false;
+        }
+      }
+      
       return false;
     }
   };

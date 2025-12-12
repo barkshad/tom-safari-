@@ -1,7 +1,7 @@
 // @ts-nocheck
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { useData } from '../context/DataContext';
-import { Lock, Save, LogOut, Globe, Layout, Settings, Home, List, MessageSquare, Image as ImageIcon, CheckCircle, AlertCircle, Plus, Edit2, Trash2, X, ChevronDown, ChevronUp, BarChart, SlidersHorizontal, Upload, Menu, Users, FileText, Compass } from 'lucide-react';
+import { Lock, Save, LogOut, Globe, Layout, Settings, Home, List, MessageSquare, Image as ImageIcon, ChevronRight, CheckCircle, AlertCircle, Plus, Edit2, Trash2, X, ChevronDown, ChevronUp, MapPin, Calendar, FileText, BarChart, SlidersHorizontal, Search, Upload, Menu, Zap, PlayCircle, Compass, Users } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Tour, ItineraryDay, BlogPost, CompanyInfo, PageContent, TestimonialItem } from '../types';
 import PageTransition from '../components/PageTransition';
