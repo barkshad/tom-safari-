@@ -1,7 +1,7 @@
 
 import { Tour, PageContent, CurrencyConfig, CompanyInfo, BlogPost } from './types';
 
-export const DATA_VERSION = "6.2"; // Reverted to Core 7
+export const DATA_VERSION = "6.3"; // Kilifi Itineraries Update
 
 export const COMPANY_INFO: CompanyInfo = {
   name: "Tom Safaris",
@@ -83,7 +83,7 @@ export const DEFAULT_PAGE_CONTENT: PageContent = {
     },
     welcome: {
       title: "Welcome to Tom Safaris",
-      content: "We are a premier safari and adventure tour operator dedicated to organizing wildlife, coastal, and adventure tours across Kenya and Tanzania."
+      content: "We are a premier safari and adventure tour operator based in Kilifi, dedicated to organizing wildlife, coastal, and adventure tours across Kenya."
     },
     features: [
       { id: 'f1', title: "Safety First", text: "Expert guides and well-maintained vehicles for a secure journey." },
@@ -161,13 +161,13 @@ export const TOURS: Tour[] = [
     category: "Safari",
     group: "Road Safari",
     featured: true,
-    shortDescription: "Join our Masai Mara tours to witness iconic Big Five wildlife and breathtaking plains.",
-    fullDescription: "Experience the heart of Africa’s wildlife with our Maasai Mara Classic Safari. Home to the legendary Big Five and dramatic wildebeest migrations, the Mara offers some of the world’s most breathtaking game viewing.",
-    highlights: ["Big Five Game Drives", "Wildebeest Migration (Seasonal)", "Maasai Village Visit", "Scenic Savannah Plains"],
+    shortDescription: "Join our Masai Mara tours starting from Kilifi to witness iconic Big Five wildlife.",
+    fullDescription: "Experience the heart of Africa’s wildlife with our Maasai Mara Classic Safari, departing conveniently from Kilifi. We handle all logistics, transferring you from the coast to the legendary Mara plains, home to the Big Five and the dramatic wildebeest migration.",
+    highlights: ["Kilifi Departure", "Big Five Game Drives", "Wildebeest Migration (Seasonal)", "Maasai Village Visit"],
     itinerary: [
-      { day: 1, title: "Nairobi to Maasai Mara", description: "Depart Nairobi and drive through the Great Rift Valley. Arrive in time for lunch and an afternoon game drive." },
+      { day: 1, title: "Kilifi to Maasai Mara", description: "Early morning pickup from your Kilifi hotel/resort. Transfer to Malindi/Mombasa airport for a flight to the Mara (or SGR to Nairobi connecting to Mara). Arrive in time for lunch and an afternoon game drive." },
       { day: 2, title: "Full Day in Maasai Mara", description: "Spend the entire day exploring the vast plains, tracking lions, cheetahs, and elephants with a picnic lunch in the wild." },
-      { day: 3, title: "Morning Game Drive & Return", description: "A final sunrise game drive before breakfast, followed by a scenic drive back to Nairobi." }
+      { day: 3, title: "Mara to Kilifi", description: "A final sunrise game drive before breakfast. Transfer to airstrip for your return flight to the coast, followed by a transfer back to your Kilifi residence." }
     ],
     inclusions: DEFAULT_INCLUSIONS,
     exclusions: [...DEFAULT_EXCLUSIONS, "Optional balloon safaris"]
@@ -182,13 +182,13 @@ export const TOURS: Tour[] = [
     category: "Safari",
     group: "Road Safari",
     featured: true,
-    shortDescription: "Explore Amboseli National Park — view majestic elephant herds and stunning Mount Kilimanjaro backdrops.",
-    fullDescription: "Discover the majestic Amboseli National Park with Tom Safaris, where vast plains and towering views of Mount Kilimanjaro create a stunning backdrop for wildlife photography.",
-    highlights: ["Mt. Kilimanjaro Views", "Large Elephant Herds", "Observation Hill", "Bird Watching"],
+    shortDescription: "Depart Kilifi for Amboseli National Park — majestic elephants and Mt. Kilimanjaro.",
+    fullDescription: "Discover the majestic Amboseli National Park with Tom Safaris. Departing from Kilifi, this road safari takes you through the scenic coastal hinterland to the foot of Mount Kilimanjaro.",
+    highlights: ["Kilifi Departure", "Mt. Kilimanjaro Views", "Large Elephant Herds", "Observation Hill"],
     itinerary: [
-      { day: 1, title: "Nairobi to Amboseli", description: "Drive south to Amboseli. Check-in and enjoy an evening game drive with Kilimanjaro in the background." },
-      { day: 2, title: "Full Day Amboseli", description: "Full day game drive. Visit the swamp grounds where elephants bathe and hike Observation Hill." },
-      { day: 3, title: "Amboseli to Nairobi", description: "Morning game drive to catch the predators before returning to Nairobi." }
+      { day: 1, title: "Kilifi to Amboseli", description: "05:00 AM pickup from Kilifi. Drive along the Mombasa-Nairobi highway, entering Amboseli around midday. Lunch at the lodge followed by an afternoon game drive." },
+      { day: 2, title: "Full Day Amboseli", description: "Full day game drive. Visit the swamp grounds where elephants bathe and hike Observation Hill for panoramic views of Kilimanjaro." },
+      { day: 3, title: "Amboseli to Kilifi", description: "Morning game drive to catch the predators. Depart after breakfast for the return drive to Kilifi, arriving in the evening." }
     ],
     inclusions: DEFAULT_INCLUSIONS,
     exclusions: DEFAULT_EXCLUSIONS
@@ -203,13 +203,13 @@ export const TOURS: Tour[] = [
     category: 'Safari',
     group: 'Excursion', 
     featured: false,
-    shortDescription: "A quick but intense dose of wildlife from the coast.",
-    fullDescription: "Perfect for those short on time. Enter Tsavo East through Bachuma gate and spend the day searching for the famous Red Elephants, lions, and buffaloes before returning to the coast for dinner.",
-    highlights: ["Red Elephants", "Aruba Dam", "Big Five", "Savannah Landscapes"],
+    shortDescription: "A quick but intense dose of wildlife starting and ending in Kilifi.",
+    fullDescription: "Perfect for those in Kilifi short on time. Enter Tsavo East through Bachuma gate and spend the day searching for the famous Red Elephants, lions, and buffaloes before returning to Kilifi for dinner.",
+    highlights: ["Kilifi Pickup/Drop-off", "Red Elephants", "Aruba Dam", "Big Five Potential"],
     itinerary: [
-      { day: 1, title: "Bush to Beach", description: "05:00 Pickup. Drive to Tsavo East. Morning game drive. Lunch at Voi Safari Lodge. Afternoon game drive. Return to coast." }
+      { day: 1, title: "Kilifi to Tsavo East & Back", description: "05:00 Pickup from Kilifi. Scenic drive to Bachuma Gate. Morning game drive. Lunch at Voi Safari Lodge. Afternoon game drive. Return to Kilifi by sunset." }
     ],
-    inclusions: ["Transport", "Park Fees", "Lunch", "Guide", "Water"],
+    inclusions: ["Transport from Kilifi", "Park Fees", "Lunch", "Guide", "Water"],
     exclusions: ["Tips", "Drinks"]
   },
   {
@@ -222,13 +222,13 @@ export const TOURS: Tour[] = [
     category: 'Coastal',
     group: 'Excursion',
     featured: false,
-    shortDescription: "Swim with dolphins and snorkel in Kenya's premier marine park.",
-    fullDescription: "A full day dhow cruise to Kisite Mpunguti Marine Park. Spot dolphins, snorkel in crystal clear waters teeming with marine life, and enjoy a fresh Swahili seafood lunch on Wasini Island.",
-    highlights: ["Dolphin Spotting", "Snorkeling", "Seafood Lunch", "Traditional Dhow"],
+    shortDescription: "Swim with dolphins and snorkel. Includes transfer from Kilifi.",
+    fullDescription: "A full day adventure. We pick you up from Kilifi and drive south to Shimoni. Board a traditional dhow to Kisite Mpunguti Marine Park for snorkeling and dolphin watching, followed by a seafood lunch.",
+    highlights: ["Kilifi Transfer", "Dolphin Spotting", "Snorkeling", "Seafood Lunch on Wasini"],
     itinerary: [
-      { day: 1, title: "Full Day Marine Adventure", description: "Pick up from hotel. Drive to Shimoni. Dhow cruise to marine park. Lunch on Wasini Island. Return." }
+      { day: 1, title: "Kilifi to Wasini Marine Park", description: "Early pickup from Kilifi. Drive via Mombasa Ferry to Shimoni. Dhow cruise, snorkeling, and dolphin spotting. Seafood lunch on Wasini Island. Return drive to Kilifi." }
     ],
-    inclusions: ["Transport", "Marine Park Fees", "Seafood Lunch", "Snorkeling Gear", "Guide"],
+    inclusions: ["Transport from Kilifi", "Marine Park Fees", "Seafood Lunch", "Snorkeling Gear", "Guide"],
     exclusions: ["Tips", "Drinks"]
   },
   {
@@ -241,13 +241,13 @@ export const TOURS: Tour[] = [
     category: "Coastal",
     group: "Excursion",
     featured: true,
-    shortDescription: "A magical day trip to Watamu Marine Park for dolphin watching and snorkeling.",
-    fullDescription: "Set sail on a traditional dhow or glass-bottom boat into the pristine waters of Watamu Marine National Park. Witness playful pods of dolphins in their natural habitat and explore vibrant coral gardens.",
-    highlights: ["Dolphin Spotting", "Snorkeling at Coral Gardens", "Watamu Marine Park", "Seafood Lunch"],
+    shortDescription: "A magical day trip from Kilifi to Watamu Marine Park.",
+    fullDescription: "Just a short drive from Kilifi, Watamu Marine Park offers pristine waters for dolphin watching. Set sail on a boat to witness playful pods and explore vibrant coral gardens.",
+    highlights: ["Short Drive from Kilifi", "Dolphin Spotting", "Snorkeling at Coral Gardens", "Seafood Lunch"],
     itinerary: [
-      { day: 1, title: "Watamu Marine Adventure", description: "Early morning pickup. Boat ride to spot dolphins. Snorkeling session. Seafood lunch. Return to hotel." }
+      { day: 1, title: "Kilifi to Watamu Adventure", description: "Morning pickup from Kilifi (approx 45 mins drive). Boat ride to spot dolphins. Snorkeling session. Seafood lunch at a Watamu beachfront restaurant. Return to Kilifi." }
     ],
-    inclusions: ["Transport", "Marine Park Fees", "Boat Ride", "Lunch", "Snorkeling Gear"],
+    inclusions: ["Transport from Kilifi", "Marine Park Fees", "Boat Ride", "Lunch", "Snorkeling Gear"],
     exclusions: ["Tips", "Drinks", "Personal items"]
   },
   {
@@ -260,13 +260,13 @@ export const TOURS: Tour[] = [
     category: "Safari",
     group: "Road Safari",
     featured: false,
-    shortDescription: "Experience rare northern species and rich culture with our Samburu Safari Tours.",
-    fullDescription: "Samburu National Reserve offers a unique safari experience with species found nowhere else in Kenya. From the striking Grevy’s zebra to the elegant gerenuk, our Samburu Safari Tours bring you face-to-face with rare and remarkable wildlife.",
-    highlights: ["Samburu Special 5", "Ewaso Nyiro River", "Unique Culture", "Leopard Sightings"],
+    shortDescription: "Experience rare northern species. Depart Kilifi via Flight.",
+    fullDescription: "Samburu National Reserve offers a unique experience with species found nowhere else. We arrange your flight from Malindi/Mombasa (departing Kilifi) to bring you face-to-face with the 'Samburu Special 5'.",
+    highlights: ["Depart Kilifi", "Samburu Special 5", "Ewaso Nyiro River", "Unique Culture"],
     itinerary: [
-      { day: 1, title: "Nairobi to Samburu", description: "Journey north across the equator. Afternoon game drive." },
-      { day: 2, title: "Discover the Special Five", description: "Full day seeking the Reticulated Giraffe, Grevy’s Zebra, Beisa Oryx, Somali Ostrich, and Gerenuk." },
-      { day: 3, title: "Return to Nairobi", description: "Final morning game viewing before the return journey." }
+      { day: 1, title: "Kilifi to Samburu", description: "Transfer from Kilifi to local airport. Flight to Samburu. Afternoon game drive seeking the Special Five." },
+      { day: 2, title: "Discover the Special Five", description: "Full day in Samburu. Look for the Reticulated Giraffe, Grevy’s Zebra, Beisa Oryx, Somali Ostrich, and Gerenuk." },
+      { day: 3, title: "Samburu to Kilifi", description: "Final morning game viewing. Return flight to the coast and transfer back to your Kilifi residence." }
     ],
     inclusions: DEFAULT_INCLUSIONS,
     exclusions: DEFAULT_EXCLUSIONS
@@ -281,16 +281,16 @@ export const TOURS: Tour[] = [
     category: "Coastal",
     group: "Excursion",
     featured: false,
-    shortDescription: "Explore the pristine coral beaches of Diani & Ukunda with Tom Safaris.",
-    fullDescription: "Experience paradise in Diani & Ukunda with Tom Safaris’ beach packages. Perfect for couples and families alike, these coastal retreats offer water sports, scenic sunsets, and world-class relaxation.",
-    highlights: ["White Sand Beaches", "Snorkeling at Kisite", "Seafood Dining", "Shimba Hills Day Trip"],
+    shortDescription: "A South Coast getaway starting from Kilifi.",
+    fullDescription: "Experience paradise in Diani & Ukunda. We organize your transfer from Kilifi to the South Coast for a relaxing beach retreat with water sports and scenic sunsets.",
+    highlights: ["Transfer from Kilifi", "White Sand Beaches", "Kisite Snorkeling", "Shimba Hills Day Trip"],
     itinerary: [
-      { day: 1, title: "Arrival in Paradise", description: "Arrive in Diani, check into your beachfront resort." },
+      { day: 1, title: "Kilifi to Diani", description: "Pickup from Kilifi. Drive via the Likoni Ferry to Diani Beach. Check into your beachfront resort." },
       { day: 2, title: "Marine Park Adventure", description: "Full day trip to Kisite Mpunguti for snorkeling and dolphin watching." },
       { day: 3, title: "Leisure & Culture", description: "Relax by the pool or visit the sacred Kaya Kinondo forest." },
-      { day: 4, title: "Departure", description: "Transfer to Ukunda airstrip or Mombasa airport." }
+      { day: 4, title: "Diani to Kilifi", description: "Morning relaxation. Transfer back to Kilifi." }
     ],
-    inclusions: ["Accommodation", "Airport Transfers", "Breakfast", "Marine Park Fees"],
+    inclusions: ["Accommodation", "Transfers from Kilifi", "Breakfast", "Marine Park Fees"],
     exclusions: ["Lunch & Dinner (unless specified)", "Personal water sports", ...DEFAULT_EXCLUSIONS]
   }
 ];
