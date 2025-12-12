@@ -14,14 +14,18 @@ const isVideo = (url: string | undefined) => {
 };
 
 // --- STABLE INPUT COMPONENTS ---
-// These components manage their own local state to prevent cursor jumping/focus loss
-// during parent re-renders.
+// Critical for fixing the "keyboard closes" bug. 
+// These components manage their own local state and only report changes up the chain.
 
-const StableInput = ({ value, onChange, placeholder, type = "text", label }: any) => {
+const StableInput = ({ value, onChange, placeholder, type = "text", label, className }: any) => {
   const [localValue, setLocalValue] = useState(value || "");
   
+  // Sync with prop only if it changes externally and is not what we currently have
+  // (This avoids race conditions where typing is faster than the prop update)
   useEffect(() => { 
-      setLocalValue(value || ""); 
+      if (value !== localValue) {
+          setLocalValue(value || ""); 
+      }
   }, [value]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -32,7 +36,7 @@ const StableInput = ({ value, onChange, placeholder, type = "text", label }: any
   };
 
   return (
-    <div className="w-full">
+    <div className={className || "w-full"}>
       {label && <label className="text-xs font-bold uppercase text-stone-500 block mb-2">{label}</label>}
       <input 
         type={type} 
@@ -45,11 +49,13 @@ const StableInput = ({ value, onChange, placeholder, type = "text", label }: any
   );
 };
 
-const StableTextArea = ({ value, onChange, placeholder, rows = 4, label }: any) => {
+const StableTextArea = ({ value, onChange, placeholder, rows = 4, label, className }: any) => {
   const [localValue, setLocalValue] = useState(value || "");
   
   useEffect(() => { 
-      setLocalValue(value || ""); 
+      if (value !== localValue) {
+          setLocalValue(value || ""); 
+      }
   }, [value]);
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -58,7 +64,7 @@ const StableTextArea = ({ value, onChange, placeholder, rows = 4, label }: any) 
   };
 
   return (
-    <div className="w-full">
+    <div className={className || "w-full"}>
       {label && <label className="text-xs font-bold uppercase text-stone-500 block mb-2">{label}</label>}
       <textarea 
         value={localValue} 
@@ -133,7 +139,7 @@ const Accordion = ({ title, children, nested = false }: any) => {
     );
 };
 
-// --- FEATURE EDITOR (Extracted to prevent remounting) ---
+// --- FEATURE EDITOR ---
 const FeatureEditor = ({ features, onUpdate }: { features: any[], onUpdate: (f: any[]) => void }) => {
     const handleFeatureChange = (index: number, field: string, value: any) => {
         const newFeatures = [...features];
@@ -189,6 +195,7 @@ const DashboardView = ({ setActiveTab }: any) => {
 
 const PageEditorView = ({ showToast }: any) => {
     const { pageContent, updatePageContent } = useData();
+    // LOCAL STATE BUFFER - This is the key fix. We edit this, not the global state directly.
     const [localContent, setLocalContent] = useState(pageContent);
     const [isSaving, setIsSaving] = useState(false);
 
@@ -356,7 +363,7 @@ const GlobalSettingsView = ({ showToast }: any) => {
                     <StableInput label="Facebook Link" value={localInfo.social.facebook} onChange={(v: string) => setLocalInfo({...localInfo, social: {...localInfo.social, facebook: v}})} />
                 </div>
             </div>
-            {hasChanges && <div className="bg-white rounded-xl shadow-lg border border-stone-200"><ActionButtons onSave={handleSave} onDiscard={() => setLocalInfo(companyInfo)} isSaving={isSaving} hasChanges={hasChanges} /></div>}
+            <ActionButtons onSave={handleSave} onDiscard={() => setLocalInfo(companyInfo)} isSaving={isSaving} hasChanges={hasChanges} />
         </div>
     );
 };
@@ -393,9 +400,6 @@ const SEOEditorView = ({ showToast }: any) => {
         </div>
     );
 };
-
-// ... InquiriesView, SystemSettingsView (unchanged mostly, but ensure they don't leak logic) ...
-// Included truncated versions or same versions if they were fine.
 
 const SystemSettingsView = ({ showToast }: { showToast: (msg: string, type?: 'success' | 'error') => void }) => {
     const { changePassword, resetData } = useData();
@@ -436,8 +440,6 @@ const SystemSettingsView = ({ showToast }: { showToast: (msg: string, type?: 'su
         </div>
     );
 };
-
-// ... ToursManagerView (Existing was okay but verify StableInput usage) ...
 
 const ToursManagerView = ({ showToast }: { showToast: (msg: string, type?: 'success' | 'error') => void }) => {
     const { tours, addTour, updateTour, deleteTour } = useData();
@@ -662,6 +664,69 @@ const BlogManagerView = ({ showToast }: { showToast: (msg: string, type?: 'succe
             )}
         </AnimatePresence>
       </div>
+    );
+};
+
+const InquiriesView = () => {
+    const { inquiries, updateInquiry } = useData();
+    const [filter, setFilter] = useState('All');
+
+    const filteredInquiries = inquiries.filter(i => filter === 'All' || i.status === filter);
+
+    return (
+        <div className="bg-white rounded-xl shadow-sm overflow-hidden">
+            <div className="p-4 border-b flex justify-between items-center bg-gray-50">
+                <h2 className="font-bold text-lg">Inquiries Inbox</h2>
+                <select value={filter} onChange={e => setFilter(e.target.value)} className="p-2 border rounded-lg text-sm">
+                    <option value="All">All Statuses</option>
+                    <option value="New">New</option>
+                    <option value="In Progress">In Progress</option>
+                    <option value="Closed">Closed</option>
+                </select>
+            </div>
+            <div className="overflow-x-auto">
+                <table className="w-full text-left">
+                    <thead className="bg-gray-100 text-xs uppercase text-gray-500">
+                        <tr>
+                            <th className="p-4">Date</th>
+                            <th className="p-4">Name</th>
+                            <th className="p-4">Tour</th>
+                            <th className="p-4">Contact</th>
+                            <th className="p-4">Message</th>
+                            <th className="p-4">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody className="divide-y text-sm">
+                        {filteredInquiries.map(inq => (
+                            <tr key={inq.id} className="hover:bg-gray-50">
+                                <td className="p-4 whitespace-nowrap text-gray-500">{new Date(inq.submittedAt).toLocaleDateString()}</td>
+                                <td className="p-4 font-bold">{inq.name}</td>
+                                <td className="p-4 text-admin-blue font-medium">{inq.tourName || 'General'}</td>
+                                <td className="p-4">
+                                    <div className="flex flex-col">
+                                        <span className="text-xs text-gray-500">{inq.email}</span>
+                                        <span className="text-xs">{inq.phone}</span>
+                                    </div>
+                                </td>
+                                <td className="p-4 max-w-xs truncate text-gray-600" title={inq.message}>{inq.message}</td>
+                                <td className="p-4">
+                                    <select 
+                                        value={inq.status} 
+                                        onChange={(e) => updateInquiry(inq.id, e.target.value)}
+                                        className={`p-1 rounded text-xs font-bold border-none outline-none cursor-pointer ${inq.status === 'New' ? 'bg-blue-100 text-blue-700' : inq.status === 'Closed' ? 'bg-gray-200 text-gray-600' : 'bg-yellow-100 text-yellow-700'}`}
+                                    >
+                                        <option value="New">New</option>
+                                        <option value="In Progress">Working</option>
+                                        <option value="Closed">Closed</option>
+                                    </select>
+                                </td>
+                            </tr>
+                        ))}
+                        {filteredInquiries.length === 0 && <tr><td colSpan={6} className="p-8 text-center text-gray-500">No inquiries found.</td></tr>}
+                    </tbody>
+                </table>
+            </div>
+        </div>
     );
 };
 
