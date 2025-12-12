@@ -21,7 +21,6 @@ const StableInput = ({ value, onChange, placeholder, type = "text", label, class
   const [localValue, setLocalValue] = useState(value || "");
   
   // Sync with prop only if it changes externally and is not what we currently have
-  // (This avoids race conditions where typing is faster than the prop update)
   useEffect(() => { 
       if (value !== localValue) {
           setLocalValue(value || ""); 
@@ -29,6 +28,7 @@ const StableInput = ({ value, onChange, placeholder, type = "text", label, class
   }, [value]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.stopPropagation(); // Stop event bubbling
     const rawVal = e.target.value;
     const newVal = type === 'number' ? (rawVal === '' ? '' : parseFloat(rawVal)) : rawVal;
     setLocalValue(newVal);
@@ -59,6 +59,7 @@ const StableTextArea = ({ value, onChange, placeholder, rows = 4, label, classNa
   }, [value]);
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    e.stopPropagation(); // Stop event bubbling
     setLocalValue(e.target.value);
     onChange(e.target.value);
   };
@@ -462,6 +463,8 @@ const ToursManagerView = ({ showToast }: { showToast: (msg: string, type?: 'succ
     const { tours, addTour, updateTour, deleteTour } = useData();
     const [editingTour, setEditingTour] = useState<Tour | null>(null);
 
+    // Using StableInput completely bypasses the re-rendering focus issue
+    // because the input state is maintained locally inside StableInput
     const handleTourChange = (field: string, value: any) => {
         if (!editingTour) return;
         setEditingTour(prev => ({...prev, [field]: value}));
