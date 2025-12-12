@@ -1,18 +1,19 @@
+
 import { Tour, PageContent, CurrencyConfig, CompanyInfo, BlogPost } from './types';
 
-export const DATA_VERSION = "5.5"; // Updated for new content
+export const DATA_VERSION = "6.0"; // Universal CMS Upgrade
 
 export const COMPANY_INFO: CompanyInfo = {
   name: "Tom Safaris",
   ownerName: "Tom 'Cruse' Madeda",
   email: "admin@tomsafaris.co.ke",
-  phone: "+254 792 150 200",
+  phone: "+254721787589",
   location: "Titanic Plaza, Kilifi, Kenya",
   slogan: "Extraordinary journeys, hosted by 'Cruse'. Mission possible.",
   social: {
     facebook: "#",
     instagram: "https://www.instagram.com/madeda_thomas?igsh=eTA0czUxejI2ZnZp",
-    whatsapp: "https://wa.me/254792150200",
+    whatsapp: "https://wa.me/254721787589",
   },
   animationsEnabled: true,
 };
@@ -102,14 +103,17 @@ export const DEFAULT_PAGE_CONTENT: PageContent = {
       content: "We are a premier safari and adventure tour operator dedicated to organizing wildlife, coastal, and adventure tours across Kenya and Tanzania."
     },
     features: [
-      { title: "Safety First", text: "Expert guides and well-maintained vehicles for a secure journey." },
-      { title: "Local Expertise", text: "We know the hidden gems, wildlife patterns, and cultural nuances." },
-      { title: "Authentic Experiences", text: "Passionate about creating unforgettable memories in nature." }
+      { id: 'f1', title: "Safety First", text: "Expert guides and well-maintained vehicles for a secure journey." },
+      { id: 'f2', title: "Local Expertise", text: "We know the hidden gems, wildlife patterns, and cultural nuances." },
+      { id: 'f3', title: "Authentic Experiences", text: "Passionate about creating unforgettable memories in nature." }
     ],
-    testimonials: {
-      content: "We had the most amazing time with Tom 'Cruse'. The driver was knowledgeable, the lodges were beautiful, and seeing the lions in Maasai Mara was a dream come true!",
-      author: "Sarah J., United Kingdom"
-    }
+    testimonials: [
+      {
+        id: 't1',
+        content: "We had the most amazing time with Tom 'Cruse'. The driver was knowledgeable, the lodges were beautiful, and seeing the lions in Maasai Mara was a dream come true!",
+        author: "Sarah J., United Kingdom"
+      }
+    ]
   },
   about: {
     hero: {
@@ -147,6 +151,22 @@ export const DEFAULT_PAGE_CONTENT: PageContent = {
   }
 };
 
+const DEFAULT_INCLUSIONS = [
+  "Private 4×4 Land Cruiser (pop-up roof)",
+  "Professional English-speaking guide",
+  "Full board accommodation",
+  "All park & conservation fees",
+  "Bottled drinking water",
+  "Airport transfers"
+];
+
+const DEFAULT_EXCLUSIONS = [
+  "International flights",
+  "Visas & travel insurance",
+  "Tips & personal expenses",
+  "Alcoholic drinks"
+];
+
 export const TOURS: Tour[] = [
   // --- BUSH SAFARIS (Updated Categories) ---
   {
@@ -166,7 +186,9 @@ export const TOURS: Tour[] = [
       { day: 1, title: "Nairobi to Maasai Mara", description: "Depart Nairobi and drive through the Great Rift Valley. Arrive in time for lunch and an afternoon game drive." },
       { day: 2, title: "Full Day in Maasai Mara", description: "Spend the entire day exploring the vast plains, tracking lions, cheetahs, and elephants with a picnic lunch in the wild." },
       { day: 3, title: "Morning Game Drive & Return", description: "A final sunrise game drive before breakfast, followed by a scenic drive back to Nairobi." }
-    ]
+    ],
+    inclusions: DEFAULT_INCLUSIONS,
+    exclusions: [...DEFAULT_EXCLUSIONS, "Optional balloon safaris"]
   },
   {
     id: "amboseli-kilimanjaro",
@@ -185,7 +207,9 @@ export const TOURS: Tour[] = [
       { day: 1, title: "Nairobi to Amboseli", description: "Drive south to Amboseli. Check-in and enjoy an evening game drive with Kilimanjaro in the background." },
       { day: 2, title: "Full Day Amboseli", description: "Full day game drive. Visit the swamp grounds where elephants bathe and hike Observation Hill for panoramic views." },
       { day: 3, title: "Amboseli to Nairobi", description: "Morning game drive to catch the predators before returning to Nairobi." }
-    ]
+    ],
+    inclusions: DEFAULT_INCLUSIONS,
+    exclusions: DEFAULT_EXCLUSIONS
   },
   {
     id: "samburu-special",
@@ -204,7 +228,9 @@ export const TOURS: Tour[] = [
       { day: 1, title: "Nairobi to Samburu", description: "Journey north across the equator to the arid landscapes of Samburu. Afternoon game drive." },
       { day: 2, title: "Discover the Special Five", description: "Full day seeking the Reticulated Giraffe, Grevy’s Zebra, Beisa Oryx, Somali Ostrich, and Gerenuk." },
       { day: 3, title: "Return to Nairobi", description: "Final morning game viewing before the return journey to the capital." }
-    ]
+    ],
+    inclusions: DEFAULT_INCLUSIONS,
+    exclusions: DEFAULT_EXCLUSIONS
   },
   
   // --- HONEYMOON & ROMANTIC ---
@@ -229,7 +255,9 @@ export const TOURS: Tour[] = [
       { day: 5, title: "Fly to Diani Beach", description: "Swap the bush for the beach. Fly to Diani for a stay at an exclusive resort." },
       { day: 6, title: "Diani Bliss", description: "Relax on the white sands, private seafood dinner on the beach." },
       { day: 7, title: "Departure", description: "Transfer to Mombasa airport for your flight home." }
-    ]
+    ],
+    inclusions: [...DEFAULT_INCLUSIONS, "Internal Flights", "Honeymoon Specials"],
+    exclusions: DEFAULT_EXCLUSIONS
   },
 
   // --- WEEKEND GETAWAYS ---
@@ -249,7 +277,9 @@ export const TOURS: Tour[] = [
     itinerary: [
       { day: 1, title: "Nairobi to Naivasha", description: "Drive to Naivasha. Boat ride on the lake and walking safari in Hell's Gate National Park." },
       { day: 2, title: "Lake Nakuru to Nairobi", description: "Early drive to Lake Nakuru for a game drive to see rhinos and flamingos. Return to Nairobi by evening." }
-    ]
+    ],
+    inclusions: DEFAULT_INCLUSIONS,
+    exclusions: DEFAULT_EXCLUSIONS
   },
 
   // --- COASTAL & BEACH ---
@@ -271,7 +301,9 @@ export const TOURS: Tour[] = [
       { day: 2, title: "Marine Park Adventure", description: "Full day trip to Kisite Mpunguti for snorkeling and dolphin watching." },
       { day: 3, title: "Leisure & Culture", description: "Relax by the pool or visit the sacred Kaya Kinondo forest." },
       { day: 4, title: "Departure", description: "Transfer to Ukunda airstrip or Mombasa airport." }
-    ]
+    ],
+    inclusions: ["Accommodation", "Airport Transfers", "Breakfast", "Marine Park Fees"],
+    exclusions: ["Lunch & Dinner (unless specified)", "Personal water sports", ...DEFAULT_EXCLUSIONS]
   },
   {
     id: "lamu-island-explorer",
@@ -290,7 +322,9 @@ export const TOURS: Tour[] = [
       { day: 1, title: "Arrival in Lamu", description: "Boat transfer to Lamu town. Walking tour of the historic UNESCO site." },
       { day: 2, title: "Shela & Dhow Cruise", description: "Visit the dunes of Shela Beach and enjoy a traditional sunset dhow cruise." },
       { day: 3, title: "Departure", description: "Morning swim before boat transfer to the airstrip." }
-    ]
+    ],
+    inclusions: ["Bed & Breakfast Accommodation", "Return Boat Transfers", "Guided Town Tour", "Sunset Cruise"],
+    exclusions: DEFAULT_EXCLUSIONS
   },
 
   // --- INTERNATIONAL ---
@@ -313,7 +347,9 @@ export const TOURS: Tour[] = [
       { day: 3, title: "Desert Safari", description: "Afternoon 4x4 desert safari with BBQ dinner." },
       { day: 4, title: "Leisure/Shopping", description: "Free day for shopping at Dubai Mall or visiting Palm Jumeirah." },
       { day: 5, title: "Departure", description: "Transfer to airport." }
-    ]
+    ],
+    inclusions: ["4-Star Hotel Accommodation", "Daily Breakfast", "Airport Transfers", "Desert Safari & BBQ", "Visa Processing"],
+    exclusions: ["Flights", "Tourism Dirham Fee", "Personal Expenses", "Lunch & Dinner"]
   },
 
   // --- EXISTING TOURS (Kept for continuity) ---
@@ -334,7 +370,9 @@ export const TOURS: Tour[] = [
       { day: 1, title: "Arusha → Serengeti National Park", description: "Morning departure from Arusha for a scenic drive into the Serengeti." },
       { day: 2, title: "Serengeti → Ngorongoro Highlands", description: "Sunrise game drive in the Serengeti. Transfer toward Ngorongoro." },
       { day: 3, title: "Ngorongoro Crater → Arusha", description: "Early descent into the crater for a Big Five game drive. Return to Arusha." }
-    ]
+    ],
+    inclusions: [...DEFAULT_INCLUSIONS, "Ngorongoro Crater Fees"],
+    exclusions: DEFAULT_EXCLUSIONS
   },
   {
     id: "great-migration-river-crossing",
@@ -358,7 +396,9 @@ export const TOURS: Tour[] = [
       { day: 6, title: "Central Serengeti", description: "Game drive back towards the central plains." },
       { day: 7, title: "Ngorongoro Crater", description: "Descent into the Ngorongoro Crater." },
       { day: 8, title: "Departure", description: "Drive back to Arusha for departure." }
-    ]
+    ],
+    inclusions: [...DEFAULT_INCLUSIONS, "Ngorongoro Crater Fees"],
+    exclusions: DEFAULT_EXCLUSIONS
   },
   {
     id: "tsavo-east-day-trip",
@@ -375,7 +415,9 @@ export const TOURS: Tour[] = [
     highlights: ["Red Elephants", "Aruba Dam", "Big Five", "Savannah Landscapes"],
     itinerary: [
       { day: 1, title: "Bush to Beach", description: "05:00 Pickup. Drive to Tsavo East. Morning game drive. Lunch at Voi Safari Lodge. Afternoon game drive. Return to coast." }
-    ]
+    ],
+    inclusions: ["Transport", "Park Fees", "Lunch", "Guide", "Water"],
+    exclusions: ["Tips", "Drinks"]
   },
   {
     id: "wasini-island-dolphin-safari",
@@ -392,6 +434,8 @@ export const TOURS: Tour[] = [
     highlights: ["Dolphin Spotting", "Snorkeling", "Seafood Lunch", "Traditional Dhow"],
     itinerary: [
       { day: 1, title: "Full Day Marine Adventure", description: "Pick up from hotel. Drive to Shimoni. Dhow cruise to marine park. Lunch on Wasini Island. Return." }
-    ]
+    ],
+    inclusions: ["Transport", "Marine Park Fees", "Seafood Lunch", "Snorkeling Gear", "Guide"],
+    exclusions: ["Tips", "Drinks"]
   }
 ];

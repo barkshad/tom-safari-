@@ -1,8 +1,9 @@
+
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { Tour, CompanyInfo, Inquiry, InquiryForm, PageContent, CurrencyConfig, BlogPost } from '../types';
+import { Tour, CompanyInfo, Inquiry, InquiryForm, PageContent, CurrencyConfig, BlogPost, TestimonialItem } from '../types';
 import { TOURS, COMPANY_INFO, DEFAULT_PAGE_CONTENT, SUPPORTED_CURRENCIES, SAMPLE_BLOG_POSTS } from '../constants';
 import { db, auth } from '../firebase';
-import { doc, getDoc, setDoc, collection, addDoc, getDocs, query, orderBy } from 'firebase/firestore';
+import { doc, getDoc, setDoc, collection, addDoc, getDocs, query, orderBy, enableNetwork, disableNetwork } from 'firebase/firestore';
 import { onAuthStateChanged, signInWithEmailAndPassword, signOut, updatePassword, User } from 'firebase/auth';
 
 interface CloudData {
@@ -98,8 +99,11 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const docRef = doc(db, DB_COLLECTION, DB_DOC_ID);
       try {
         const docSnap = await getDoc(docRef);
+        
         if (docSnap.exists()) {
           const cloudData = docSnap.data() as CloudData;
+          
+          // Deep merge page content to prevent new fields from being wiped out
           const mergedPageContent = {
             ...DEFAULT_PAGE_CONTENT, ...cloudData.pageContent,
             home: { ...DEFAULT_PAGE_CONTENT.home, ...cloudData.pageContent?.home },
@@ -109,10 +113,7 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
             seo: { ...DEFAULT_PAGE_CONTENT.seo, ...cloudData.pageContent?.seo },
           };
           
-          const mergedCompanyInfo = {
-            ...COMPANY_INFO,
-            ...cloudData.companyInfo,
-          };
+          const mergedCompanyInfo = { ...COMPANY_INFO, ...cloudData.companyInfo };
 
           setData({
             companyInfo: mergedCompanyInfo,
@@ -121,10 +122,14 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
             blogPosts: cloudData.blogPosts && cloudData.blogPosts.length > 0 ? cloudData.blogPosts : SAMPLE_BLOG_POSTS,
           });
         } else {
-           console.log("No live data in Firestore. Using default content. Admin can seed data from the settings panel.");
+           console.log("No live data found in Firestore. Using local defaults.");
         }
-      } catch (e) {
-        console.error("Failed to load public cloud data, falling back to defaults.", e);
+      } catch (e: any) {
+        if (e.code === 'unavailable' || e.message?.includes('offline')) {
+           console.log("Firestore offline/unreachable. Using local data.");
+        } else {
+           console.error("Failed to load cloud data:", e);
+        }
       } finally {
         setLoading(false);
       }
@@ -145,7 +150,7 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
           });
           setInquiries(fetchedInquiries);
         } catch(e) {
-          console.error("Failed to load inquiries. Check Firestore rules.", e);
+          console.error("Failed to load inquiries.", e);
         }
       } else {
         setInquiries([]);
@@ -156,14 +161,23 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
 
   const fetchRates = async () => {
+    if (typeof navigator !== 'undefined' && !navigator.onLine) {
+        // Silently fail or log debug message if offline
+        console.debug("Offline: Skipping currency rate fetch.");
+        return;
+    }
     try {
       const response = await fetch('https://open.er-api.com/v6/latest/USD');
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
       const data = await response.json();
       if (data && data.rates) {
         setCurrencyRates(data.rates);
         localStorage.setItem('currencyRates', JSON.stringify({ rates: data.rates, timestamp: Date.now() }));
       }
-    } catch (error) { console.error("Failed to fetch rates:", error); }
+    } catch (error) { 
+        // Use warn instead of error to avoid cluttering console for non-critical failures
+        console.warn("Currency rates could not be fetched (using cached/default):", error); 
+    }
   };
 
   useEffect(() => {
@@ -253,17 +267,22 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const addInquiry = async (form: InquiryForm) => {
-    const tour = data.tours.find(t => t.id === form.tourId);
-    const newInquiry: Inquiry = {
-      ...form,
-      id: `inq-${Date.now()}`,
-      tourName: tour ? tour.name : undefined,
-      status: 'New',
-      submittedAt: new Date().toISOString()
-    };
-    await addDoc(collection(db, "inquiries"), newInquiry);
-    if (isAuthenticated) {
-        setInquiries(prev => [newInquiry, ...prev]);
+    try {
+      const tour = data.tours.find(t => t.id === form.tourId);
+      const newInquiry: Inquiry = {
+        ...form,
+        id: `inq-${Date.now()}`,
+        tourName: tour ? tour.name : undefined,
+        status: 'New',
+        submittedAt: new Date().toISOString()
+      };
+      await addDoc(collection(db, "inquiries"), newInquiry);
+      if (isAuthenticated) {
+          setInquiries(prev => [newInquiry, ...prev]);
+      }
+    } catch (e) {
+      console.error("Failed to submit inquiry:", e);
+      alert("Note: Inquiry could not be saved (Offline mode). Please contact us directly.");
     }
   };
 

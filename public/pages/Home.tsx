@@ -65,6 +65,8 @@ const Home: React.FC = () => {
   };
   
   const isVideo = (url) => url?.match(/\.(mp4|webm|ogg|mov)$/i) || url?.includes('/video/upload/');
+  
+  const firstTestimonial = pageContent.home.testimonials?.[0];
 
   return (
     <PageTransition>
@@ -172,7 +174,7 @@ const Home: React.FC = () => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
               {pageContent.home.features.map((feature, idx) => (
                 <motion.div 
-                  key={idx} 
+                  key={feature.id || idx} 
                   initial={{ opacity: 0, y: 50, scale: 0.95 }} 
                   whileInView={{ opacity: 1, y: 0, scale: 1 }} 
                   viewport={{ once: true }} 
@@ -215,19 +217,21 @@ const Home: React.FC = () => {
                <div className="absolute inset-0 bg-stone-900/60 backdrop-blur-sm"></div>
           </div>
           
-          <motion.div 
-            initial={{ opacity: 0, scale: 0.9, y: 50 }} 
-            whileInView={{ opacity: 1, scale: 1, y: 0 }} 
-            viewport={{ once: true }} 
-            className="max-w-4xl mx-auto px-4 text-center relative z-10"
-          >
-            <div className="glass-dark p-12 md:p-16 rounded-[3rem] shadow-2xl relative">
-              <blockquote className="text-2xl md:text-4xl italic font-serif font-medium mb-10 leading-relaxed text-stone-200">
-                "{pageContent.home.testimonials.content}"
-              </blockquote>
-              <cite className="font-bold not-italic text-stone-400 block text-lg tracking-wide uppercase">- {pageContent.home.testimonials.author}</cite>
-            </div>
-          </motion.div>
+          {firstTestimonial && (
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.9, y: 50 }} 
+              whileInView={{ opacity: 1, scale: 1, y: 0 }} 
+              viewport={{ once: true }} 
+              className="max-w-4xl mx-auto px-4 text-center relative z-10"
+            >
+              <div className="glass-dark p-12 md:p-16 rounded-[3rem] shadow-2xl relative">
+                <blockquote className="text-2xl md:text-4xl italic font-serif font-medium mb-10 leading-relaxed text-stone-200">
+                  "{firstTestimonial.content}"
+                </blockquote>
+                <cite className="font-bold not-italic text-stone-400 block text-lg tracking-wide uppercase">- {firstTestimonial.author}</cite>
+              </div>
+            </motion.div>
+          )}
         </section>
       </div>
     </PageTransition>

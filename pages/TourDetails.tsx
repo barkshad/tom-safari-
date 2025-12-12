@@ -143,12 +143,12 @@ const TourDetails: React.FC = () => {
                         <CheckCircle className="text-safari-emerald" size={20}/> Included
                     </h3>
                     <ul className="space-y-2 text-sm text-stone-600">
-                        <li className="flex items-start gap-2"><span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-safari-emerald flex-shrink-0"></span> Private 4×4 Land Cruiser (pop-up roof)</li>
-                        <li className="flex items-start gap-2"><span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-safari-emerald flex-shrink-0"></span> Professional English-speaking guide</li>
-                        <li className="flex items-start gap-2"><span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-safari-emerald flex-shrink-0"></span> Full board accommodation</li>
-                        <li className="flex items-start gap-2"><span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-safari-emerald flex-shrink-0"></span> All park & conservation fees</li>
-                        <li className="flex items-start gap-2"><span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-safari-emerald flex-shrink-0"></span> Bottled drinking water</li>
-                        <li className="flex items-start gap-2"><span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-safari-emerald flex-shrink-0"></span> Airport transfers</li>
+                        {(tour.inclusions || []).map((item, idx) => (
+                           <li key={idx} className="flex items-start gap-2">
+                             <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-safari-emerald flex-shrink-0"></span> 
+                             {item}
+                           </li>
+                        ))}
                     </ul>
                 </div>
                 <div className="glass-card p-8 rounded-[2rem] bg-red-50/50 border-red-100">
@@ -156,10 +156,12 @@ const TourDetails: React.FC = () => {
                         <XCircle className="text-red-400" size={20}/> Excluded
                     </h3>
                     <ul className="space-y-2 text-sm text-stone-600">
-                        <li className="flex items-start gap-2"><span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-red-300 flex-shrink-0"></span> International flights</li>
-                        <li className="flex items-start gap-2"><span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-red-300 flex-shrink-0"></span> Visas & travel insurance</li>
-                        <li className="flex items-start gap-2"><span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-red-300 flex-shrink-0"></span> Tips & personal expenses</li>
-                        <li className="flex items-start gap-2"><span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-red-300 flex-shrink-0"></span> Alcoholic drinks</li>
+                        {(tour.exclusions || []).map((item, idx) => (
+                           <li key={idx} className="flex items-start gap-2">
+                             <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-red-300 flex-shrink-0"></span> 
+                             {item}
+                           </li>
+                        ))}
                     </ul>
                 </div>
               </motion.div>

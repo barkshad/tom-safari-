@@ -18,10 +18,16 @@ const TourDetails: React.FC = () => {
     const foundTour = tours.find(t => t.id === id);
     if (foundTour) {
       setTour(foundTour);
+      // Dynamic Title Update for SEO
+      document.title = `${foundTour.name} | Tom Safaris`;
     }
   }, [id, tours]);
 
-  if (!tour) return <div className="h-screen flex items-center justify-center">Loading...</div>;
+  if (!tour) return (
+      <div className="h-screen flex items-center justify-center bg-safari-sand">
+          <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 1 }} className="w-12 h-12 border-4 border-safari-emerald border-t-transparent rounded-full"></motion.div>
+      </div>
+  );
 
   const price = convertPrice(tour.priceUsd);
   
@@ -40,7 +46,7 @@ const TourDetails: React.FC = () => {
       <StructuredData type="TouristAttraction" data={tour} />
       <div className="bg-safari-sand min-h-screen pb-20">
         
-        <div className="relative h-[80vh] overflow-hidden">
+        <div className="relative h-[80vh] overflow-hidden group">
           <EditTrigger sectionName={`Tour: ${tour.name}`} className="top-24 right-4" />
           <motion.div 
               initial={{ scale: 1.2 }}
@@ -69,6 +75,12 @@ const TourDetails: React.FC = () => {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.2 }}
               >
+                  {tour.category === 'Honeymoon' && (
+                      <span className="inline-block px-4 py-1 mb-4 rounded-full bg-pink-500/80 text-white text-xs font-bold uppercase tracking-widest backdrop-blur-md">Romantic Getaway</span>
+                  )}
+                  {tour.category === 'Weekend' && (
+                      <span className="inline-block px-4 py-1 mb-4 rounded-full bg-orange-500/80 text-white text-xs font-bold uppercase tracking-widest backdrop-blur-md">Weekend Escape</span>
+                  )}
                   <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-serif font-black text-white mb-6 leading-none drop-shadow-2xl">{tour.name}</h1>
               </motion.div>
             </div>
@@ -130,13 +142,12 @@ const TourDetails: React.FC = () => {
                         <CheckCircle className="text-safari-emerald" size={20}/> Included
                     </h3>
                     <ul className="space-y-2 text-sm text-stone-600">
-                        <li className="flex items-start gap-2"><span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-safari-emerald flex-shrink-0"></span> Private 4×4 Land Cruiser (pop-up roof)</li>
-                        <li className="flex items-start gap-2"><span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-safari-emerald flex-shrink-0"></span> Professional English-speaking guide</li>
-                        <li className="flex items-start gap-2"><span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-safari-emerald flex-shrink-0"></span> Full board accommodation</li>
-                        <li className="flex items-start gap-2"><span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-safari-emerald flex-shrink-0"></span> All park & conservation fees</li>
-                        <li className="flex items-start gap-2"><span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-safari-emerald flex-shrink-0"></span> Ngorongoro crater descent fees</li>
-                        <li className="flex items-start gap-2"><span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-safari-emerald flex-shrink-0"></span> Bottled drinking water</li>
-                        <li className="flex items-start gap-2"><span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-safari-emerald flex-shrink-0"></span> Airport transfers</li>
+                        {(tour.inclusions || []).map((item, idx) => (
+                           <li key={idx} className="flex items-start gap-2">
+                             <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-safari-emerald flex-shrink-0"></span> 
+                             {item}
+                           </li>
+                        ))}
                     </ul>
                 </div>
                 <div className="glass-card p-8 rounded-[2rem] bg-red-50/50 border-red-100">
@@ -144,11 +155,12 @@ const TourDetails: React.FC = () => {
                         <XCircle className="text-red-400" size={20}/> Excluded
                     </h3>
                     <ul className="space-y-2 text-sm text-stone-600">
-                        <li className="flex items-start gap-2"><span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-red-300 flex-shrink-0"></span> International flights</li>
-                        <li className="flex items-start gap-2"><span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-red-300 flex-shrink-0"></span> Visas & travel insurance</li>
-                        <li className="flex items-start gap-2"><span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-red-300 flex-shrink-0"></span> Tips & personal expenses</li>
-                        <li className="flex items-start gap-2"><span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-red-300 flex-shrink-0"></span> Alcoholic drinks</li>
-                        <li className="flex items-start gap-2"><span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-red-300 flex-shrink-0"></span> Optional balloon safaris</li>
+                        {(tour.exclusions || []).map((item, idx) => (
+                           <li key={idx} className="flex items-start gap-2">
+                             <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-red-300 flex-shrink-0"></span> 
+                             {item}
+                           </li>
+                        ))}
                     </ul>
                 </div>
               </motion.div>
@@ -159,10 +171,14 @@ const TourDetails: React.FC = () => {
                           <motion.div 
                               key={idx}
                               whileHover={{ scale: 1.05 }}
-                              className="aspect-square rounded-2xl overflow-hidden shadow-md"
+                              className="aspect-square rounded-2xl overflow-hidden shadow-md cursor-pointer"
+                              onClick={() => {
+                                // Simple lightbox implementation or just view full
+                                window.open(img, '_blank');
+                              }}
                           >
                               {isVideo(img) ? (
-                                  <video src={img} className="w-full h-full object-cover" controls />
+                                  <video src={img} className="w-full h-full object-cover" muted loop onMouseOver={e => e.target.play()} onMouseOut={e => e.target.pause()} />
                               ) : (
                                   <img src={img} className="w-full h-full object-cover" loading="lazy" />
                               )}
@@ -199,6 +215,7 @@ const TourDetails: React.FC = () => {
                    <div className="flex items-center"><CheckCircle className="w-4 h-4 mr-3 text-green-600" /> Free Cancellation (24h)</div>
                    <div className="flex items-center"><CheckCircle className="w-4 h-4 mr-3 text-green-600" /> Instant Confirmation</div>
                    <div className="flex items-center"><CheckCircle className="w-4 h-4 mr-3 text-green-600" /> Best Price Guarantee</div>
+                   {tour.featured && <div className="flex items-center text-safari-gold font-bold"><CheckCircle className="w-4 h-4 mr-3" /> Tom's Recommended Choice</div>}
                 </div>
               </motion.div>
             </div>

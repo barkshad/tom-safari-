@@ -1,4 +1,5 @@
 
+
 export interface BlogPost {
   id: string;
   slug: string;
@@ -22,6 +23,8 @@ export interface Tour {
   shortDescription: string;
   fullDescription: string;
   highlights: string[];
+  inclusions?: string[];
+  exclusions?: string[];
   itinerary: ItineraryDay[];
   featured: boolean;
   category: 'Safari' | 'Coastal' | 'Trek' | 'Day Trip' | 'Honeymoon' | 'International' | 'Weekend';
@@ -64,12 +67,18 @@ export interface PageSection {
   content?: string;
 }
 
+export interface TestimonialItem {
+  id: string;
+  content: string;
+  author: string;
+}
+
 export interface PageContent {
   home: {
     hero: PageSection;
     welcome: PageSection;
-    features: { title: string; text: string }[];
-    testimonials: PageSection & { author: string };
+    features: { id: string, title: string; text: string }[];
+    testimonials: TestimonialItem[];
   };
   about: {
     hero: PageSection;
