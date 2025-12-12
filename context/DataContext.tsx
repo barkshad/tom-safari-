@@ -34,6 +34,8 @@ interface DataContextType {
   changePassword: (newPassword: string) => Promise<boolean>;
   logout: () => void;
   resetData: () => Promise<void>;
+  syncLocalTours: () => Promise<void>;
+  localToursCount: number;
   loading: boolean;
   saving: boolean;
   
@@ -276,7 +278,6 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
         submittedAt: new Date().toISOString()
       };
       const docRef = await addDoc(collection(db, "inquiries"), newInquiry);
-      // If we are admin (rare case for adding), update local state, otherwise we rely on refresh
       if (isAuthenticated) {
           setInquiries(prev => [{...newInquiry, id: docRef.id}, ...prev]);
       }
@@ -302,8 +303,6 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
       return true;
     } catch (error: any) {
       console.error("Firebase login failed:", error);
-      
-      // Auto-create admin user if it doesn't exist (Quick-fix for demo/fresh project)
       if (
         (error.code === 'auth/user-not-found' || error.code === 'auth/invalid-credential') && 
         email === 'admin@tomsafaris.co.ke'
@@ -314,11 +313,9 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
            return true;
         } catch (createError: any) {
            console.error("Failed to create admin user:", createError);
-           // If creation failed (e.g. 'auth/email-already-in-use' but login failed?), return false
            return false;
         }
       }
-      
       return false;
     }
   };
@@ -350,6 +347,16 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
+  // NEW: Sync local constant tours to cloud without wiping everything else
+  const syncLocalTours = async () => {
+    if(window.confirm(`This will overwrite your cloud database tours with the ${TOURS.length} tours defined in your local code. Are you sure?`)) {
+        const newData = { ...data, tours: TOURS };
+        await saveData(newData);
+        setData(newData);
+        alert("Tours synced successfully! The database now matches your code.");
+    }
+  };
+
   return (
     <DataContext.Provider value={{
       companyInfo: data.companyInfo,
@@ -372,6 +379,8 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
       changePassword,
       logout: () => signOut(auth),
       resetData,
+      syncLocalTours,
+      localToursCount: TOURS.length,
       loading,
       saving,
       selectedCurrency,

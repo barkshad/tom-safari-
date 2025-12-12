@@ -402,7 +402,7 @@ const SEOEditorView = ({ showToast }: any) => {
 };
 
 const SystemSettingsView = ({ showToast }: { showToast: (msg: string, type?: 'success' | 'error') => void }) => {
-    const { changePassword, resetData } = useData();
+    const { changePassword, resetData, syncLocalTours, localToursCount, tours } = useData();
     const [newPassword, setNewPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
 
@@ -432,6 +432,23 @@ const SystemSettingsView = ({ showToast }: { showToast: (msg: string, type?: 'su
                     <button onClick={handlePasswordChange} className="bg-admin-blue text-white px-6 py-3 rounded-lg font-bold hover:bg-opacity-90 w-full">Change Password</button>
                 </div>
             </div>
+            
+            <div className="bg-white p-6 md:p-8 rounded-2xl shadow-sm border-2 border-blue-500/20">
+                <h3 className="text-xl font-bold mb-2 text-blue-700">Content Synchronization</h3>
+                <p className="text-sm text-stone-500 mb-4">
+                    <strong>Local Code:</strong> {localToursCount} Tours defined in code.<br/>
+                    <strong>Live Database:</strong> {tours.length} Tours currently live.
+                </p>
+                {localToursCount !== tours.length && (
+                    <div className="mb-4 bg-blue-50 text-blue-800 p-3 rounded-lg text-sm border border-blue-100">
+                        Mismatch detected! Your code has newer content than your database. Sync now to fix the "18 vs 7" tour count issue.
+                    </div>
+                )}
+                <button onClick={syncLocalTours} className="bg-blue-600 hover:bg-blue-800 text-white px-6 py-3 rounded-lg font-bold flex items-center gap-2 transition-all">
+                    <Globe size={18}/> Push Local Tours to Live Database
+                </button>
+            </div>
+
             <div className="bg-white p-6 md:p-8 rounded-2xl shadow-sm border-2 border-red-50">
                 <h3 className="text-xl font-bold mb-2 text-red-600">Danger Zone</h3>
                 <p className="text-sm text-stone-500 mb-6">This action is irreversible and will delete all your custom content from the cloud, resetting to factory defaults.</p>
