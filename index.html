@@ -60,7 +60,8 @@
             animation: {
               'float': 'float 6s ease-in-out infinite',
               'glow': 'glow 4s ease-in-out infinite',
-              'shimmer': 'shimmer 2s linear infinite',
+              'shimmer': 'shimmer 2.5s linear infinite',
+              'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
             },
             keyframes: {
               float: {
@@ -72,8 +73,8 @@
                 '50%': { 'text-shadow': '0 0 20px rgba(0, 196, 154, 0.8), 0 0 30px rgba(0, 196, 154, 0.5)' },
               },
               shimmer: {
-                '0%': { transform: 'translateX(-100%)' },
-                '100%': { transform: 'translateX(100%)' }
+                '0%': { transform: 'translateX(-100%) skewX(-15deg)' },
+                '100%': { transform: 'translateX(200%) skewX(-15deg)' }
               }
             }
           }
@@ -99,7 +100,6 @@
       .glass-card:hover {
         background: rgba(255, 255, 255, 0.8);
         box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
-        transform: translateY(-5px);
       }
       .glass-dark {
         background: rgba(10, 10, 10, 0.65);
@@ -124,6 +124,11 @@
         background: linear-gradient(to right, #e2b34a, #ffd700);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
+      }
+      
+      /* Smooth scrolling */
+      html {
+          scroll-behavior: smooth;
       }
     </style>
   <script type="importmap">
