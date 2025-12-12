@@ -1,7 +1,7 @@
 
 import { Tour, PageContent, CurrencyConfig, CompanyInfo, BlogPost } from './types';
 
-export const DATA_VERSION = "6.3"; // Kilifi Itineraries Update
+export const DATA_VERSION = "6.5"; // Final 7 Core Tours
 
 export const COMPANY_INFO: CompanyInfo = {
   name: "Tom Safaris",

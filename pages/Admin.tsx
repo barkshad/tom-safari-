@@ -6,33 +6,132 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Tour, ItineraryDay, BlogPost, CompanyInfo, PageContent, TestimonialItem } from '../types';
 import PageTransition from '../components/PageTransition';
 
-// --- UTILITIES ---
-
+// Helper to check for video
 const isVideo = (url: string | undefined) => {
   if (!url) return false;
   return url.match(/\.(mp4|webm|ogg|mov)$/i) || url.includes('/video/upload/');
 };
 
-// --- STABLE INPUT COMPONENTS ---
-// Critical for fixing the "keyboard closes" bug. 
-// These components manage their own local state and only report changes up the chain.
+// Reverting to Cloudinary Widget for reliable CDN uploads
+const CloudinaryImageUploader: React.FC<{
+  onUploadSuccess: (url: string) => void;
+  currentImageUrl?: string;
+  label: string;
+}> = ({ onUploadSuccess, currentImageUrl, label }) => {
+  const cloudinaryRef = useRef<any>();
+  const widgetRef = useRef<any>();
+
+  useEffect(() => {
+    if (window.cloudinary) {
+      cloudinaryRef.current = window.cloudinary;
+      widgetRef.current = cloudinaryRef.current.createUploadWidget({
+        cloudName: 'ds2mbrzcn',
+        uploadPreset: 'qqk2urzm',
+        folder: 'tomsafaris',
+        sources: ['local', 'url', 'camera'],
+        multiple: false,
+        clientAllowedFormats: ['image', 'video'],
+        maxImageFileSize: 10000000, // 10MB
+        maxVideoFileSize: 50000000, // 50MB
+        styles: {
+            palette: {
+                window: "#FFFFFF",
+                windowBorder: "#90A0B3",
+                tabIcon: "#00C49A",
+                menuIcons: "#5A5463",
+                textDark: "#000000",
+                textLight: "#FFFFFF",
+                link: "#00C49A",
+                action: "#FF620C",
+                inactiveTabIcon: "#0E2F5A",
+                error: "#F44235",
+                inProgress: "#0078FF",
+                complete: "#20B832",
+                sourceBg: "#E4EBF1"
+            },
+        }
+      }, function(error: any, result: any) {
+        if (!error && result && result.event === "success") {
+          onUploadSuccess(result.info.secure_url);
+        }
+      });
+    }
+  }, [onUploadSuccess]);
+
+  const openWidget = () => {
+    if (widgetRef.current) {
+        widgetRef.current.open();
+    } else {
+        alert("Cloudinary widget not loaded. Please refresh the page.");
+    }
+  };
+
+  return (
+    <div className="mb-4">
+      <label className="text-xs font-bold uppercase text-stone-400 block mb-2">{label}</label>
+      <div className="flex items-center gap-4">
+        {currentImageUrl ? (
+          isVideo(currentImageUrl) ? (
+            <video src={currentImageUrl} className="w-24 h-16 object-cover rounded-lg border border-stone-200" autoPlay muted loop />
+          ) : (
+            <img src={currentImageUrl} className="w-24 h-16 object-cover rounded-lg border border-stone-200" alt="Preview"/>
+          )
+        ) : (
+            <div className="w-24 h-16 bg-stone-100 rounded-lg border border-stone-200 flex items-center justify-center text-stone-400">
+                <ImageIcon size={20} />
+            </div>
+        )}
+        <div className="flex-grow">
+          <button onClick={openWidget} className="cursor-pointer bg-safari-emerald/10 text-safari-emerald border border-safari-emerald/20 px-4 py-2 rounded-lg text-sm font-bold inline-flex items-center gap-2 hover:bg-safari-emerald hover:text-white transition-all">
+            <Upload size={14} /> Upload Media
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const SaveStatus = ({ saving }: { saving: boolean }) => (
+  <div className="flex items-center gap-2 text-sm font-bold transition-colors">
+    {saving ? (
+      <>
+        <motion.div
+          animate={{ rotate: 360 }}
+          transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
+          className="w-4 h-4 border-2 border-stone-400 border-t-safari-gold rounded-full"
+        />
+        <span className="text-stone-500">Saving...</span>
+      </>
+    ) : (
+      <>
+        <CheckCircle size={16} className="text-green-500" />
+        <span className="text-stone-500">All changes saved</span>
+      </>
+    )}
+  </div>
+);
+
+// --- STABLE INPUT COMPONENTS (KEYBOARD FIX) ---
+// These components only trigger onChange when the user leaves the field (onBlur)
+// This prevents the parent from re-rendering on every keystroke, keeping the keyboard open.
 
 const StableInput = ({ value, onChange, placeholder, type = "text", label, className }: any) => {
   const [localValue, setLocalValue] = useState(value || "");
   
-  // Sync with prop only if it changes externally and is not what we currently have
+  // Sync with prop only if it changes externally
   useEffect(() => { 
-      if (value !== localValue) {
-          setLocalValue(value || ""); 
-      }
+      setLocalValue(value || ""); 
   }, [value]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    e.stopPropagation(); // Stop event bubbling
-    const rawVal = e.target.value;
-    const newVal = type === 'number' ? (rawVal === '' ? '' : parseFloat(rawVal)) : rawVal;
-    setLocalValue(newVal);
-    onChange(newVal);
+    setLocalValue(e.target.value);
+  };
+
+  const handleBlur = () => {
+    const finalValue = type === 'number' ? (localValue === '' ? '' : parseFloat(localValue)) : localValue;
+    if (value !== finalValue) {
+        onChange(finalValue);
+    }
   };
 
   return (
@@ -41,7 +140,8 @@ const StableInput = ({ value, onChange, placeholder, type = "text", label, class
       <input 
         type={type} 
         value={localValue} 
-        onChange={handleChange} 
+        onChange={handleChange}
+        onBlur={handleBlur}
         placeholder={placeholder} 
         className="w-full p-3 bg-stone-50 border border-stone-300 rounded-lg focus:ring-2 focus:ring-admin-blue outline-none transition-all text-stone-800" 
       />
@@ -53,15 +153,17 @@ const StableTextArea = ({ value, onChange, placeholder, rows = 4, label, classNa
   const [localValue, setLocalValue] = useState(value || "");
   
   useEffect(() => { 
-      if (value !== localValue) {
-          setLocalValue(value || ""); 
-      }
+      setLocalValue(value || ""); 
   }, [value]);
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    e.stopPropagation(); // Stop event bubbling
     setLocalValue(e.target.value);
-    onChange(e.target.value);
+  };
+
+  const handleBlur = () => {
+      if (value !== localValue) {
+          onChange(localValue);
+      }
   };
 
   return (
@@ -69,7 +171,8 @@ const StableTextArea = ({ value, onChange, placeholder, rows = 4, label, classNa
       {label && <label className="text-xs font-bold uppercase text-stone-500 block mb-2">{label}</label>}
       <textarea 
         value={localValue} 
-        onChange={handleChange} 
+        onChange={handleChange}
+        onBlur={handleBlur}
         placeholder={placeholder} 
         rows={rows} 
         className="w-full p-3 bg-stone-50 border border-stone-300 rounded-lg focus:ring-2 focus:ring-admin-blue outline-none transition-all text-stone-800" 
@@ -78,39 +181,7 @@ const StableTextArea = ({ value, onChange, placeholder, rows = 4, label, classNa
   );
 };
 
-// --- MEDIA UPLOADER ---
-const CloudinaryImageUploader = ({ onUploadSuccess, currentImageUrl, label }: any) => {
-  const widgetRef = useRef<any>();
-  useEffect(() => {
-    if (window.cloudinary) {
-      widgetRef.current = window.cloudinary.createUploadWidget({
-        cloudName: 'ds2mbrzcn', uploadPreset: 'qqk2urzm', folder: 'tomsafaris',
-        sources: ['local', 'url', 'camera'], multiple: false, clientAllowedFormats: ['image', 'video'],
-        maxImageFileSize: 10000000, maxVideoFileSize: 50000000,
-      }, (error, result) => {
-        if (!error && result && result.event === "success") onUploadSuccess(result.info.secure_url);
-      });
-    }
-  }, [onUploadSuccess]);
-
-  return (
-    <div className="mb-4">
-      <label className="text-xs font-bold uppercase text-stone-500 block mb-2">{label}</label>
-      <div className="flex items-center gap-4">
-        {currentImageUrl ? (
-          isVideo(currentImageUrl) ? 
-            <video src={currentImageUrl} className="w-24 h-16 object-cover rounded-lg border border-stone-200" autoPlay muted loop /> :
-            <img src={currentImageUrl} className="w-24 h-16 object-cover rounded-lg border border-stone-200" alt="Preview"/>
-        ) : (
-            <div className="w-24 h-16 bg-stone-100 rounded-lg border border-stone-200 flex items-center justify-center text-stone-400"><ImageIcon size={24} /></div>
-        )}
-        <button onClick={() => widgetRef.current?.open()} className="font-semibold text-admin-blue bg-admin-blue/10 px-4 py-2 rounded-lg text-sm flex items-center gap-2 hover:bg-admin-blue/20 transition-all"><Upload size={14} /> Upload Media</button>
-      </div>
-    </div>
-  );
-};
-
-// --- ACTION BUTTONS (Manual Save) ---
+// --- ACTION BUTTONS ---
 const ActionButtons = ({ onSave, onDiscard, isSaving, hasChanges }: any) => {
   if (!hasChanges) return null;
   return (
