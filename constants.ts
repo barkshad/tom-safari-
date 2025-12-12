@@ -1,7 +1,7 @@
 
 import { Tour, PageContent, CurrencyConfig, CompanyInfo, BlogPost } from './types';
 
-export const DATA_VERSION = "6.0"; // Universal CMS Upgrade
+export const DATA_VERSION = "6.1"; // Content Update
 
 export const COMPANY_INFO: CompanyInfo = {
   name: "Tom Safaris",
@@ -168,7 +168,143 @@ const DEFAULT_EXCLUSIONS = [
 ];
 
 export const TOURS: Tour[] = [
-  // --- BUSH SAFARIS (Updated Categories) ---
+  // --- NEW TOURS ADDED (Updated) ---
+  {
+    id: "dolphin-watching-watamu",
+    name: "Dolphin Watching – Watamu",
+    durationDays: 1,
+    priceUsd: 120,
+    priceGbp: 95,
+    image: "https://images.unsplash.com/photo-1569428034239-f9565e32e224?q=80&w=2079",
+    category: "Coastal",
+    group: "Excursion",
+    featured: true,
+    shortDescription: "A magical day trip to Watamu Marine Park for dolphin watching and snorkeling.",
+    fullDescription: "Set sail on a traditional dhow or glass-bottom boat into the pristine waters of Watamu Marine National Park. Witness playful pods of dolphins in their natural habitat and explore vibrant coral gardens teeming with marine life.",
+    highlights: ["Dolphin Spotting", "Snorkeling at Coral Gardens", "Watamu Marine Park", "Seafood Lunch"],
+    itinerary: [
+      { day: 1, title: "Watamu Marine Adventure", description: "Early morning pickup. Boat ride to spot dolphins. Snorkeling session. Seafood lunch on an island or beachfront restaurant. Return to hotel." }
+    ],
+    inclusions: ["Transport", "Marine Park Fees", "Boat Ride", "Lunch", "Snorkeling Gear"],
+    exclusions: ["Tips", "Drinks", "Personal items"]
+  },
+  {
+    id: "scuba-diving-kilifi",
+    name: "Scuba Diving – Kilifi",
+    durationDays: 1,
+    priceUsd: 150,
+    priceGbp: 120,
+    image: "https://images.unsplash.com/photo-1544551763-46a875611267?q=80&w=2076",
+    category: "Coastal",
+    group: "Excursion",
+    featured: false,
+    shortDescription: "Explore the underwater treasures of Kilifi Creek and the Indian Ocean reefs.",
+    fullDescription: "Dive deep into the Indian Ocean's hidden gems with our Kilifi Scuba Diving excursion. Whether you are a beginner or a certified diver, our expert PADI instructors will guide you through stunning coral reefs and shipwrecks.",
+    highlights: ["Guided Dive", "Vnarani Reef", "Instruction for Beginners", "Equipment Rental"],
+    itinerary: [
+      { day: 1, title: "Dive Expedition", description: "Briefing and gear fitting. Boat ride to dive site. Guided dive (1 or 2 tanks). Refreshments on board. Return to shore." }
+    ],
+    inclusions: ["Dive Gear", "Instructor/Guide", "Boat Transport", "Water & Snacks"],
+    exclusions: ["Lunch", "Tips", "Transport to Dive Center"]
+  },
+  {
+    id: "mt-kilimanjaro-trek",
+    name: "Mt. Kilimanjaro Trek (Machame Route)",
+    durationDays: 10,
+    priceUsd: 2600,
+    priceGbp: 2100,
+    image: "https://images.unsplash.com/photo-1650634689405-f93b5f36e849?q=80&w=2070",
+    category: "Trek",
+    group: "Trek",
+    featured: false,
+    shortDescription: "Conquer the Roof of Africa on the scenic 7-day Machame Route.",
+    fullDescription: "Embark on the ultimate African adventure: climbing Mount Kilimanjaro. We use the Machame Route, known for its high success rate and breathtaking scenic variety. Our experienced team ensures your safety and comfort as you ascend to Uhuru Peak.",
+    highlights: ["Uhuru Peak Summit", "Scenic Machame Route", "Shira Plateau", "Barranco Wall"],
+    itinerary: [
+      { day: 1, title: "Arrival Moshi", description: "Transfer to hotel in Moshi. Gear check and briefing." },
+      { day: 2, title: "Machame Gate to Machame Camp", description: "Hike through rainforest zone." },
+      { day: 3, title: "Machame Camp to Shira Camp", description: "Ascend to the Shira Plateau with expansive views." },
+      { day: 4, title: "Shira to Barranco Camp", description: "Acclimatization day via Lava Tower." },
+      { day: 5, title: "Barranco to Karanga Camp", description: "Climb the Barranco Wall and traverse ridges." },
+      { day: 6, title: "Karanga to Barafu Camp", description: "Final push to base camp. Rest for summit." },
+      { day: 7, title: "Summit Night!", description: "Midnight start to Uhuru Peak. Descent to Mweka Camp." },
+      { day: 8, title: "Mweka to Gate", description: "Final descent through forest. Certificate collection." },
+      { day: 9, title: "Rest in Moshi", description: "Relaxation and celebration dinner." },
+      { day: 10, title: "Departure", description: "Transfer to Kilimanjaro Airport." }
+    ],
+    inclusions: ["Mountain Guide & Porters", "Park & Camping Fees", "All Meals on Mountain", "2 Nights Hotel B&B", "Oxygen & First Aid"],
+    exclusions: ["Flights", "Visas", "Tips ($200-$300 rec.)", "Personal Gear"]
+  },
+  {
+    id: "amboseli-east-west",
+    name: "Amboseli East-West Adventure",
+    durationDays: 4,
+    priceUsd: 1100,
+    priceGbp: 880,
+    image: "https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?q=80&w=2000",
+    category: "Safari",
+    group: "Road Safari",
+    featured: true,
+    shortDescription: "Comprehensive 4-day exploration of Amboseli's ecosystems and elephant herds.",
+    fullDescription: "Experience the full breadth of Amboseli National Park. This extended 4-day safari allows for a deeper exploration of both the eastern and western sectors, maximizing your chances of seeing the super tusker elephants and predators against the backdrop of Kilimanjaro.",
+    highlights: ["Extensive Game Drives", "Observation Hill", "Elephant Research Center", "Maasai Culture"],
+    itinerary: [
+      { day: 1, title: "Nairobi to Amboseli", description: "Drive to Amboseli. Afternoon game drive in the western sector." },
+      { day: 2, title: "Full Day East & Swamps", description: "Explore the eastern swamps where elephants congregate. Picnic lunch." },
+      { day: 3, title: "Full Day West & Lake", description: "Visit the dry lake bed and western woodlands. Sunset views of Kilimanjaro." },
+      { day: 4, title: "Morning Game Drive & Return", description: "Final morning drive before returning to Nairobi." }
+    ],
+    inclusions: DEFAULT_INCLUSIONS,
+    exclusions: DEFAULT_EXCLUSIONS
+  },
+  {
+    id: "mara-nakuru-naivasha-combo",
+    name: "The Great Rift Valley & Mara Combo",
+    durationDays: 5,
+    priceUsd: 1350,
+    priceGbp: 1080,
+    image: "https://images.unsplash.com/photo-1519900270450-5a332704a3ce?q=80&w=2065",
+    category: "Safari",
+    group: "Road Safari",
+    featured: true,
+    shortDescription: "The ultimate 5-day road safari covering the best of Kenya's parks.",
+    fullDescription: "This value-packed safari combines the birdlife of Lake Nakuru, the hippos of Lake Naivasha, and the big cats of the Maasai Mara. It is the perfect itinerary for those who want to see diverse landscapes and wildlife in a single trip.",
+    highlights: ["Lake Nakuru Rhinos", "Boat Ride Naivasha", "Maasai Mara Big 5", "Hell's Gate Hike"],
+    itinerary: [
+      { day: 1, title: "Nairobi to Lake Nakuru", description: "Drive to Nakuru. Afternoon game drive to see rhinos and flamingos." },
+      { day: 2, title: "Nakuru to Naivasha", description: "Short drive to Naivasha. Boat ride and walking safari in Hell's Gate." },
+      { day: 3, title: "Naivasha to Maasai Mara", description: "Drive through the Rift Valley to the Mara. Evening game drive." },
+      { day: 4, title: "Full Day Maasai Mara", description: "Unlimited game viewing in Kenya's premier reserve." },
+      { day: 5, title: "Mara to Nairobi", description: "Morning game drive. Return to Nairobi." }
+    ],
+    inclusions: DEFAULT_INCLUSIONS,
+    exclusions: DEFAULT_EXCLUSIONS
+  },
+  {
+    id: "zanzibar-leisure",
+    name: "Zanzibar Island Leisure",
+    durationDays: 5,
+    priceUsd: 1100,
+    priceGbp: 880,
+    image: "https://images.unsplash.com/photo-1534764831626-d30c000df0b3?q=80&w=2070",
+    category: "International",
+    group: "International",
+    featured: false,
+    shortDescription: "Relax on the Spice Island with this 5-day beach and culture package.",
+    fullDescription: "Escape to the exotic island of Zanzibar. This package combines the history of Stone Town with the pristine white sands of Nungwi or Kendwa beaches. Perfect for post-safari relaxation or a romantic getaway.",
+    highlights: ["Stone Town Tour", "Spice Farm Visit", "Sunset Dhow Cruise", "Beach Relaxation"],
+    itinerary: [
+      { day: 1, title: "Arrival Zanzibar", description: "Transfer to Stone Town hotel. Evening at Forodhani Gardens." },
+      { day: 2, title: "Stone Town & Spices", description: "Guided historical tour and spice farm visit. Transfer to beach resort." },
+      { day: 3, title: "Beach Relaxation", description: "Free day to enjoy the turquoise waters and white sand." },
+      { day: 4, title: "Blue Safari / Leisure", description: "Optional Blue Safari boat trip or continued relaxation." },
+      { day: 5, title: "Departure", description: "Transfer to Zanzibar Airport." }
+    ],
+    inclusions: ["4 Nights Accommodation", "Half Board Meals", "Transfers", "Stone Town Tour", "Spice Tour"],
+    exclusions: ["Flights", "Infrastructure Tax", "Lunch", "Drinks"]
+  },
+
+  // --- BUSH SAFARIS (Existing) ---
   {
     id: "maasai-mara-classic",
     name: "Maasai Mara Classic Safari",

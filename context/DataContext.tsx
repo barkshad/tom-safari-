@@ -3,7 +3,7 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import { Tour, CompanyInfo, Inquiry, InquiryForm, PageContent, CurrencyConfig, BlogPost, TestimonialItem } from '../types';
 import { TOURS, COMPANY_INFO, DEFAULT_PAGE_CONTENT, SUPPORTED_CURRENCIES, SAMPLE_BLOG_POSTS } from '../constants';
 import { db, auth } from '../firebase';
-import { doc, getDoc, setDoc, collection, addDoc, getDocs, query, orderBy, enableNetwork, disableNetwork } from 'firebase/firestore';
+import { doc, getDoc, setDoc, collection, addDoc, getDocs, query, orderBy, enableNetwork, disableNetwork, updateDoc } from 'firebase/firestore';
 import { onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, updatePassword, User } from 'firebase/auth';
 
 interface CloudData {
@@ -27,6 +27,7 @@ interface DataContextType {
   updateBlogPost: (post: BlogPost) => Promise<void>;
   deleteBlogPost: (id: string) => Promise<void>;
   addInquiry: (form: InquiryForm) => Promise<void>;
+  updateInquiry: (id: string, status: 'New' | 'In Progress' | 'Closed') => Promise<void>;
   updatePageContent: (content: PageContent) => Promise<void>;
   isAuthenticated: boolean;
   login: (email: string, password: string) => Promise<boolean>;
@@ -146,7 +147,7 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
           const querySnapshot = await getDocs(q);
           const fetchedInquiries: Inquiry[] = [];
           querySnapshot.forEach((doc) => {
-              fetchedInquiries.push(doc.data() as Inquiry);
+              fetchedInquiries.push({ ...doc.data(), id: doc.id } as Inquiry);
           });
           setInquiries(fetchedInquiries);
         } catch(e) {
@@ -274,14 +275,25 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
         status: 'New',
         submittedAt: new Date().toISOString()
       };
-      await addDoc(collection(db, "inquiries"), newInquiry);
+      const docRef = await addDoc(collection(db, "inquiries"), newInquiry);
+      // If we are admin (rare case for adding), update local state, otherwise we rely on refresh
       if (isAuthenticated) {
-          setInquiries(prev => [newInquiry, ...prev]);
+          setInquiries(prev => [{...newInquiry, id: docRef.id}, ...prev]);
       }
     } catch (e) {
       console.error("Failed to submit inquiry:", e);
       alert("Note: Inquiry could not be saved (Offline mode). Please contact us directly.");
     }
+  };
+
+  const updateInquiry = async (id: string, status: 'New' | 'In Progress' | 'Closed') => {
+      try {
+          const inquiryRef = doc(db, "inquiries", id);
+          await updateDoc(inquiryRef, { status });
+          setInquiries(prev => prev.map(i => i.id === id ? { ...i, status } : i));
+      } catch (e) {
+          console.error("Error updating inquiry", e);
+      }
   };
 
   const login = async (email: string, password: string) => {
@@ -353,6 +365,7 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
       updateBlogPost,
       deleteBlogPost,
       addInquiry,
+      updateInquiry,
       updatePageContent,
       isAuthenticated,
       login,
