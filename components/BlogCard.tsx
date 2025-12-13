@@ -2,13 +2,15 @@
 // @ts-nocheck
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Calendar } from 'lucide-react';
+import { Calendar, PlayCircle } from 'lucide-react';
 import { BlogPost } from '../types';
 import { motion } from 'framer-motion';
 
 interface BlogCardProps {
   post: BlogPost;
 }
+
+const isVideo = (url: string) => url?.match(/\.(mp4|webm|ogg|mov)$/i) || url?.includes('/video/upload/');
 
 const BlogCard: React.FC<BlogCardProps> = ({ post }) => {
   return (
@@ -25,17 +27,35 @@ const BlogCard: React.FC<BlogCardProps> = ({ post }) => {
         transition={{ type: "spring", stiffness: 200, damping: 30 }}
         className="glass-card h-full rounded-3xl overflow-hidden flex flex-col relative z-10 border-2 border-transparent group-hover:border-safari-emerald/30"
       >
-        <div className="relative h-64 overflow-hidden">
+        <div className="relative h-64 overflow-hidden bg-stone-900">
           <Link to={`/blog/${post.slug}`} className="block w-full h-full">
-            <motion.img 
-              whileHover={{ scale: 1.1 }}
-              transition={{ duration: 0.5, ease: "easeOut" }}
-              src={post.image} 
-              alt={post.title} 
-              className="w-full h-full object-cover"
-            />
+            {isVideo(post.image) ? (
+               <video 
+                 src={post.image} 
+                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                 muted 
+                 loop 
+                 playsInline
+                 onMouseOver={e => e.currentTarget.play()}
+                 onMouseOut={e => e.currentTarget.pause()}
+               />
+            ) : (
+                <motion.img 
+                  whileHover={{ scale: 1.1 }}
+                  transition={{ duration: 0.5, ease: "easeOut" }}
+                  src={post.image} 
+                  alt={post.title} 
+                  className="w-full h-full object-cover"
+                />
+            )}
           </Link>
           <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-black/50 to-transparent"></div>
+          
+          {isVideo(post.image) && (
+            <div className="absolute top-4 right-4 bg-black/40 backdrop-blur-md p-2 rounded-full text-white">
+                <PlayCircle size={20} />
+            </div>
+          )}
         </div>
         
         <div className="p-6 flex flex-col flex-grow relative">

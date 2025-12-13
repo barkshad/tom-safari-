@@ -1,5 +1,4 @@
 
-
 // @ts-nocheck
 import React from 'react';
 import { useParams, Link } from 'react-router-dom';
@@ -7,6 +6,8 @@ import { useData } from '../context/DataContext';
 import { ArrowLeft, Calendar } from 'lucide-react';
 import { motion } from 'framer-motion';
 import PageTransition from '../components/PageTransition';
+
+const isVideo = (url: string) => url?.match(/\.(mp4|webm|ogg|mov)$/i) || url?.includes('/video/upload/');
 
 const BlogPost: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -28,14 +29,25 @@ const BlogPost: React.FC = () => {
   return (
     <PageTransition>
       <div className="bg-safari-sand min-h-screen pb-20">
-        <div className="relative h-[70vh] overflow-hidden">
+        <div className="relative h-[70vh] overflow-hidden bg-stone-900">
           <motion.div 
               initial={{ scale: 1.2 }}
               animate={{ scale: 1 }}
               transition={{ duration: 1.5, ease: "easeOut" }}
               className="w-full h-full"
           >
-              <img src={post.image} alt={post.title} className="w-full h-full object-cover"/>
+              {isVideo(post.image) ? (
+                 <video 
+                    src={post.image} 
+                    className="w-full h-full object-cover" 
+                    autoPlay 
+                    muted 
+                    loop 
+                    playsInline
+                 />
+              ) : (
+                 <img src={post.image} alt={post.title} className="w-full h-full object-cover"/>
+              )}
           </motion.div>
           <div className="absolute inset-0 bg-gradient-to-t from-safari-sand via-transparent to-black/40"></div>
           
