@@ -1,9 +1,11 @@
+
 // @ts-nocheck
 import React, { useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { Calendar, PlayCircle, Volume2, VolumeX } from 'lucide-react';
 import { BlogPost } from '../types';
 import { motion } from 'framer-motion';
+import { getOptimizedMedia, getPoster } from '../utils/media';
 
 interface BlogCardProps {
   post: BlogPost;
@@ -25,6 +27,22 @@ const BlogCard: React.FC<BlogCardProps> = ({ post }) => {
     }
   };
 
+  const handleMouseEnter = () => {
+      if (videoRef.current) {
+          videoRef.current.play().catch(() => {});
+      }
+  };
+
+  const handleMouseLeave = () => {
+      if (videoRef.current) {
+          videoRef.current.pause();
+          videoRef.current.currentTime = 0; // Reset
+      }
+  };
+
+  const mediaUrl = isVideo(post.image) ? getOptimizedMedia(post.image, 'video', 600) : getOptimizedMedia(post.image, 'image', 600);
+  const posterUrl = isVideo(post.image) ? getPoster(post.image) : '';
+
   return (
     <motion.div 
       initial={{ opacity: 0, y: 50, scale: 0.95 }}
@@ -40,26 +58,28 @@ const BlogCard: React.FC<BlogCardProps> = ({ post }) => {
         className="glass-card h-full rounded-3xl overflow-hidden flex flex-col relative z-10 border-2 border-transparent group-hover:border-safari-emerald/30"
       >
         <div className="relative h-64 overflow-hidden bg-stone-900">
-          <Link to={`/blog/${post.slug}`} className="block w-full h-full">
+          <Link 
+            to={`/blog/${post.slug}`} 
+            className="block w-full h-full"
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+          >
             {isVideo(post.image) ? (
                <video 
                  ref={videoRef}
-                 src={post.image} 
+                 src={mediaUrl}
+                 poster={posterUrl}
                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                  muted={isMuted}
                  loop 
                  playsInline
-                 onMouseOver={() => videoRef.current?.play()}
-                 onMouseOut={() => {
-                     videoRef.current?.pause();
-                     videoRef.current!.currentTime = 0; // Optional: Reset on leave
-                 }}
+                 preload="none"
                />
             ) : (
                 <motion.img 
                   whileHover={{ scale: 1.1 }}
                   transition={{ duration: 0.5, ease: "easeOut" }}
-                  src={post.image} 
+                  src={mediaUrl} 
                   alt={post.title} 
                   className="w-full h-full object-cover"
                 />

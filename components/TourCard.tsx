@@ -6,6 +6,7 @@ import { ArrowRight, Star, PlayCircle, MapPin } from 'lucide-react';
 import { Tour } from '../types';
 import { useData } from '../context/DataContext';
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
+import { getOptimizedMedia, getPoster } from '../utils/media';
 
 interface TourCardProps {
   tour: Tour;
@@ -19,6 +20,7 @@ const TourCard: React.FC<TourCardProps> = ({ tour }) => {
 
   // --- 3D TILT LOGIC ---
   const ref = useRef<HTMLDivElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
   
   // Motion values for tilt state
   const x = useMotionValue(0);
@@ -58,6 +60,23 @@ const TourCard: React.FC<TourCardProps> = ({ tour }) => {
     // Reset to center on leave
     x.set(0);
     y.set(0);
+    if (videoRef.current) {
+      videoRef.current.pause();
+    }
+  };
+
+  const handleMouseEnter = () => {
+    triggerHaptic('light');
+    if (videoRef.current) {
+      // Small delay to ensure mouse is intent on staying
+      const playPromise = videoRef.current.play();
+      if (playPromise !== undefined) {
+        playPromise.catch(error => {
+          // Auto-play was prevented
+          console.debug("Autoplay prevented", error);
+        });
+      }
+    }
   };
 
   // --- HAPTIC FEEDBACK ---
@@ -67,6 +86,10 @@ const TourCard: React.FC<TourCardProps> = ({ tour }) => {
         navigator.vibrate(intensity === 'light' ? 10 : 20);
     }
   };
+
+  // Optimize media sources
+  const mediaUrl = isVideo(tour.image) ? getOptimizedMedia(tour.image, 'video', 600) : getOptimizedMedia(tour.image, 'image', 600);
+  const posterUrl = isVideo(tour.image) ? getPoster(tour.image) : '';
 
   return (
     <motion.div 
@@ -87,7 +110,7 @@ const TourCard: React.FC<TourCardProps> = ({ tour }) => {
       className="group relative h-full cursor-pointer perspective-1000"
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      onMouseEnter={() => triggerHaptic('light')}
+      onMouseEnter={handleMouseEnter}
       onTouchStart={() => triggerHaptic('light')}
       whileTap={{ scale: 0.98 }}
     >
@@ -108,17 +131,18 @@ const TourCard: React.FC<TourCardProps> = ({ tour }) => {
         <div className="relative h-64 overflow-hidden bg-stone-900" style={{ transform: "translateZ(20px)" }}>
           {isVideo(tour.image) ? (
              <video 
-                src={tour.image} 
+                ref={videoRef}
+                src={mediaUrl}
+                poster={posterUrl}
                 className="w-full h-full object-cover transform transition-transform duration-700 group-hover:scale-105" 
                 muted 
                 loop 
                 playsInline 
-                onMouseOver={event => event.currentTarget.play()} 
-                onMouseOut={event => event.currentTarget.pause()} 
+                preload="none" // Critical for performance: don't load until necessary
              />
           ) : (
              <motion.img 
-                src={tour.image} 
+                src={mediaUrl} 
                 alt={tour.name} 
                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                 loading="lazy"

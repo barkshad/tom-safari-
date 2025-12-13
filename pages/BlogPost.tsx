@@ -1,3 +1,4 @@
+
 // @ts-nocheck
 import React, { useState, useRef } from 'react';
 import { useParams, Link } from 'react-router-dom';
@@ -5,6 +6,7 @@ import { useData } from '../context/DataContext';
 import { ArrowLeft, Calendar, Volume2, VolumeX } from 'lucide-react';
 import { motion } from 'framer-motion';
 import PageTransition from '../components/PageTransition';
+import { getOptimizedMedia, getPoster } from '../utils/media';
 
 const isVideo = (url: string) => url?.match(/\.(mp4|webm|ogg|mov)$/i) || url?.includes('/video/upload/');
 
@@ -26,6 +28,12 @@ const BlogPost: React.FC = () => {
     );
   }
 
+  // Media Optimization
+  const mediaUrl = isVideo(post.image) 
+      ? getOptimizedMedia(post.image, 'video', 1200) 
+      : getOptimizedMedia(post.image, 'image', 1200);
+  const posterUrl = isVideo(post.image) ? getPoster(post.image) : '';
+
   return (
     <PageTransition>
       <div className="bg-safari-sand min-h-screen pb-20">
@@ -38,7 +46,8 @@ const BlogPost: React.FC = () => {
           >
               {isVideo(post.image) ? (
                  <video 
-                    src={post.image} 
+                    src={mediaUrl}
+                    poster={posterUrl}
                     className="w-full h-full object-cover" 
                     autoPlay 
                     muted={isMuted}
@@ -46,7 +55,7 @@ const BlogPost: React.FC = () => {
                     playsInline
                  />
               ) : (
-                 <img src={post.image} alt={post.title} className="w-full h-full object-cover"/>
+                 <img src={mediaUrl} alt={post.title} className="w-full h-full object-cover"/>
               )}
           </motion.div>
           <div className="absolute inset-0 bg-gradient-to-t from-safari-sand via-transparent to-black/40"></div>

@@ -1,3 +1,4 @@
+
 // @ts-nocheck
 import React, { useRef } from 'react';
 import { Link } from 'react-router-dom';
@@ -8,10 +9,12 @@ import { motion, useScroll, useTransform, useMotionValue } from 'framer-motion';
 import PageTransition from '../components/PageTransition';
 import EditTrigger from '../components/EditTrigger';
 import StructuredData from '../components/StructuredData';
+import { getOptimizedMedia, getPoster } from '../utils/media';
 
 const Home: React.FC = () => {
   const { tours, companyInfo, pageContent } = useData();
-  const featuredTours = tours.filter(t => t.featured).slice(0, 6);
+  // Filter for featured AND visible tours
+  const featuredTours = tours.filter(t => t.featured && !t.hidden).slice(0, 6);
   const heroRef = useRef(null);
   
   const { scrollYProgress } = useScroll({ target: heroRef, offset: ["start start", "end start"] });
@@ -71,6 +74,12 @@ const Home: React.FC = () => {
       ? pageContent.home.testimonials[0] 
       : null;
 
+  // Hero Media Optimization
+  const heroMediaUrl = isVideo(pageContent.home.hero.image) 
+      ? getOptimizedMedia(pageContent.home.hero.image, 'video', 1920) 
+      : getOptimizedMedia(pageContent.home.hero.image, 'image', 1920);
+  const heroPoster = isVideo(pageContent.home.hero.image) ? getPoster(pageContent.home.hero.image) : '';
+
   return (
     <PageTransition>
       <StructuredData type="WebSite" data={{ name: companyInfo.name }} />
@@ -93,15 +102,17 @@ const Home: React.FC = () => {
           >
             {isVideo(pageContent.home.hero.image) ? (
                 <video 
-                    src={pageContent.home.hero.image} 
+                    src={heroMediaUrl}
+                    poster={heroPoster}
                     className="w-full h-full object-cover" 
                     autoPlay 
                     loop 
                     muted 
-                    playsInline 
+                    playsInline
+                    preload="auto"
                 />
             ) : (
-                <img src={pageContent.home.hero.image} alt="Safari Hero" className="w-full h-full object-cover" loading="eager" />
+                <img src={heroMediaUrl} alt="Safari Hero" className="w-full h-full object-cover" loading="eager" />
             )}
           </motion.div>
 
