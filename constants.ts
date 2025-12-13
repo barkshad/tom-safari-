@@ -1,7 +1,7 @@
 
 import { Tour, PageContent, CurrencyConfig, CompanyInfo, BlogPost } from './types';
 
-export const DATA_VERSION = "6.6"; // Added Image List Tours
+export const DATA_VERSION = "6.7"; // Added 20+ Blog Posts
 
 export const COMPANY_INFO: CompanyInfo = {
   name: "Tom Safaris",
@@ -72,874 +72,538 @@ Tsavo East is famous for its "Red Elephants," which get their color from dusting
     category: "Cultural Experiences",
     date: "October 22, 2023",
   },
+  {
+    id: "post-great-migration",
+    slug: "witnessing-the-great-migration-maasai-mara",
+    title: "The Great Wildebeest Migration: A Spectacle Like No Other",
+    excerpt: "Plan your trip to the Maasai Mara to witness the 'Eighth Wonder of the World' as millions of wildebeest cross the Mara River.",
+    content: `Every year, the Maasai Mara plays host to the greatest wildlife show on earth. Millions of wildebeest, zebras, and gazelles traverse the Serengeti-Mara ecosystem in search of fresh grazing.
+
+**When to Go**
+While the migration is a year-round cycle, the dramatic river crossings usually occur between **July and October**. This is when the herds face the crocodile-infested Mara River, creating heart-stopping moments for onlookers.
+
+**What You'll See**
+- **Predator Action:** Lions, leopards, and cheetahs follow the herds closely.
+- **River Crossings:** The chaos and survival instinct at the river banks.
+- **Vast Herds:** The sheer noise and vibration of the ground is unforgettable.
+
+Book your Maasai Mara flight safari early, as lodges fill up quickly during migration season!`,
+    image: "https://images.unsplash.com/photo-1516426122078-c23e76319801?q=80&w=2000",
+    category: "Wildlife",
+    date: "January 15, 2024"
+  },
+  {
+    id: "post-amboseli-giants",
+    slug: "amboseli-land-of-giants",
+    title: "Amboseli: Land of Giants and Mountain Views",
+    excerpt: "Why Amboseli National Park offers the best elephant photography in the world, with Mt. Kilimanjaro as your backdrop.",
+    content: `Amboseli National Park is synonymous with two things: massive herds of elephants and the towering peak of Mount Kilimanjaro.
+
+**The Photographers Dream**
+The park is famous for being the best place in Africa to get close to free-ranging elephants. The famous shot of an elephant with the snow-capped mountain in the background is taken here.
+
+**Observation Hill**
+A climb up Observation Hill offers a panoramic view of the entire park, including the swamps where elephants bathe and hippos hide.
+
+**Birding Paradise**
+With over 400 species of birds, including water birds like pelicans and kingfishers, it's a haven for ornithologists.`,
+    image: "https://images.unsplash.com/photo-1549320341-9426d03d45d6?q=80&w=2070",
+    category: "Destinations",
+    date: "February 2, 2024"
+  },
+  {
+    id: "post-packing-safari",
+    slug: "ultimate-safari-packing-list",
+    title: "The Ultimate Safari Packing List for Kenya",
+    excerpt: "Don't overpack! Here is exactly what you need for a comfortable and stylish safari experience.",
+    content: `Packing for a safari can be tricky. You want to be prepared, but luggage space in 4x4s and light aircraft is limited.
+
+**The Essentials:**
+1.  **Neutral Colors:** Wear khaki, beige, or green to blend in. Avoid bright colors (scares animals) and dark blue/black (attracts tsetse flies).
+2.  **Layers:** Mornings are cold, afternoons are hot. Bring a fleece jacket and light t-shirts.
+3.  **Camera & Binoculars:** A must for spotting wildlife.
+4.  **Sun Protection:** Hat, sunglasses, and high SPF sunscreen.
+5.  **Insect Repellent:** Essential for evenings.
+6.  **Comfortable Shoes:** Hiking boots aren't necessary unless you're walking; comfortable trainers work fine.`,
+    image: "https://images.unsplash.com/photo-1523978591478-c753949ff840?q=80&w=2070",
+    category: "Travel Tips",
+    date: "March 10, 2024"
+  },
+  {
+    id: "post-wasini-island",
+    slug: "magic-of-wasini-island",
+    title: "Beyond the Beach: The Magic of Wasini Island",
+    excerpt: "Escape the resorts and discover the coral gardens, dolphins, and Swahili culture of Wasini Island.",
+    content: `Located south of Diani, Wasini Island is a tranquil escape where time seems to stand still. There are no cars, only footpaths of coral rag.
+
+**Kisite-Mpunguti Marine Park**
+Our Wasini tour includes a dhow trip to this marine park, famous for its resident pod of dolphins. Snorkeling here is world-class, with vibrant coral gardens and sea turtles.
+
+**The Coral Garden**
+On the island itself, the "Coral Garden" is a surreal landscape of fossilized coral structures exposed by the receding sea, now covered in mangroves. A boardwalk allows you to explore this alien-like terrain.
+
+**Seafood Feast**
+No trip is complete without a traditional Swahili seafood lunch, featuring fresh crab and fish caught by local fishermen.`,
+    image: "https://images.unsplash.com/photo-1582967788606-a171f1080ca8?q=80&w=2070",
+    category: "Coastal Excursions",
+    date: "March 25, 2024"
+  },
+  {
+    id: "post-tsavo-west-mzima",
+    slug: "tsavo-west-mzima-springs",
+    title: "Tsavo West: Lava Flows and Mzima Springs",
+    excerpt: "Explore the rugged beauty of Tsavo West, from the Shetani Lava Flow to the underwater viewing chamber at Mzima Springs.",
+    content: `While Tsavo East is flat and open, Tsavo West is rugged, volcanic, and hilly. It offers a completely different aesthetic for safari-goers.
+
+**Mzima Springs**
+A geological marvel, Mzima Springs produces 50 million gallons of crystal-clear water daily. An underwater viewing chamber allows you to watch hippos and fish swimming in the filtration-clear water.
+
+**Shetani Lava Flow**
+"Shetani" means "Devil" in Swahili. This massive black lava flow was formed only a few hundred years ago and local legends say the earth opened up and fire consumed the area.
+
+**Rhino Sanctuary**
+Tsavo West is home to a protected area for black rhinos, offering a high chance of spotting this elusive member of the Big Five.`,
+    image: "https://images.unsplash.com/photo-1518709414768-a88981a4515d?q=80&w=2070",
+    category: "Destinations",
+    date: "April 5, 2024"
+  },
+  {
+    id: "post-shimba-hills",
+    slug: "shimba-hills-sable-antelope",
+    title: "Shimba Hills: The Coastal Rainforest Safari",
+    excerpt: "Just 30km from Diani, Shimba Hills offers a unique rainforest ecosystem and the rare Sable Antelope.",
+    content: `If you want a break from the heat of the coast, head to the Shimba Hills. This National Reserve is a coastal rainforest, often covered in a cooling mist.
+
+**The Sable Antelope**
+Shimba Hills is the only place in Kenya where you can see the majestic Sable Antelope, known for their scimitar-horned silhouette.
+
+**Sheldrick Falls**
+For the adventurous, a guided hike down to the Sheldrick Falls is a must. You can take a refreshing dip in the cool waters of the plunge pool.
+
+**Forest Elephants**
+The elephants here are distinct from their Tsavo cousins; they live in the dense forest and are often smaller but very active.`,
+    image: "https://images.unsplash.com/photo-1590523277543-a94d2e4eb00b?q=80&w=2000",
+    category: "Destinations",
+    date: "April 18, 2024"
+  },
+  {
+    id: "post-salt-lick-lodge",
+    slug: "staying-at-salt-lick-lodge",
+    title: "A Night at Salt Lick Safari Lodge: Iconic Stilted Architecture",
+    excerpt: "Why the Salt Lick Game Lodge in Taita Hills is one of the most photographed lodges in the world.",
+    content: `Located in the heart of the Taita Hills Wildlife Sanctuary, Sarova Salt Lick Game Lodge is famous for its unique architecture. The entire lodge is built on high stilts, connected by suspended walkways.
+
+**24/7 Game Viewing**
+The stilts lift you above the elephants that congregate at the waterholes below. You can watch wildlife from your bedroom window or the underground bunker, which puts you at eye level with drinking elephants.
+
+**Private Sanctuary**
+Because it's a private sanctuary, you can enjoy night game drives—an activity not permitted in most National Parks—revealing nocturnal creatures like aardvarks and bush babies.`,
+    image: "https://images.unsplash.com/photo-1516426122078-c23e76319801?q=80&w=2000",
+    category: "Accommodation",
+    date: "May 1, 2024"
+  },
+  {
+    id: "post-gede-ruins",
+    slug: "mystery-of-gede-ruins",
+    title: "The Mystery of Gede Ruins: A Swahili Ghost City",
+    excerpt: "Wander through the ancient coral-stone walls of Gede, a wealthy city mysteriously abandoned in the 17th century.",
+    content: `Buried deep in the Arabuko-Sokoke forest near Malindi lies the Gede Ruins. This was once a thriving Swahili city with palaces, mosques, and stone houses, complete with advanced sanitation systems.
+
+**The Mystery**
+In the early 17th century, the entire population abandoned the city. There are no written records explaining why. Was it disease? War? A receding water table?
+
+**What Remains**
+Today, you can walk through the Great Mosque, the Palace, and the pillars of tombs. The site is now inhabited by playful Sykes monkeys and butterflies, adding life to the ruins.`,
+    image: "https://images.unsplash.com/photo-1544551763-46a013bb70d5?q=80&w=2070",
+    category: "History",
+    date: "May 15, 2024"
+  },
+  {
+    id: "post-honeymoon-safari",
+    slug: "planning-perfect-honeymoon-safari",
+    title: "How to Plan the Perfect Honeymoon Safari",
+    excerpt: "Combine the thrill of the bush with the relaxation of the beach for an unforgettable romantic getaway.",
+    content: `Kenya is arguably the world's best honeymoon destination because it offers the "Bush and Beach" combination effortlessly.
+
+**Romance in the Wild**
+Imagine a private candlelit dinner under the stars in the middle of the savannah, or a sunrise hot air balloon ride over the Mara.
+
+**Luxury Accommodation**
+We recommend lodges that offer honeymoon suites with private plunge pools and secluded views.
+
+**The Perfect Itinerary**
+Start with 3 days of adventure in Tsavo or Amboseli, then retreat to Diani Beach or Zanzibar for 4 days of relaxation. We handle all the transfers so you can focus on each other.`,
+    image: "https://images.unsplash.com/photo-1515682977530-584762260717?q=80&w=2070",
+    category: "Travel Tips",
+    date: "June 2, 2024"
+  },
+  {
+    id: "post-big-five",
+    slug: "spotting-the-big-five",
+    title: "The Big Five Checklist: Where to Find Them",
+    excerpt: "Lion, Leopard, Elephant, Rhino, and Buffalo. Here is your guide to spotting Africa's most sought-after animals.",
+    content: `The term "Big Five" was originally coined by hunters for the five most difficult animals to hunt on foot. Today, it's about the prestige of spotting them on camera.
+
+1.  **Elephant:** Best seen in Amboseli and Tsavo East (Red Elephants).
+2.  **Lion:** Abundant in Maasai Mara and Tsavo. Look for them resting in the shade during the day.
+3.  **Buffalo:** Common in most parks, often found in large herds or as solitary "Dagga Boys."
+4.  **Leopard:** The most elusive. Tsavo West and the riverine forests of the Mara are your best bet. Look up in the trees!
+5.  **Rhino:** The rarest. Lake Nakuru and the Ngulia Sanctuary in Tsavo West are the strongholds for Black Rhinos.`,
+    image: "https://images.unsplash.com/photo-1547970810-dc1eac37d174?q=80&w=2071",
+    category: "Wildlife",
+    date: "June 20, 2024"
+  },
+  {
+    id: "post-glass-bottom-boat",
+    slug: "malindi-marine-park-glass-bottom",
+    title: "Exploring the Underwater World: Malindi Marine Park",
+    excerpt: "You don't need to be a diver to see the coral reefs. Step aboard a glass-bottom boat in Malindi.",
+    content: `Malindi Marine National Park is the oldest marine park in Africa. It is a haven for sea life, and the best way to see it without getting wet (initially) is a glass-bottom boat tour.
+
+**The Experience**
+As the boat glides over the coral gardens, the glass floor reveals a kaleidoscope of color. You'll see Zebra fish, Surgeonfish, and perhaps a sea turtle.
+
+**Snorkeling**
+The boat will anchor in the calm lagoon, allowing you to jump in and swim amongst the fish. The fish here are protected and very accustomed to humans, often swimming right up to your mask.
+
+**Magic Island**
+At low tide, sandbanks emerge from the ocean, known as "Magic Islands." It's the perfect spot for sunbathing in the middle of the sea.`,
+    image: "https://images.unsplash.com/photo-1544551763-46a013bb70d5?q=80&w=2070",
+    category: "Coastal Excursions",
+    date: "July 5, 2024"
+  },
+  {
+    id: "post-family-safari",
+    slug: "family-safari-tips-kids",
+    title: "Taking Kids on Safari: A Survival Guide",
+    excerpt: "Is a safari safe for children? Absolutely. Here are our top tips for a family-friendly adventure.",
+    content: `A safari is a magical education for children, but it requires planning.
+
+**Age Matters**
+We generally recommend safaris for children aged 5 and up. Younger children may struggle with the long drives and the need for silence near animals.
+
+**Keep it Short**
+For families, we recommend 2-day or 3-day safaris rather than week-long expeditions. Tsavo East is perfect because it's close to the coast.
+
+**Lodges with Pools**
+After a dusty game drive, a pool is essential for kids to burn off energy. Lodges like Voi Wildlife Lodge or Salt Lick offer great facilities.
+
+**Private Vehicle**
+Booking a private safari van gives you flexibility. If the kids are tired, you can return to the lodge early without affecting other guests.`,
+    image: "https://images.unsplash.com/photo-1523978591478-c753949ff840?q=80&w=2070",
+    category: "Travel Tips",
+    date: "July 18, 2024"
+  },
+  {
+    id: "post-sgr-train",
+    slug: "sgr-train-vs-road-safari",
+    title: "SGR Train vs. Road Safari: Which is Better?",
+    excerpt: "Should you drive from Mombasa to Tsavo or take the Madaraka Express train? We weigh the pros and cons.",
+    content: `The SGR (Standard Gauge Railway) has revolutionized travel in Kenya. But for a safari, is it better than the road?
+
+**The Road Option**
+*   **Pros:** You see the countryside, you have your vehicle from start to finish, and you can stop for photos/souvenirs.
+*   **Cons:** The highway can be busy and the journey is longer.
+
+**The Train Option**
+*   **Pros:** Fast, comfortable, air-conditioned, and travels *through* the park (you might spot elephants from your seat!).
+*   **Cons:** You need a transfer at the station to your safari vehicle.
+
+**Our Verdict**
+For Tsavo East, driving is often easier as the park gate is on the highway. For Tsavo West or Amboseli, the train to Voi or Emali/Mtito Andei can save hours of fatigue. We offer packages for both!`,
+    image: "https://images.unsplash.com/photo-1517379768224-2c7847c234a9?q=80&w=2070",
+    category: "Travel Tips",
+    date: "August 1, 2024"
+  },
+  {
+    id: "post-bird-watching",
+    slug: "bird-watching-kenya-coast",
+    title: "A Birder’s Paradise: Arabuko-Sokoke and Mida Creek",
+    excerpt: "Discover the rare species of the Kenyan coast, from the Clarke's Weaver to the Sokoke Scops Owl.",
+    content: `Kenya isn't just about the Big Five. The coastal forests are a global biodiversity hotspot for birds.
+
+**Arabuko-Sokoke Forest**
+This is the largest remaining fragment of coastal forest in East Africa. It is the only place to find the Clarke's Weaver. It's also home to the tiny, endangered Sokoke Scops Owl.
+
+**Mida Creek**
+A short distance away, Mida Creek is a tidal inlet lined with mangroves. It is a vital stopover for migrating waders. A boardwalk allows you to walk over the mangroves, offering prime viewing of Flamingos, Crab-plovers, and Ospreys.`,
+    image: "https://images.unsplash.com/photo-1444464666168-49d633b86797?q=80&w=2069",
+    category: "Wildlife",
+    date: "August 15, 2024"
+  },
+  {
+    id: "post-night-game-drive",
+    slug: "thrill-of-night-game-drives",
+    title: "The Thrill of a Night Game Drive",
+    excerpt: "See the bush come alive after dark. Why you should include a private sanctuary in your itinerary.",
+    content: `National Parks in Kenya usually close their gates at 6:30 PM. To see the nocturnal world, you need to visit a private conservancy like Taita Hills or Lumo Sanctuary.
+
+**The Eyes in the Dark**
+Using a spotlight, your guide will scan the bush. You'll see hundreds of reflective eyes back at you.
+
+**Predators on the Prowl**
+Lions and leopards are most active at night. This is your best chance to see a hunt in action.
+
+**Smaller Creatures**
+You'll spot animals you never see during the day: Genets, Civets, White-tailed Mongooses, and Aardvarks. It brings a completely different dimension to the safari experience.`,
+    image: "https://images.unsplash.com/photo-1516426122078-c23e76319801?q=80&w=2000",
+    category: "Safari Experience",
+    date: "August 28, 2024"
+  },
+  {
+    id: "post-cultural-maasai",
+    slug: "maasai-village-visit",
+    title: "More Than Wildlife: Visiting a Maasai Village",
+    excerpt: "Understanding the culture of the Maasai people is integral to the East African safari experience.",
+    content: `The Maasai people have lived alongside wildlife for centuries. A visit to a traditional "Manyatta" (village) offers a glimpse into their enduring lifestyle.
+
+**The Welcome Dance**
+You will typically be welcomed with a rhythmic dance and the famous high-jumping competition (Adumu) by the warriors.
+
+**Traditional Skills**
+Learn how they make fire using sticks, beadwork, and how they construct their homes using natural materials.
+
+**Respectful Tourism**
+We ensure our cultural visits are respectful and beneficial to the community, with fees going directly to the village to support schools and water projects.`,
+    image: "https://images.unsplash.com/photo-1516426122078-c23e76319801?q=80&w=2000",
+    category: "Culture",
+    date: "September 10, 2024"
+  },
+  {
+    id: "post-tanzania-combo",
+    slug: "combining-kenya-and-tanzania",
+    title: "The Ultimate Circuit: Combining Kenya and Tanzania",
+    excerpt: "Why choose? How to plan a cross-border safari covering the Mara, Serengeti, and Ngorongoro Crater.",
+    content: `For the ultimate African adventure, combining Kenya and Tanzania is the gold standard.
+
+**The Logistics**
+The border crossing at Isebania or Namanga is straightforward with our assistance. You'll switch vehicles at the border, but the experience is seamless.
+
+**The Highlights Reel**
+1.  **Maasai Mara (Kenya):** High density of cats and the river crossings.
+2.  **Serengeti (Tanzania):** Endless plains and massive herds.
+3.  **Ngorongoro Crater (Tanzania):** A wildlife fishbowl inside an extinct volcano.
+4.  **Amboseli (Kenya):** Elephants and Kilimanjaro.
+
+This requires at least 8 to 10 days, but it covers the absolute best wildlife viewing on the planet.`,
+    image: "https://images.unsplash.com/photo-1516426122078-c23e76319801?q=80&w=2000",
+    category: "Travel Tips",
+    date: "September 25, 2024"
+  },
+  {
+    id: "post-safari-photography",
+    slug: "safari-photography-tips",
+    title: "5 Photography Tips for Your Safari",
+    excerpt: "Capture the perfect shot. Advice on lighting, composition, and equipment for amateur photographers.",
+    content: `You don't need a $5,000 lens to get great safari photos, but you do need patience.
+
+1.  **Golden Hour:** The light at 6:30 AM and 5:30 PM is soft and golden. Midday sun is harsh and flattens images.
+2.  **Eye Level:** If possible, ask your guide to position the vehicle so you are lower down. Photos taken looking down on animals are less intimate.
+3.  **Leave Space:** If an animal is moving, leave space in the frame in front of it for it to "move into."
+4.  **Focus on Eyes:** Always focus on the animal's eyes. If the eyes are sharp, the photo works.
+5.  **Bean Bags:** Use a bean bag on the roof of the safari van to stabilize your camera instead of a tripod, which is cumbersome in a car.`,
+    image: "https://images.unsplash.com/photo-1516426122078-c23e76319801?q=80&w=2000",
+    category: "Photography",
+    date: "October 5, 2024"
+  },
+  {
+    id: "post-diani-beach",
+    slug: "diani-beach-relaxation",
+    title: "Why Diani Beach is the Best Way to End a Safari",
+    excerpt: "After dusty game drives, nothing beats the white sands of Diani. Voted Africa's leading beach destination multiple times.",
+    content: `Safari is exhilarating, but it is also tiring. Early mornings and bumpy roads take their toll. That's why we always recommend ending your trip in Diani.
+
+**The Beach**
+Diani offers 17km of flawless white sand and turquoise water. It's protected by a reef, making the water calm and safe for swimming.
+
+**Activities**
+If you still have energy, try kite surfing, skydiving (landing on the beach!), or a glass-bottom boat trip to the sandbar.
+
+**Dining**
+Diani has a vibrant culinary scene, from the famous Ali Barbour's Cave Restaurant (set inside a natural coral cave) to fresh seafood shacks on the beach.`,
+    image: "https://images.unsplash.com/photo-1590523741831-ab7e8b8f9c7f?q=80&w=1974",
+    category: "Destinations",
+    date: "October 18, 2024"
+  },
+  {
+    id: "post-safari-etiquette",
+    slug: "safari-etiquette-rules",
+    title: "Safari Etiquette: How to Be a Responsible Tourist",
+    excerpt: "Respecting the wild is key. Rules on noise, feeding animals, and off-road driving.",
+    content: `We love showing you our country, but we must protect it. Here are the golden rules of safari:
+
+1.  **Never Feed Animals:** It makes them aggressive and dependent on humans.
+2.  **Keep Noise Down:** Loud voices scare animals away and disturb other guests.
+3.  **Stay in the Vehicle:** Unless in a designated area, getting out is extremely dangerous.
+4.  **No Littering:** Take all your trash back to the lodge.
+5.  **Patience:** Don't pressure your driver to chase animals or go off-road. The best sightings often come to those who wait quietly.`,
+    image: "https://images.unsplash.com/photo-1516426122078-c23e76319801?q=80&w=2000",
+    category: "Travel Tips",
+    date: "November 1, 2024"
+  }
+];
+
+export const TOURS: Tour[] = [
+  {
+    id: "tour-tsavo-east-1-day",
+    name: "Tsavo East Day Trip",
+    durationDays: 1,
+    priceUsd: 150,
+    priceGbp: 120,
+    image: "https://images.unsplash.com/photo-1516426122078-c23e76319801?q=80&w=2000",
+    shortDescription: "A quick but immersive safari experience from Mombasa/Diani.",
+    fullDescription: "Experience the thrill of the wild with a day trip to Tsavo East National Park. Depart early from your coastal hotel and drive along the Mombasa-Nairobi highway to the park gate. Enjoy game drives spotting 'Red Elephants', lions, and other wildlife before lunch at a lodge. Return to the coast by evening.",
+    highlights: ["Red Elephants", "Aruba Dam", "Big Five Spotting"],
+    itinerary: [
+      { day: 1, title: "Mombasa to Tsavo East", description: "Early morning pick up, game drive, lunch, and return." }
+    ],
+    featured: true,
+    category: 'Safari',
+    group: 'Road Safari',
+    inclusions: ["Park fees", "Transport", "Lunch", "Game drives"],
+    exclusions: ["Drinks", "Tips"],
+    gallery: ["https://images.unsplash.com/photo-1516426122078-c23e76319801?q=80&w=2000"]
+  },
+  {
+    id: "tour-tsavo-east-salt-lick-2-days",
+    name: "Tsavo East & Salt Lick Overnight",
+    durationDays: 2,
+    priceUsd: 350,
+    priceGbp: 280,
+    image: "https://images.unsplash.com/photo-1547970810-dc1eac37d174?q=80&w=2071",
+    shortDescription: "Stay at the iconic stilted lodge and explore Taita Hills.",
+    fullDescription: "Combine Tsavo East with the private Taita Hills Sanctuary. Stay at the famous Salt Lick Safari Lodge, built on stilts overlooking waterholes where animals gather day and night.",
+    highlights: ["Salt Lick Lodge", "Night Game Drive", "Tsavo East"],
+    itinerary: [
+      { day: 1, title: "Coast to Taita Hills", description: "Drive to Taita Hills, lunch at Taita Hills Lodge, afternoon game drive, dinner at Salt Lick." },
+      { day: 2, title: "Tsavo East to Coast", description: "Morning game drive in Tsavo East, then return to the coast." }
+    ],
+    featured: true,
+    category: 'Safari',
+    group: 'Road Safari',
+    inclusions: ["Accommodation", "All meals", "Park fees", "Transport"],
+    exclusions: ["Drinks", "Tips"],
+     gallery: ["https://images.unsplash.com/photo-1547970810-dc1eac37d174?q=80&w=2071"]
+  },
+  {
+    id: "tour-amboseli-3-days",
+    name: "Amboseli Kilimanjaro Safari",
+    durationDays: 3,
+    priceUsd: 550,
+    priceGbp: 440,
+    image: "https://images.unsplash.com/photo-1549320341-9426d03d45d6?q=80&w=2070",
+    shortDescription: "See majestic elephants against the backdrop of Mt. Kilimanjaro.",
+    fullDescription: "Amboseli is famous for its large herds of elephants and views of Mount Kilimanjaro. This 3-day safari gives you ample time to explore the park's swamps and observation hill.",
+    highlights: ["Mt. Kilimanjaro Views", "Large Elephant Herds", "Observation Hill"],
+    itinerary: [
+      { day: 1, title: "Travel to Amboseli", description: "Drive or take the train to Emali, transfer to Amboseli. Afternoon game drive." },
+      { day: 2, title: "Full Day Amboseli", description: "Morning and afternoon game drives. Optional Maasai village visit." },
+      { day: 3, title: "Return", description: "Morning game drive and return journey." }
+    ],
+    featured: false,
+    category: 'Safari',
+    group: 'Road Safari',
+    inclusions: ["Accommodation", "Meals", "Park fees"],
+    exclusions: ["Tips", "Drinks"],
+     gallery: ["https://images.unsplash.com/photo-1549320341-9426d03d45d6?q=80&w=2070"]
+  },
+  {
+    id: "tour-wasini-dolphin",
+    name: "Wasini Island Dolphin Tour",
+    durationDays: 1,
+    priceUsd: 90,
+    priceGbp: 75,
+    image: "https://images.unsplash.com/photo-1582967788606-a171f1080ca8?q=80&w=2070",
+    shortDescription: "Snorkel, see dolphins, and enjoy a seafood lunch.",
+    fullDescription: "A full day excursion to Kisite Mpunguti Marine Park. Swim with dolphins, snorkel in the coral garden, and enjoy a traditional Swahili seafood lunch on Wasini Island.",
+    highlights: ["Dolphins", "Snorkeling", "Seafood Lunch", "Dhow Cruise"],
+    itinerary: [
+      { day: 1, title: "Full Day Excursion", description: "Pick up, dhow cruise, snorkeling, lunch, and return." }
+    ],
+    featured: false,
+    category: 'Day Trip',
+    group: 'Excursion',
+    inclusions: ["Marine Park Fees", "Lunch", "Snorkeling Gear", "Transport"],
+    exclusions: ["Drinks"],
+     gallery: ["https://images.unsplash.com/photo-1582967788606-a171f1080ca8?q=80&w=2070"]
+  },
+   {
+    id: "tour-masai-mara-flight",
+    name: "Maasai Mara Flight Safari",
+    durationDays: 3,
+    priceUsd: 1200,
+    priceGbp: 950,
+    image: "https://images.unsplash.com/photo-1516426122078-c23e76319801?q=80&w=2000",
+    shortDescription: "Fly directly into the action for the Big Five.",
+    fullDescription: "Maximize your time with a flight package to the world-famous Maasai Mara. Witness the Big Five and potentially the Great Migration (seasonal).",
+    highlights: ["Flight Experience", "Big Five", "Luxury Camp"],
+    itinerary: [
+      { day: 1, title: "Flight to Mara", description: "Flight from Diani/Mombasa/Nairobi. Afternoon game drive." },
+      { day: 2, title: "Explore Mara", description: "Full day game viewing." },
+      { day: 3, title: "Return Flight", description: "Morning game drive and flight back." }
+    ],
+    featured: true,
+    category: 'Safari',
+    group: 'Flight Safari',
+    inclusions: ["Flights", "Accommodation", "Game Drives", "Park Fees"],
+    exclusions: ["Tips", "Drinks"],
+    gallery: ["https://images.unsplash.com/photo-1516426122078-c23e76319801?q=80&w=2000"]
+  }
 ];
 
 export const DEFAULT_PAGE_CONTENT: PageContent = {
   home: {
     hero: {
       title: "Cruise the Wild",
-      subtitle: "Experience the thrill of the wild with Kenya's premier safari expert, Tom 'Cruse' Madeda.",
-      image: "https://i.ibb.co/Yh4wV0n/tsavo-safari-hero.jpg"
+      subtitle: "Experience Kenya's majesty with Tom 'Cruse' Madeda. Tailored safaris, unforgettable memories.",
+      image: "https://images.unsplash.com/photo-1516426122078-c23e76319801?q=80&w=2000",
     },
     welcome: {
-      title: "Welcome to Tom Safaris",
-      content: "We are a premier safari and adventure tour operator based in Kilifi, dedicated to organizing wildlife, coastal, and adventure tours across Kenya."
+      title: "Karibu Kenya",
+      content: "Welcome to Tom Safaris. We specialize in creating personalized safari experiences that go beyond the ordinary. From the vast plains of Tsavo to the white sands of Diani, let us show you the real Kenya.",
     },
     features: [
-      { id: 'f1', title: "Safety First", text: "Expert guides and well-maintained vehicles for a secure journey." },
-      { id: 'f2', title: "Local Expertise", text: "We know the hidden gems, wildlife patterns, and cultural nuances." },
-      { id: 'f3', title: "Authentic Experiences", text: "Passionate about creating unforgettable memories in nature." }
+      { id: "feat1", title: "Expert Guides", text: "Our guides are KPSGA silver/gold certified with years of bush experience." },
+      { id: "feat2", title: "Custom Fleets", text: "Our 4x4 Land Cruisers are modified for photography and comfort." },
+      { id: "feat3", title: "24/7 Support", text: "We are with you every step of the way, from booking to drop-off." },
     ],
     testimonials: [
-      {
-        id: 't1',
-        content: "We had the most amazing time with Tom 'Cruse'. The driver was knowledgeable, the lodges were beautiful, and seeing the lions in Maasai Mara was a dream come true!",
-        author: "Sarah J., United Kingdom"
-      }
-    ]
+      { id: "test1", content: "The best safari experience we've ever had! Tom is a legend.", author: "Sarah & Mark, UK" },
+      { id: "test2", content: "Saw the Big 5 in two days. Incredible guiding.", author: "Hans, Germany" },
+    ],
   },
   about: {
     hero: {
-      title: "About Us",
-      subtitle: "Experience, Passion, and Authenticity",
-      image: "https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?q=80&w=2000"
+      title: "Our Story",
+      subtitle: "Passion for the Wild",
+      image: "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?q=80&w=2021",
     },
     philosophy: {
-      content: "At Tom Safaris, we are passionate about creating unforgettable experiences. Led by Tom 'Cruse' himself, our dedicated team prioritizes safety, sustainability, and exceptional service to ensure your mission is always possible."
+      content: "We believe in sustainable tourism that benefits both the traveler and the local community. Every safari with us supports conservation efforts.",
     },
     founder: {
-      title: "Meet Our Founder",
-      subtitle: "Tom 'Cruse' Madeda",
-      content: "Founder and Head Guide, Tom 'Cruse' Madeda, is more than just a tour operator; he is a legend of the Kenyan coast. With over 15 years of navigating the savannahs and coastlines, Tom earned the nickname 'Cruse' for his smooth navigation of challenging terrains and his 'mission possible' attitude toward finding the Big Five.",
-      image: "https://images.unsplash.com/photo-1544983058-293e50626388?q=80&w=400"
-    }
+      title: "Tom Madeda",
+      subtitle: "Head Guide & Founder",
+      image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=1974", // Placeholder
+      content: "With over 15 years in the industry, Tom, affectionately known as 'Cruse', started this company to offer more than just game drives. He wanted to offer connections with nature.",
+    },
   },
   contact: {
     intro: {
       title: "Get in Touch",
-      content: "Our team is ready to answer all your questions about tours, pricing, and accommodation."
+      content: "Ready to start planning? We'd love to hear from you.",
     },
-    mapUrl: "https://maps.google.com/maps?q=Titanic%20Plaza%2C%20Kilifi&t=&z=15&ie=UTF8&iwloc=&output=embed"
+    mapUrl: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3980.206275728472!2d39.8436!3d-3.633!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zM8KwMzcnNTguOCJTIDM5wrA1MCczNy4wIkU!5e0!3m2!1sen!2ske!4v1638888888888!5m2!1sen!2ske",
   },
   footer: {
-    aboutText: "Turning your travel dreams into extraordinary experiences – Hosted by Tom 'Cruse'.",
-    copyrightText: "All rights reserved."
+    aboutText: "Tom Safaris is a premier tour operator based in Kilifi, Kenya, dedicated to showcasing the beauty of East Africa.",
+    copyrightText: "All rights reserved.",
   },
   seo: {
-    home: { title: "Home | Tom Safaris", description: "Premier safari operator in East Africa hosted by Tom 'Cruse'." },
-    about: { title: "About Us | Tom Safaris", description: "Learn about our philosophy and meet our founder Tom 'Cruse'." },
-    tours: { title: "Safari Tours | Tom Safaris", description: "Explore our wide range of wildlife and coastal safari packages." },
-    contact: { title: "Contact Us | Tom Safaris", description: "Get in touch to book your next adventure." },
-    blog: { title: "Safari Blog | Tom Safaris", description: "Latest stories and tips from the bush." }
-  }
+    home: { title: "Tom Safaris | Best Kenya Safari Tours", description: "Book your dream Kenya safari with Tom Safaris. Tsavo, Amboseli, Maasai Mara and coastal excursions." },
+    about: { title: "About Us | Tom Safaris", description: "Learn about Tom Madeda and our passion for African wildlife." },
+    tours: { title: "Our Safari Packages | Tom Safaris", description: "Explore our wide range of safari itineraries and day trips." },
+    contact: { title: "Contact Us | Tom Safaris", description: "Get a free quote for your next adventure." },
+    blog: { title: "Safari Blog | Tom Safaris", description: "Tips and stories from the bush." },
+  },
 };
-
-const DEFAULT_INCLUSIONS = [
-  "Private 4×4 Land Cruiser (pop-up roof)",
-  "Professional English-speaking guide",
-  "Full board accommodation",
-  "All park & conservation fees",
-  "Bottled drinking water",
-  "Airport transfers"
-];
-
-const DEFAULT_EXCLUSIONS = [
-  "International flights",
-  "Visas & travel insurance",
-  "Tips & personal expenses",
-  "Alcoholic drinks"
-];
-
-// Base list of tours
-export const TOURS: Tour[] = [
-  {
-    id: "maasai-mara-classic",
-    name: "Maasai Mara Classic Safari",
-    durationDays: 3,
-    priceUsd: 800,
-    priceGbp: 640,
-    image: "https://images.unsplash.com/photo-1547970810-dc1eac37d174?q=80&w=2071",
-    category: "Safari",
-    group: "Road Safari",
-    featured: true,
-    shortDescription: "Join our Masai Mara tours starting from Kilifi to witness iconic Big Five wildlife.",
-    fullDescription: "Experience the heart of Africa’s wildlife with our Maasai Mara Classic Safari, departing conveniently from Kilifi. We handle all logistics, transferring you from the coast to the legendary Mara plains, home to the Big Five and the dramatic wildebeest migration.",
-    highlights: ["Kilifi Departure", "Big Five Game Drives", "Wildebeest Migration (Seasonal)", "Maasai Village Visit"],
-    itinerary: [
-      { day: 1, title: "Kilifi to Maasai Mara", description: "Early morning pickup from your Kilifi hotel/resort. Transfer to Malindi/Mombasa airport for a flight to the Mara (or SGR to Nairobi connecting to Mara). Arrive in time for lunch and an afternoon game drive." },
-      { day: 2, title: "Full Day in Maasai Mara", description: "Spend the entire day exploring the vast plains, tracking lions, cheetahs, and elephants with a picnic lunch in the wild." },
-      { day: 3, title: "Mara to Kilifi", description: "A final sunrise game drive before breakfast. Transfer to airstrip for your return flight to the coast, followed by a transfer back to your Kilifi residence." }
-    ],
-    inclusions: DEFAULT_INCLUSIONS,
-    exclusions: [...DEFAULT_EXCLUSIONS, "Optional balloon safaris"]
-  },
-  {
-    id: "amboseli-kilimanjaro",
-    name: "Amboseli & Kilimanjaro Views",
-    durationDays: 3,
-    priceUsd: 750,
-    priceGbp: 600,
-    image: "https://images.unsplash.com/photo-1549320341-9426d03d45d6?q=80&w=2070",
-    category: "Safari",
-    group: "Road Safari",
-    featured: true,
-    shortDescription: "Depart Kilifi for Amboseli National Park — majestic elephants and Mt. Kilimanjaro.",
-    fullDescription: "Discover the majestic Amboseli National Park with Tom Safaris. Departing from Kilifi, this road safari takes you through the scenic coastal hinterland to the foot of Mount Kilimanjaro.",
-    highlights: ["Kilifi Departure", "Mt. Kilimanjaro Views", "Large Elephant Herds", "Observation Hill"],
-    itinerary: [
-      { day: 1, title: "Kilifi to Amboseli", description: "05:00 AM pickup from Kilifi. Drive along the Mombasa-Nairobi highway, entering Amboseli around midday. Lunch at the lodge followed by an afternoon game drive." },
-      { day: 2, title: "Full Day Amboseli", description: "Full day game drive. Visit the swamp grounds where elephants bathe and hike Observation Hill for panoramic views of Kilimanjaro." },
-      { day: 3, title: "Amboseli to Kilifi", description: "Morning game drive to catch the predators. Depart after breakfast for the return drive to Kilifi, arriving in the evening." }
-    ],
-    inclusions: DEFAULT_INCLUSIONS,
-    exclusions: DEFAULT_EXCLUSIONS
-  },
-  {
-    id: "tsavo-east-day-trip",
-    name: "Tsavo East Day Safari",
-    durationDays: 1,
-    priceUsd: 200,
-    priceGbp: 160,
-    image: "https://images.unsplash.com/photo-1550160248-038c3666f2a8?q=80&w=2070",
-    category: 'Safari',
-    group: 'Excursion', 
-    featured: false,
-    shortDescription: "A quick but intense dose of wildlife starting and ending in Kilifi.",
-    fullDescription: "Perfect for those in Kilifi short on time. Enter Tsavo East through Bachuma gate and spend the day searching for the famous Red Elephants, lions, and buffaloes before returning to Kilifi for dinner.",
-    highlights: ["Kilifi Pickup/Drop-off", "Red Elephants", "Aruba Dam", "Big Five Potential"],
-    itinerary: [
-      { day: 1, title: "Kilifi to Tsavo East & Back", description: "05:00 Pickup from Kilifi. Scenic drive to Bachuma Gate. Morning game drive. Lunch at Voi Safari Lodge. Afternoon game drive. Return to Kilifi by sunset." }
-    ],
-    inclusions: ["Transport from Kilifi", "Park Fees", "Lunch", "Guide", "Water"],
-    exclusions: ["Tips", "Drinks"]
-  },
-  {
-    id: "wasini-island-dolphin-safari",
-    name: "Wasini Island & Kisite",
-    durationDays: 1,
-    priceUsd: 135,
-    priceGbp: 110,
-    image: "https://images.unsplash.com/photo-1582967788606-a171f1080ca8?q=80&w=2070",
-    category: 'Coastal',
-    group: 'Excursion',
-    featured: false,
-    shortDescription: "Swim with dolphins and snorkel. Includes transfer from Kilifi.",
-    fullDescription: "A full day adventure. We pick you up from Kilifi and drive south to Shimoni. Board a traditional dhow to Kisite Mpunguti Marine Park for snorkeling and dolphin watching, followed by a seafood lunch.",
-    highlights: ["Kilifi Transfer", "Dolphin Spotting", "Snorkeling", "Seafood Lunch on Wasini"],
-    itinerary: [
-      { day: 1, title: "Kilifi to Wasini Marine Park", description: "Early pickup from Kilifi. Drive via Mombasa Ferry to Shimoni. Dhow cruise, snorkeling, and dolphin spotting. Seafood lunch on Wasini Island. Return drive to Kilifi." }
-    ],
-    inclusions: ["Transport from Kilifi", "Marine Park Fees", "Seafood Lunch", "Snorkeling Gear", "Guide"],
-    exclusions: ["Tips", "Drinks"]
-  },
-  {
-    id: "dolphin-watching-watamu",
-    name: "Dolphin Watching – Watamu",
-    durationDays: 1,
-    priceUsd: 120,
-    priceGbp: 95,
-    image: "https://images.unsplash.com/photo-1569428034239-f9565e32e224?q=80&w=2079",
-    category: "Coastal",
-    group: "Excursion",
-    featured: true,
-    shortDescription: "A magical day trip from Kilifi to Watamu Marine Park.",
-    fullDescription: "Just a short drive from Kilifi, Watamu Marine Park offers pristine waters for dolphin watching. Set sail on a boat to witness playful pods and explore vibrant coral gardens.",
-    highlights: ["Short Drive from Kilifi", "Dolphin Spotting", "Snorkeling at Coral Gardens", "Seafood Lunch"],
-    itinerary: [
-      { day: 1, title: "Kilifi to Watamu Adventure", description: "Morning pickup from Kilifi (approx 45 mins drive). Boat ride to spot dolphins. Snorkeling session. Seafood lunch at a Watamu beachfront restaurant. Return to Kilifi." }
-    ],
-    inclusions: ["Transport from Kilifi", "Marine Park Fees", "Boat Ride", "Lunch", "Snorkeling Gear"],
-    exclusions: ["Tips", "Drinks", "Personal items"]
-  },
-  {
-    id: "samburu-special",
-    name: "Samburu Wilderness Safari",
-    durationDays: 3,
-    priceUsd: 850,
-    priceGbp: 680,
-    image: "https://images.unsplash.com/photo-1550596334-7bb40a71b6bc?q=80&w=2070",
-    category: "Safari",
-    group: "Road Safari",
-    featured: false,
-    shortDescription: "Experience rare northern species. Depart Kilifi via Flight.",
-    fullDescription: "Samburu National Reserve offers a unique experience with species found nowhere else. We arrange your flight from Malindi/Mombasa (departing Kilifi) to bring you face-to-face with the 'Samburu Special 5'.",
-    highlights: ["Depart Kilifi", "Samburu Special 5", "Ewaso Nyiro River", "Unique Culture"],
-    itinerary: [
-      { day: 1, title: "Kilifi to Samburu", description: "Transfer from Kilifi to local airport. Flight to Samburu. Afternoon game drive seeking the Special Five." },
-      { day: 2, title: "Discover the Special Five", description: "Full day in Samburu. Look for the Reticulated Giraffe, Grevy’s Zebra, Beisa Oryx, Somali Ostrich, and Gerenuk." },
-      { day: 3, title: "Samburu to Kilifi", description: "Final morning game viewing. Return flight to the coast and transfer back to your Kilifi residence." }
-    ],
-    inclusions: DEFAULT_INCLUSIONS,
-    exclusions: DEFAULT_EXCLUSIONS
-  },
-  {
-    id: "diani-beach-retreat",
-    name: "Diani Beach Relaxation",
-    durationDays: 4,
-    priceUsd: 600,
-    priceGbp: 480,
-    image: "https://images.unsplash.com/photo-1590523741831-ab7e8b8f9c7f?q=80&w=1974",
-    category: "Coastal",
-    group: "Excursion",
-    featured: false,
-    shortDescription: "A South Coast getaway starting from Kilifi.",
-    fullDescription: "Experience paradise in Diani & Ukunda. We organize your transfer from Kilifi to the South Coast for a relaxing beach retreat with water sports and scenic sunsets.",
-    highlights: ["Transfer from Kilifi", "White Sand Beaches", "Kisite Snorkeling", "Shimba Hills Day Trip"],
-    itinerary: [
-      { day: 1, title: "Kilifi to Diani", description: "Pickup from Kilifi. Drive via the Likoni Ferry to Diani Beach. Check into your beachfront resort." },
-      { day: 2, title: "Marine Park Adventure", description: "Full day trip to Kisite Mpunguti for snorkeling and dolphin watching." },
-      { day: 3, title: "Leisure & Culture", description: "Relax by the pool or visit the sacred Kaya Kinondo forest." },
-      { day: 4, title: "Diani to Kilifi", description: "Morning relaxation. Transfer back to Kilifi." }
-    ],
-    inclusions: ["Accommodation", "Transfers from Kilifi", "Breakfast", "Marine Park Fees"],
-    exclusions: ["Lunch & Dinner (unless specified)", "Personal water sports", ...DEFAULT_EXCLUSIONS]
-  },
-  {
-    id: "malindi-marine-park-full-day",
-    name: "Full Day Marine Park",
-    durationDays: 1,
-    priceUsd: 95,
-    priceGbp: 75,
-    image: "https://images.unsplash.com/photo-1544551763-46a013bb70d5?q=80&w=2070",
-    category: "Coastal",
-    group: "Excursion",
-    featured: true,
-    shortDescription: "Snorkeling and glass-bottom boat adventure in Malindi Marine Park.",
-    fullDescription: "Experience the underwater wonders of Malindi Marine National Park. Famous for its coral gardens and diverse fish species, this full-day excursion includes a glass-bottom boat tour, snorkeling sessions, and a delicious beachside seafood lunch.",
-    highlights: ["Glass Bottom Boat", "Coral Gardens", "Snorkeling", "Seafood Lunch", "Beach Relaxation"],
-    itinerary: [
-      { day: 1, title: "Full Day Marine Exploration", description: "Pickup from your hotel after breakfast. Proceed to Malindi Marine Park. Board the glass-bottom boat for viewing and snorkeling. Break for a seafood lunch at a local restaurant. Afternoon relaxation on the beach before returning." }
-    ],
-    inclusions: ["Transport", "Park Fees", "Boat Ride", "Lunch", "Snorkeling Equipment"],
-    exclusions: ["Tips", "Drinks"]
-  },
-
-  // --- NEW EXCURSIONS (Mombasa List) ---
-  {
-    id: "half-day-city-tour-mombasa",
-    name: "1/2 Day City Tour Mombasa",
-    durationDays: 0.5,
-    priceUsd: 60,
-    priceGbp: 45,
-    image: "https://images.unsplash.com/photo-1580584542263-d021c172d8a4?q=80&w=2070",
-    category: "Coastal",
-    group: "Excursion",
-    featured: false,
-    shortDescription: "Explore the historic charm of Mombasa in a half-day guided tour.",
-    fullDescription: "Visit the famous Fort Jesus, Old Town, and the vibrant spice markets. Perfect for a quick cultural immersion.",
-    highlights: ["Fort Jesus", "Old Town Walking Tour", "Spice Market"],
-    itinerary: [{ day: 1, title: "City Tour", description: "Pickup, guided tour of Fort Jesus and Old Town, visit markets, drop-off." }],
-    inclusions: ["Transport", "Guide", "Entrance Fees"],
-    exclusions: ["Lunch", "Tips"]
-  },
-  {
-    id: "half-day-bush-tour",
-    name: "1/2 Day Bush Tour",
-    durationDays: 0.5,
-    priceUsd: 160,
-    priceGbp: 105,
-    image: "https://images.unsplash.com/photo-1516426122078-c23e76319801?q=80&w=2000",
-    category: "Safari",
-    group: "Excursion",
-    featured: false,
-    shortDescription: "A quick wilderness experience close to the coast.",
-    fullDescription: "Experience the bush without the long travel. Ideal for a quick getaway to see nature and wildlife.",
-    highlights: ["Wildlife Viewing", "Nature Walk", "Scenic Views"],
-    itinerary: [{ day: 1, title: "Bush Tour", description: "Morning or afternoon pickup, drive to local sanctuary, game viewing, return." }],
-    inclusions: ["Transport", "Park Fees", "Guide"],
-    exclusions: ["Lunch", "Tips"]
-  },
-  {
-    id: "full-day-city-tour-mombasa",
-    name: "1 Day City Tour Mombasa",
-    durationDays: 1,
-    priceUsd: 140,
-    priceGbp: 75,
-    image: "https://images.unsplash.com/photo-1598233379891-10d223910243?q=80&w=2070",
-    category: "Coastal",
-    group: "Excursion",
-    featured: false,
-    shortDescription: "Comprehensive tour of Mombasa including lunch.",
-    fullDescription: "A full day exploring Mombasa's history, culture, and cuisine. Includes Fort Jesus, Haller Park, and a traditional Swahili lunch.",
-    highlights: ["Fort Jesus", "Haller Park", "Swahili Lunch", "Elephant Tusks"],
-    itinerary: [{ day: 1, title: "Mombasa Full Day", description: "Full day exploration of historical sites and nature parks with lunch included." }],
-    inclusions: ["Transport", "Lunch", "All Fees", "Guide"],
-    exclusions: ["Tips", "Drinks"]
-  },
-  {
-    id: "wasini-dolphin-dhow",
-    name: "1 Day Wasini Island (Dolphin Dhow)",
-    durationDays: 1,
-    priceUsd: 160,
-    priceGbp: 85,
-    image: "https://images.unsplash.com/photo-1582967788606-a171f1080ca8?q=80&w=2070",
-    category: "Coastal",
-    group: "Excursion",
-    featured: false,
-    shortDescription: "Classic dhow sailing, dolphins, and seafood.",
-    fullDescription: "Sail on a traditional dhow to Kisite Marine Park. Snorkel with dolphins and enjoy a fresh seafood lunch on Wasini Island.",
-    highlights: ["Dhow Sailing", "Snorkeling", "Seafood Lunch", "Dolphins"],
-    itinerary: [{ day: 1, title: "Wasini Island", description: "Drive to Shimoni, board dhow, snorkel/swim, lunch on island, village walk, return." }],
-    inclusions: ["Transport", "Boat", "Lunch", "Park Fees", "Snorkeling Gear"],
-    exclusions: ["Tips", "Drinks"]
-  },
-  {
-    id: "funzi-dhow-1day",
-    name: "1 Day Funzi Dhow",
-    durationDays: 1,
-    priceUsd: 160,
-    priceGbp: 85,
-    image: "https://images.unsplash.com/photo-1500375592092-40eb2168fd21?q=80&w=2000",
-    category: "Coastal",
-    group: "Excursion",
-    featured: false,
-    shortDescription: "Explore the mangroves and sandbanks of Funzi.",
-    fullDescription: "A relaxing day trip to Funzi Island. Explore the Ramisi River mangroves, relax on a sandbank, and enjoy a seafood feast.",
-    highlights: ["Ramisi River", "Mangroves", "Sandbank Picnic", "Seafood"],
-    itinerary: [{ day: 1, title: "Funzi Adventure", description: "Transfer to Bodo, boat ride through mangroves, swimming on sandbank, lunch on island." }],
-    inclusions: ["Transport", "Boat", "Lunch", "Guide"],
-    exclusions: ["Tips", "Drinks"]
-  },
-  {
-    id: "malindi-gede-ruins-1day",
-    name: "1 Day Malindi And Gede Ruins",
-    durationDays: 1,
-    priceUsd: 195,
-    priceGbp: 105,
-    image: "https://images.unsplash.com/photo-1544551763-46a013bb70d5?q=80&w=2070",
-    category: "Coastal",
-    group: "Excursion",
-    featured: false,
-    shortDescription: "Historical ruins and coastal charm.",
-    fullDescription: "Visit the ancient Gede Ruins, a mysterious Swahili city buried in the forest. Continue to Malindi for sightseeing and the Vasco da Gama pillar.",
-    highlights: ["Gede Ruins", "Vasco da Gama Pillar", "Snake Park"],
-    itinerary: [{ day: 1, title: "History & Coast", description: "Drive north to Gede Ruins. Guided tour. Proceed to Malindi town tour. Return." }],
-    inclusions: ["Transport", "Entrance Fees", "Lunch", "Guide"],
-    exclusions: ["Tips", "Drinks"]
-  },
-
-  // --- NEW ROAD SAFARIS ---
-  {
-    id: "tsavo-east-ngutuni-1day",
-    name: "1 Day Tsavo East (Ngutuni) Min 4 Pax",
-    durationDays: 1,
-    priceUsd: 170,
-    priceGbp: 110,
-    image: "https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?q=80&w=2000",
-    category: "Safari",
-    group: "Road Safari",
-    featured: false,
-    shortDescription: "One day safari to Ngutuni sanctuary.",
-    fullDescription: "A compact safari experience in the Ngutuni Sanctuary bordering Tsavo East. Excellent for spotting lions and elephants.",
-    highlights: ["Ngutuni Sanctuary", "Game Drive", "Lunch with View"],
-    itinerary: [{ day: 1, title: "Ngutuni Day Trip", description: "Early departure, game drive in sanctuary, lunch at lodge overlooking waterhole, return." }],
-    inclusions: ["Transport", "Park Fees", "Lunch", "Guide"],
-    exclusions: ["Tips", "Drinks"]
-  },
-  {
-    id: "shimba-hills-1day",
-    name: "1 Day Shimba Hills",
-    durationDays: 1,
-    priceUsd: 195,
-    priceGbp: 125,
-    image: "https://images.unsplash.com/photo-1597930232210-907350a6210c?q=80&w=2070",
-    category: "Safari",
-    group: "Road Safari",
-    featured: false,
-    shortDescription: "Rainforest safari, waterfalls, and sable antelope.",
-    fullDescription: "Visit the Shimba Hills National Reserve, a coastal rainforest home to the rare Sable Antelope and Sheldrick Falls.",
-    highlights: ["Sheldrick Falls", "Sable Antelope", "Rainforest"],
-    itinerary: [{ day: 1, title: "Shimba Hills", description: "Game drive in reserve, hike to waterfalls, lunch at Shimba Hills Lodge, return." }],
-    inclusions: ["Transport", "Park Fees", "Lunch", "Guide"],
-    exclusions: ["Tips", "Drinks"]
-  },
-  {
-    id: "shimba-tree-lodge-1night",
-    name: "1 Night Shimba Shimba/Tree Lodge",
-    durationDays: 2,
-    priceUsd: 270,
-    priceGbp: 165,
-    image: "https://images.unsplash.com/photo-1590523277543-a94d2e4eb00b?q=80&w=2000",
-    category: "Safari",
-    group: "Road Safari",
-    featured: false,
-    shortDescription: "Overnight in the coastal rainforest.",
-    fullDescription: "Extend your Shimba Hills adventure with an overnight stay in a tree lodge, surrounded by the sounds of the forest.",
-    highlights: ["Night in Rainforest", "Waterfall Hike", "Rare Wildlife"],
-    itinerary: [
-      { day: 1, title: "Into the Forest", description: "Game drive, hike to falls, dinner and overnight at Tree Lodge." },
-      { day: 2, title: "Morning Calm", description: "Morning game viewing, breakfast, return to coast." }
-    ],
-    inclusions: DEFAULT_INCLUSIONS,
-    exclusions: DEFAULT_EXCLUSIONS
-  },
-  {
-    id: "mwaluganje-1night",
-    name: "1 Night Mwaluganje",
-    durationDays: 2,
-    priceUsd: 290,
-    priceGbp: 200,
-    image: "https://images.unsplash.com/photo-1516426122078-c23e76319801?q=80&w=2000",
-    category: "Safari",
-    group: "Road Safari",
-    featured: false,
-    shortDescription: "Elephant sanctuary overnight safari.",
-    fullDescription: "Visit the Mwaluganje Elephant Sanctuary, a community conservancy dedicated to the protection of elephants.",
-    highlights: ["Elephant Sanctuary", "Community Conservancy", "Scenic Hills"],
-    itinerary: [
-      { day: 1, title: "Mwaluganje", description: "Drive to sanctuary, afternoon game drive, overnight at camp." },
-      { day: 2, title: "Morning Safari", description: "Morning game drive, breakfast, return." }
-    ],
-    inclusions: DEFAULT_INCLUSIONS,
-    exclusions: DEFAULT_EXCLUSIONS
-  },
-  {
-    id: "tsavo-east-ndololo-1night",
-    name: "1 Night Tsavo East Ndololo/Tarhi Camp",
-    durationDays: 2,
-    priceUsd: 310,
-    priceGbp: 185,
-    image: "https://images.unsplash.com/photo-1550160248-038c3666f2a8?q=80&w=2070",
-    category: "Safari",
-    group: "Road Safari",
-    featured: false,
-    shortDescription: "Classic camping safari in Tsavo East.",
-    fullDescription: "Immerse yourself in the wild with a stay at a tented camp in Tsavo East. Authentic safari experience.",
-    highlights: ["Tented Camp", "Red Elephants", "Aruba Dam"],
-    itinerary: [
-      { day: 1, title: "Mombasa to Tsavo", description: "Enter Tsavo East, game drive en-route to camp for lunch. Afternoon game drive." },
-      { day: 2, title: "Tsavo to Coast", description: "Early morning game drive. Breakfast. Exit park and return." }
-    ],
-    inclusions: DEFAULT_INCLUSIONS,
-    exclusions: DEFAULT_EXCLUSIONS
-  },
-  {
-    id: "tsavo-east-voi-1night",
-    name: "1 Night Tsavo East /Voi Lodge/Voi Wildlife",
-    durationDays: 2,
-    priceUsd: 445,
-    priceGbp: 265,
-    image: "https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?q=80&w=2000",
-    category: "Safari",
-    group: "Road Safari",
-    featured: false,
-    shortDescription: "Comfortable lodge stay in Tsavo East.",
-    fullDescription: "Enjoy the amenities of Voi Safari Lodge or Voi Wildlife Lodge with stunning views over the park's plains.",
-    highlights: ["Lodge Comfort", "Waterhole Views", "Lion Spotting"],
-    itinerary: [
-      { day: 1, title: "Arrival Tsavo", description: "Game drive to lodge. Lunch. Afternoon game drive." },
-      { day: 2, title: "Morning Drive", description: "Morning game drive. Breakfast. Return to coast." }
-    ],
-    inclusions: DEFAULT_INCLUSIONS,
-    exclusions: DEFAULT_EXCLUSIONS
-  },
-  {
-    id: "amboseli-express-1night",
-    name: "1 Night Amboseli(Kilimanjaro) Express",
-    durationDays: 2,
-    priceUsd: 410,
-    priceGbp: 255,
-    image: "https://images.unsplash.com/photo-1549320341-9426d03d45d6?q=80&w=2070",
-    category: "Safari",
-    group: "Road Safari",
-    featured: false,
-    shortDescription: "Quick trip to see Mt. Kilimanjaro.",
-    fullDescription: "An express road safari to Amboseli to see the mighty mountain and large elephant herds.",
-    highlights: ["Mt. Kilimanjaro", "Elephants", "Express Route"],
-    itinerary: [
-      { day: 1, title: "Express to Amboseli", description: "Early departure. Arrive for lunch. Afternoon game drive." },
-      { day: 2, title: "Return to Coast", description: "Morning game drive. Long drive back to Mombasa/Kilifi." }
-    ],
-    inclusions: DEFAULT_INCLUSIONS,
-    exclusions: DEFAULT_EXCLUSIONS
-  },
-  {
-    id: "taita-hills-saltlick-1night",
-    name: "1 Night Taita Hills (Saltlick)",
-    durationDays: 2,
-    priceUsd: 320,
-    priceGbp: 205,
-    image: "https://images.unsplash.com/photo-1516426122078-c23e76319801?q=80&w=2000",
-    category: "Safari",
-    group: "Road Safari",
-    featured: false,
-    shortDescription: "Stay at the famous stilted Salt Lick lodge.",
-    fullDescription: "A unique experience staying at Sarova Salt Lick Game Lodge, famous for its stilted architecture overlooking a busy waterhole.",
-    highlights: ["Stilted Lodge", "Private Sanctuary", "Night Game Drive Option"],
-    itinerary: [
-      { day: 1, title: "Taita Hills", description: "Drive to Taita Hills Sanctuary. Lunch. Afternoon game drive. Check-in Salt Lick." },
-      { day: 2, title: "Sanctuary Drive", description: "Morning game drive. Breakfast. Return." }
-    ],
-    inclusions: DEFAULT_INCLUSIONS,
-    exclusions: DEFAULT_EXCLUSIONS
-  },
-  {
-    id: "tsavo-special-east-west-1night",
-    name: "1 Night Tsavo Special (East & West N. Park)",
-    durationDays: 2,
-    priceUsd: 460,
-    priceGbp: 285,
-    image: "https://images.unsplash.com/photo-1550160248-038c3666f2a8?q=80&w=2070",
-    category: "Safari",
-    group: "Road Safari",
-    featured: false,
-    shortDescription: "Highlights of both Tsavo East and West.",
-    fullDescription: "A fast-paced safari covering key attractions in both Tsavo East and the scenic Tsavo West.",
-    highlights: ["Mzima Springs", "Red Elephants", "Lava Flows"],
-    itinerary: [
-      { day: 1, title: "Tsavo East & West", description: "Morning game drive in East. Proceed to West for afternoon drive. Overnight." },
-      { day: 2, title: "Mzima Springs", description: "Visit Mzima Springs. Morning game drive. Return." }
-    ],
-    inclusions: DEFAULT_INCLUSIONS,
-    exclusions: DEFAULT_EXCLUSIONS
-  },
-  {
-    id: "tsavo-east-ngutuni-1night",
-    name: "1 Night Tsavo East (Ngutuni ) Min 4 Pax",
-    durationDays: 2,
-    priceUsd: 285,
-    priceGbp: 110,
-    image: "https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?q=80&w=2000",
-    category: "Safari",
-    group: "Road Safari",
-    featured: false,
-    shortDescription: "Overnight at Ngutuni Sanctuary.",
-    fullDescription: "Stay overnight at Ngutuni Lodge, offering excellent game viewing from the comfort of the lodge deck.",
-    highlights: ["Ngutuni Lodge", "Waterhole Viewing", "Relaxed Pace"],
-    itinerary: [
-      { day: 1, title: "Ngutuni", description: "Drive to sanctuary. Game drive. Lunch and dinner at lodge." },
-      { day: 2, title: "Morning Safari", description: "Morning game drive. Return to coast." }
-    ],
-    inclusions: DEFAULT_INCLUSIONS,
-    exclusions: DEFAULT_EXCLUSIONS
-  },
-  {
-    id: "ngutuni-amboseli-2nights",
-    name: "2 Nights (Ngutuni) & Amboseli 4 Pax",
-    durationDays: 3,
-    priceUsd: 580,
-    priceGbp: 355,
-    image: "https://images.unsplash.com/photo-1549320341-9426d03d45d6?q=80&w=2070",
-    category: "Safari",
-    group: "Road Safari",
-    featured: false,
-    shortDescription: "Combine coastal sanctuary with Kilimanjaro views.",
-    fullDescription: "A 3-day safari visiting Ngutuni Sanctuary and the majestic Amboseli National Park.",
-    highlights: ["Ngutuni", "Amboseli", "Kilimanjaro"],
-    itinerary: [
-      { day: 1, title: "Ngutuni", description: "Drive to Ngutuni. Game drive. Overnight Ngutuni." },
-      { day: 2, title: "To Amboseli", description: "Depart for Amboseli. Afternoon game drive. Overnight Amboseli." },
-      { day: 3, title: "Return", description: "Morning game drive. Return to coast." }
-    ],
-    inclusions: DEFAULT_INCLUSIONS,
-    exclusions: DEFAULT_EXCLUSIONS
-  },
-  {
-    id: "ngutuni-saltlick-2nights",
-    name: "2 Nights (Ngutuni) & Salt Lick Min 4 Pax",
-    durationDays: 3,
-    priceUsd: 500,
-    priceGbp: 295,
-    image: "https://images.unsplash.com/photo-1516426122078-c23e76319801?q=80&w=2000",
-    category: "Safari",
-    group: "Road Safari",
-    featured: false,
-    shortDescription: "Sanctuary hopping safari.",
-    fullDescription: "Experience two private sanctuaries: Ngutuni and Taita Hills (Salt Lick).",
-    highlights: ["Ngutuni", "Salt Lick Lodge", "Private Sanctuaries"],
-    itinerary: [
-      { day: 1, title: "Ngutuni", description: "Drive to Ngutuni. Game drive. Overnight." },
-      { day: 2, title: "To Salt Lick", description: "Drive to Taita Hills. Afternoon game drive. Overnight Salt Lick." },
-      { day: 3, title: "Return", description: "Morning game drive. Return." }
-    ],
-    inclusions: DEFAULT_INCLUSIONS,
-    exclusions: DEFAULT_EXCLUSIONS
-  },
-  {
-    id: "tsavo-east-saltlick-2nights",
-    name: "2 Nights Tsavo East and Salt Lick",
-    durationDays: 3,
-    priceUsd: 545,
-    priceGbp: 325,
-    image: "https://images.unsplash.com/photo-1550160248-038c3666f2a8?q=80&w=2070",
-    category: "Safari",
-    group: "Road Safari",
-    featured: false,
-    shortDescription: "Red elephants and stilted lodges.",
-    fullDescription: "Combine the vast plains of Tsavo East with the unique Salt Lick Lodge experience.",
-    highlights: ["Tsavo East", "Salt Lick", "Diverse Landscape"],
-    itinerary: [
-      { day: 1, title: "Tsavo East", description: "Enter Tsavo East. Game drive. Overnight." },
-      { day: 2, title: "To Taita Hills", description: "Drive to Taita Hills Sanctuary. Overnight Salt Lick." },
-      { day: 3, title: "Return", description: "Morning game drive. Return." }
-    ],
-    inclusions: DEFAULT_INCLUSIONS,
-    exclusions: DEFAULT_EXCLUSIONS
-  },
-  {
-    id: "tsavo-east-west-ngulia-2nights",
-    name: "2 Nights Tsavo East /West (Ngulia)",
-    durationDays: 3,
-    priceUsd: 570,
-    priceGbp: 355,
-    image: "https://images.unsplash.com/photo-1550160248-038c3666f2a8?q=80&w=2070",
-    category: "Safari",
-    group: "Road Safari",
-    featured: false,
-    shortDescription: "Complete Tsavo experience.",
-    fullDescription: "Explore both sides of Tsavo. Stay at Ngulia Safari Lodge in Tsavo West, known for leopard sightings.",
-    highlights: ["Tsavo East", "Tsavo West", "Ngulia Rhino Sanctuary"],
-    itinerary: [
-      { day: 1, title: "Tsavo East", description: "Game drive in East. Overnight." },
-      { day: 2, title: "Tsavo West", description: "Drive to West. Visit Mzima Springs. Overnight Ngulia." },
-      { day: 3, title: "Return", description: "Morning game drive. Return." }
-    ],
-    inclusions: DEFAULT_INCLUSIONS,
-    exclusions: DEFAULT_EXCLUSIONS
-  },
-  {
-    id: "tsavo-east-amboseli-2nights",
-    name: "2 Nights Tsavo East/Amboseli (kilimanjaro)",
-    durationDays: 3,
-    priceUsd: 630,
-    priceGbp: 390,
-    image: "https://images.unsplash.com/photo-1549320341-9426d03d45d6?q=80&w=2070",
-    category: "Safari",
-    group: "Road Safari",
-    featured: false,
-    shortDescription: "The classic bush and mountain safari.",
-    fullDescription: "Visit the two most popular parks: Tsavo East for wildlife quantity and Amboseli for the Kilimanjaro backdrop.",
-    highlights: ["Tsavo East", "Amboseli", "Mt. Kilimanjaro"],
-    itinerary: [
-      { day: 1, title: "Tsavo East", description: "Game drive in East. Overnight." },
-      { day: 2, title: "To Amboseli", description: "Drive to Amboseli. Afternoon game drive. Overnight." },
-      { day: 3, title: "Return", description: "Morning game drive. Return." }
-    ],
-    inclusions: DEFAULT_INCLUSIONS,
-    exclusions: DEFAULT_EXCLUSIONS
-  },
-  {
-    id: "tsavo-east-west-amboseli-2nights",
-    name: "2 Nights Tsavo East/west and Amboseli",
-    durationDays: 3,
-    priceUsd: 585,
-    priceGbp: 350,
-    image: "https://images.unsplash.com/photo-1547970810-dc1eac37d174?q=80&w=2071",
-    category: "Safari",
-    group: "Road Safari",
-    featured: false,
-    shortDescription: "Action packed 3-park safari.",
-    fullDescription: "A fast-paced adventure covering Tsavo East, Tsavo West, and Amboseli in 3 days.",
-    highlights: ["3 Parks", "Diverse Scenery", "Big Five"],
-    itinerary: [
-      { day: 1, title: "Tsavo East", description: "Game drive. Overnight." },
-      { day: 2, title: "West & Amboseli", description: "Transit through West to Amboseli. Overnight." },
-      { day: 3, title: "Return", description: "Morning game drive. Return." }
-    ],
-    inclusions: DEFAULT_INCLUSIONS,
-    exclusions: DEFAULT_EXCLUSIONS
-  },
-  {
-    id: "tsavo-east-west-amboseli-3nights",
-    name: "3 Nights Tsavo East/west and Amboseli",
-    durationDays: 4,
-    priceUsd: 890,
-    priceGbp: 555,
-    image: "https://images.unsplash.com/photo-1550596334-7bb40a71b6bc?q=80&w=2070",
-    category: "Safari",
-    group: "Road Safari",
-    featured: false,
-    shortDescription: "Relaxed pace 3-park safari.",
-    fullDescription: "Enjoy more time in Tsavo East, West, and Amboseli with this 4-day itinerary.",
-    highlights: ["Extended Game Drives", "Mzima Springs", "Kilimanjaro"],
-    itinerary: [
-      { day: 1, title: "Tsavo East", description: "Game drive. Overnight." },
-      { day: 2, title: "Tsavo West", description: "Drive to West. Mzima Springs. Overnight." },
-      { day: 3, title: "Amboseli", description: "Drive to Amboseli. Game drive. Overnight." },
-      { day: 4, title: "Return", description: "Morning game drive. Return." }
-    ],
-    inclusions: DEFAULT_INCLUSIONS,
-    exclusions: DEFAULT_EXCLUSIONS
-  },
-  {
-    id: "tanzania-special-5nights",
-    name: "5 Nights Tanzania Special",
-    durationDays: 6,
-    priceUsd: 2730,
-    priceGbp: 1705,
-    image: "https://images.unsplash.com/photo-1516426122078-c23e76319801?q=80&w=2000",
-    category: "International",
-    group: "International",
-    featured: false,
-    shortDescription: "Lake Manyara, Tarangire, Serengeti, Ngorongoro.",
-    fullDescription: "The ultimate Northern Tanzania circuit. Explore the Serengeti plains, Ngorongoro Crater, and elephant-rich Tarangire.",
-    highlights: ["Serengeti", "Ngorongoro Crater", "Tarangire", "Lake Manyara"],
-    itinerary: [
-      { day: 1, title: "Arusha to Manyara", description: "Drive to Lake Manyara. Game drive." },
-      { day: 2, title: "Serengeti", description: "Drive to Serengeti. Afternoon game drive." },
-      { day: 3, title: "Serengeti Full Day", description: "Full day exploring Serengeti." },
-      { day: 4, title: "Ngorongoro", description: "Drive to Ngorongoro via Olduvai Gorge." },
-      { day: 5, title: "Crater Tour", description: "Descend into crater. Drive to Tarangire." },
-      { day: 6, title: "Tarangire to Arusha", description: "Morning game drive. Return to Arusha." }
-    ],
-    inclusions: ["4x4 Transport", "Guide", "Park Fees", "Accommodation"],
-    exclusions: ["Flights", "Visas", "Tips"]
-  },
-  {
-    id: "kenya-explorer-5nights",
-    name: "5 Nights Tsavo East/west and Amboseli,Masai Mara, Lake Nakuru",
-    durationDays: 6,
-    priceUsd: 1610,
-    priceGbp: 1005,
-    image: "https://images.unsplash.com/photo-1547970810-dc1eac37d174?q=80&w=2071",
-    category: "Safari",
-    group: "Road Safari",
-    featured: false,
-    shortDescription: "Grand Kenya circuit finishing in Mombasa.",
-    fullDescription: "A comprehensive tour covering Kenya's major parks: Tsavo, Amboseli, Mara, and Nakuru. Return to coast by air or train.",
-    highlights: ["Masai Mara", "Lake Nakuru", "Amboseli", "Tsavo"],
-    itinerary: [
-      { day: 1, title: "Tsavo East", description: "Start safari. Overnight Tsavo." },
-      { day: 2, title: "Amboseli", description: "Drive to Amboseli. Overnight." },
-      { day: 3, title: "Lake Nakuru", description: "Drive to Rift Valley. Overnight." },
-      { day: 4, title: "Masai Mara", description: "Drive to Mara. Overnight." },
-      { day: 5, title: "Masai Mara", description: "Full day in Mara." },
-      { day: 6, title: "Return", description: "Drive to Nairobi, Train/Fly to Mombasa." }
-    ],
-    inclusions: DEFAULT_INCLUSIONS,
-    exclusions: DEFAULT_EXCLUSIONS
-  },
-  {
-    id: "kenya-grand-safari-6nights",
-    name: "6 Nights Tsavo East/West And Amboseli,Masai Mara, Lake Nakuru & Naivasha",
-    durationDays: 7,
-    priceUsd: 1850,
-    priceGbp: 1155,
-    image: "https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?q=80&w=2000",
-    category: "Safari",
-    group: "Road Safari",
-    featured: false,
-    shortDescription: "The ultimate 1-week Kenya road safari.",
-    fullDescription: "See it all: Red elephants, Kilimanjaro, Rift Valley lakes, and the Masai Mara. Return to coast by air or train.",
-    highlights: ["Lake Naivasha", "Masai Mara", "Tsavo", "Amboseli"],
-    itinerary: [
-      { day: 1, title: "Tsavo East", description: "Start safari. Overnight." },
-      { day: 2, title: "Amboseli", description: "Drive to Amboseli. Overnight." },
-      { day: 3, title: "Lake Naivasha", description: "Boat ride. Overnight." },
-      { day: 4, title: "Masai Mara", description: "Drive to Mara. Overnight." },
-      { day: 5, title: "Masai Mara", description: "Full day in Mara." },
-      { day: 6, title: "Lake Nakuru", description: "Drive to Nakuru. Overnight." },
-      { day: 7, title: "Return", description: "Return to Nairobi, connection to Coast." }
-    ],
-    inclusions: DEFAULT_INCLUSIONS,
-    exclusions: DEFAULT_EXCLUSIONS
-  },
-  {
-    id: "kilimanjaro-climbing-6nights",
-    name: "6 Nights Mount Kilimanjaro Climbing",
-    durationDays: 7,
-    priceUsd: 1810,
-    priceGbp: 1130,
-    image: "https://images.unsplash.com/photo-1650660688329-373b9055eb4e?q=80&w=2070",
-    category: "Trek",
-    group: "Trek",
-    featured: false,
-    shortDescription: "Conquer the roof of Africa.",
-    fullDescription: "A 6-night climb up Mount Kilimanjaro (typically Machame or Marangu route). Challenge yourself to reach Uhuru Peak.",
-    highlights: ["Uhuru Peak", "Hiking", "Alpine Desert"],
-    itinerary: [
-      { day: 1, title: "Arrival", description: "Transfer to Moshi. Briefing." },
-      { day: 2, title: "Start Climb", description: "Begin ascent to first camp." },
-      { day: 3, title: "Climb", description: "Ascent continues." },
-      { day: 4, title: "Climb", description: "Acclimatization and ascent." },
-      { day: 5, title: "Summit Bid", description: "Midnight start for summit. Descent." },
-      { day: 6, title: "Descent", description: "Final descent to gate." },
-      { day: 7, title: "Departure", description: "Transfer to airport/shuttle." }
-    ],
-    inclusions: ["Guide", "Porters", "Meals", "Hut/Tent Fees"],
-    exclusions: ["Gear Rental", "Tips", "Visas"]
-  },
-  
-  // --- NEW FLIGHT SAFARIS ---
-  {
-    id: "lamu-1night-flight",
-    name: "1 Night Lamu",
-    durationDays: 2,
-    priceUsd: 650,
-    priceGbp: 405,
-    image: "https://images.unsplash.com/photo-1590523741831-ab7e8b8f9c7f?q=80&w=1974",
-    category: "Coastal",
-    group: "Flight Safari",
-    featured: false,
-    shortDescription: "Fly to the historic Lamu archipelago.",
-    fullDescription: "A quick flight to the UNESCO World Heritage site of Lamu. Experience Swahili culture and pristine beaches.",
-    highlights: ["Lamu Old Town", "Shela Beach", "Dhow Sail"],
-    itinerary: [
-      { day: 1, title: "Fly to Lamu", description: "Flight from Malindi/Mombasa. Boat transfer. Explore Lamu." },
-      { day: 2, title: "Return", description: "Morning leisure. Return flight." }
-    ],
-    inclusions: ["Flights", "Accommodation", "Transfers"],
-    exclusions: ["Lunch/Dinner", "Tips"]
-  },
-  {
-    id: "zanzibar-1night-flight",
-    name: "1 Night Zanzibar",
-    durationDays: 2,
-    priceUsd: 570,
-    priceGbp: 355,
-    image: "https://images.unsplash.com/photo-1534768393527-4c126d40733d?q=80&w=2070",
-    category: "International",
-    group: "Flight Safari",
-    featured: false,
-    shortDescription: "Spice Island getaway.",
-    fullDescription: "Fly to Zanzibar for a quick immersion in Stone Town and white sand beaches.",
-    highlights: ["Stone Town", "Spice Tour", "Beaches"],
-    itinerary: [
-      { day: 1, title: "Fly to Zanzibar", description: "Flight to Zanzibar. Stone Town tour." },
-      { day: 2, title: "Return", description: "Morning beach/shopping. Return flight." }
-    ],
-    inclusions: ["Flights", "Accommodation", "Breakfast"],
-    exclusions: ["Visa", "Lunch/Dinner"]
-  },
-  {
-    id: "masai-mara-1night-flight",
-    name: "1 Night Masai Mara",
-    durationDays: 2,
-    priceUsd: 890,
-    priceGbp: 555,
-    image: "https://images.unsplash.com/photo-1547970810-dc1eac37d174?q=80&w=2071",
-    category: "Safari",
-    group: "Flight Safari",
-    featured: false,
-    shortDescription: "Express flight to the Mara.",
-    fullDescription: "Maximize your time with a flight directly into the Masai Mara for an overnight safari.",
-    highlights: ["Flight over Rift Valley", "Big Five", "Luxury Camp"],
-    itinerary: [
-      { day: 1, title: "Fly to Mara", description: "Morning flight. Afternoon game drive." },
-      { day: 2, title: "Return", description: "Morning game drive. Return flight to coast." }
-    ],
-    inclusions: DEFAULT_INCLUSIONS,
-    exclusions: DEFAULT_EXCLUSIONS
-  },
-  {
-    id: "masai-mara-2nights-flight",
-    name: "2 Nights Masai Mara",
-    durationDays: 3,
-    priceUsd: 1050,
-    priceGbp: 655,
-    image: "https://images.unsplash.com/photo-1547970810-dc1eac37d174?q=80&w=2071",
-    category: "Safari",
-    group: "Flight Safari",
-    featured: false,
-    shortDescription: "3 days in the world's best reserve.",
-    fullDescription: "Fly to the Mara for a relaxed 3-day safari, increasing your chances of seeing the migration (in season) and the Big Five.",
-    highlights: ["Extended Game Viewing", "Sundowners", "Big Cats"],
-    itinerary: [
-      { day: 1, title: "Fly to Mara", description: "Morning flight. Afternoon game drive." },
-      { day: 2, title: "Full Day Mara", description: "All day game viewing." },
-      { day: 3, title: "Return", description: "Morning game drive. Return flight." }
-    ],
-    inclusions: DEFAULT_INCLUSIONS,
-    exclusions: DEFAULT_EXCLUSIONS
-  }
-];
