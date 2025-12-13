@@ -1,8 +1,7 @@
-
 // @ts-nocheck
-import React from 'react';
+import React, { useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { Calendar, PlayCircle } from 'lucide-react';
+import { Calendar, PlayCircle, Volume2, VolumeX } from 'lucide-react';
 import { BlogPost } from '../types';
 import { motion } from 'framer-motion';
 
@@ -13,6 +12,19 @@ interface BlogCardProps {
 const isVideo = (url: string) => url?.match(/\.(mp4|webm|ogg|mov)$/i) || url?.includes('/video/upload/');
 
 const BlogCard: React.FC<BlogCardProps> = ({ post }) => {
+  const [isMuted, setIsMuted] = useState(true);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  const toggleMute = (e: React.MouseEvent) => {
+    e.preventDefault(); // Prevent navigation
+    e.stopPropagation();
+    const newState = !isMuted;
+    setIsMuted(newState);
+    if (videoRef.current) {
+        videoRef.current.muted = newState;
+    }
+  };
+
   return (
     <motion.div 
       initial={{ opacity: 0, y: 50, scale: 0.95 }}
@@ -31,13 +43,17 @@ const BlogCard: React.FC<BlogCardProps> = ({ post }) => {
           <Link to={`/blog/${post.slug}`} className="block w-full h-full">
             {isVideo(post.image) ? (
                <video 
+                 ref={videoRef}
                  src={post.image} 
                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                 muted 
+                 muted={isMuted}
                  loop 
                  playsInline
-                 onMouseOver={e => e.currentTarget.play()}
-                 onMouseOut={e => e.currentTarget.pause()}
+                 onMouseOver={() => videoRef.current?.play()}
+                 onMouseOut={() => {
+                     videoRef.current?.pause();
+                     videoRef.current!.currentTime = 0; // Optional: Reset on leave
+                 }}
                />
             ) : (
                 <motion.img 
@@ -52,8 +68,14 @@ const BlogCard: React.FC<BlogCardProps> = ({ post }) => {
           <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-black/50 to-transparent"></div>
           
           {isVideo(post.image) && (
-            <div className="absolute top-4 right-4 bg-black/40 backdrop-blur-md p-2 rounded-full text-white">
-                <PlayCircle size={20} />
+            <div className="absolute top-4 right-4 flex gap-2 z-20">
+                <button 
+                    onClick={toggleMute}
+                    className="bg-black/40 backdrop-blur-md p-2 rounded-full text-white hover:bg-safari-emerald transition-colors"
+                    title={isMuted ? "Unmute" : "Mute"}
+                >
+                    {isMuted ? <VolumeX size={16} /> : <Volume2 size={16} />}
+                </button>
             </div>
           )}
         </div>

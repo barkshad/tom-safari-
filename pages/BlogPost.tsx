@@ -1,9 +1,8 @@
-
 // @ts-nocheck
-import React from 'react';
+import React, { useState, useRef } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useData } from '../context/DataContext';
-import { ArrowLeft, Calendar } from 'lucide-react';
+import { ArrowLeft, Calendar, Volume2, VolumeX } from 'lucide-react';
 import { motion } from 'framer-motion';
 import PageTransition from '../components/PageTransition';
 
@@ -13,6 +12,7 @@ const BlogPost: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
   const { blogPosts } = useData();
   const post = blogPosts.find(p => p.slug === slug);
+  const [isMuted, setIsMuted] = useState(true);
 
   if (!post) {
     return (
@@ -29,7 +29,7 @@ const BlogPost: React.FC = () => {
   return (
     <PageTransition>
       <div className="bg-safari-sand min-h-screen pb-20">
-        <div className="relative h-[70vh] overflow-hidden bg-stone-900">
+        <div className="relative h-[70vh] overflow-hidden bg-stone-900 group">
           <motion.div 
               initial={{ scale: 1.2 }}
               animate={{ scale: 1 }}
@@ -41,7 +41,7 @@ const BlogPost: React.FC = () => {
                     src={post.image} 
                     className="w-full h-full object-cover" 
                     autoPlay 
-                    muted 
+                    muted={isMuted}
                     loop 
                     playsInline
                  />
@@ -56,6 +56,16 @@ const BlogPost: React.FC = () => {
                   <ArrowLeft className="w-4 h-4 mr-2" /> Back to Blog
               </Link>
           </div>
+
+          {isVideo(post.image) && (
+            <button
+                onClick={() => setIsMuted(!isMuted)}
+                className="absolute bottom-8 right-8 z-30 bg-black/50 backdrop-blur-md p-3 rounded-full text-white hover:bg-safari-emerald hover:text-stone-900 transition-all border border-white/10"
+                title={isMuted ? "Unmute Sound" : "Mute Sound"}
+            >
+                {isMuted ? <VolumeX size={24} /> : <Volume2 size={24} />}
+            </button>
+          )}
         </div>
 
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 -mt-32 relative z-30">
