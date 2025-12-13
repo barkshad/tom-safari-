@@ -66,6 +66,11 @@ const Home: React.FC = () => {
   
   const isVideo = (url) => url?.match(/\.(mp4|webm|ogg|mov)$/i) || url?.includes('/video/upload/');
 
+  // Safe access to first testimonial
+  const firstTestimonial = Array.isArray(pageContent.home.testimonials) && pageContent.home.testimonials.length > 0 
+      ? pageContent.home.testimonials[0] 
+      : null;
+
   return (
     <PageTransition>
       <StructuredData type="WebSite" data={{ name: companyInfo.name }} />
@@ -208,6 +213,7 @@ const Home: React.FC = () => {
         </section>
 
         {/* --- TESTIMONIAL --- */}
+        {firstTestimonial && (
         <section className="py-40 relative overflow-hidden flex items-center justify-center">
           <EditTrigger sectionName="Testimonials" className="top-4 right-4" />
           <div className="absolute inset-0 z-0">
@@ -223,12 +229,13 @@ const Home: React.FC = () => {
           >
             <div className="glass-dark p-12 md:p-16 rounded-[3rem] shadow-2xl relative">
               <blockquote className="text-2xl md:text-4xl italic font-serif font-medium mb-10 leading-relaxed text-stone-200">
-                "{pageContent.home.testimonials.content}"
+                "{firstTestimonial.content}"
               </blockquote>
-              <cite className="font-bold not-italic text-stone-400 block text-lg tracking-wide uppercase">- {pageContent.home.testimonials.author}</cite>
+              <cite className="font-bold not-italic text-stone-400 block text-lg tracking-wide uppercase">- {firstTestimonial.author}</cite>
             </div>
           </motion.div>
         </section>
+        )}
       </div>
     </PageTransition>
   );

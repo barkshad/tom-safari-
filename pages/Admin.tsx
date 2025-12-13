@@ -112,13 +112,9 @@ const SaveStatus = ({ saving }: { saving: boolean }) => (
 );
 
 // --- STABLE INPUT COMPONENTS (KEYBOARD FIX) ---
-// These components only trigger onChange when the user leaves the field (onBlur)
-// This prevents the parent from re-rendering on every keystroke, keeping the keyboard open.
-
 const StableInput = ({ value, onChange, placeholder, type = "text", label, className }: any) => {
   const [localValue, setLocalValue] = useState(value || "");
   
-  // Sync with prop only if it changes externally
   useEffect(() => { 
       setLocalValue(value || ""); 
   }, [value]);
@@ -344,9 +340,14 @@ const PageEditorView = ({ showToast }: any) => {
 
 const TestimonialsManagerView = ({ showToast }: any) => {
     const { pageContent, updatePageContent } = useData();
-    const [testimonials, setTestimonials] = useState(pageContent.home.testimonials || []);
+    // SAFE INITIALIZATION: Ensure it's always an array
+    const getSafeTestimonials = (data: any) => Array.isArray(data) ? data : [];
     
-    useEffect(() => { setTestimonials(pageContent.home.testimonials || []); }, [pageContent.home.testimonials]);
+    const [testimonials, setTestimonials] = useState<any[]>(getSafeTestimonials(pageContent.home.testimonials));
+    
+    useEffect(() => { 
+        setTestimonials(getSafeTestimonials(pageContent.home.testimonials)); 
+    }, [pageContent.home.testimonials]);
 
     const handleUpdate = (index: number, field: string, value: any) => {
         const newTestimonials = [...testimonials];
@@ -370,7 +371,7 @@ const TestimonialsManagerView = ({ showToast }: any) => {
         showToast("Testimonials saved successfully!");
     };
     
-    const hasChanges = JSON.stringify(testimonials) !== JSON.stringify(pageContent.home.testimonials);
+    const hasChanges = JSON.stringify(testimonials) !== JSON.stringify(getSafeTestimonials(pageContent.home.testimonials));
 
     return (
         <div className="bg-white rounded-2xl shadow-sm border border-stone-100 p-6">
@@ -391,7 +392,7 @@ const TestimonialsManagerView = ({ showToast }: any) => {
                  ))}
                  {testimonials.length === 0 && <p className="text-stone-500 text-center py-8">No testimonials added yet.</p>}
              </div>
-             <ActionButtons onSave={handleSave} onDiscard={() => setTestimonials(pageContent.home.testimonials || [])} isSaving={false} hasChanges={hasChanges} />
+             <ActionButtons onSave={handleSave} onDiscard={() => setTestimonials(getSafeTestimonials(pageContent.home.testimonials))} isSaving={false} hasChanges={hasChanges} />
         </div>
     );
 };
