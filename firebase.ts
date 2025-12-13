@@ -18,12 +18,12 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 
 // Initialize Firestore with settings to improve reliability and offline support
-// experimentalForceLongPolling helps in environments where WebSockets are blocked or unstable
+// Removed experimentalForceLongPolling: true to allow the SDK to choose the best connection method (WebSockets/LongPolling)
+// and prevent timeouts in environments where forced long polling fails.
 const db = initializeFirestore(app, {
   localCache: persistentLocalCache({
     tabManager: persistentMultipleTabManager()
-  }),
-  experimentalForceLongPolling: true,
+  })
 });
 
 const storage = getStorage(app);

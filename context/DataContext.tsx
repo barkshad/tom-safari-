@@ -347,13 +347,23 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
-  // NEW: Sync local constant tours to cloud without wiping everything else
+  // Sync local constant tours to cloud, merging with existing ones instead of replacing
   const syncLocalTours = async () => {
-    if(window.confirm(`This will overwrite your cloud database tours with the ${TOURS.length} tours defined in your local code. Are you sure?`)) {
-        const newData = { ...data, tours: TOURS };
+    if(window.confirm(`This will merge local tours from code into your database. Existing cloud tours will NOT be replaced. New local tours will be added. Continue?`)) {
+        const existingIds = new Set(data.tours.map(t => t.id));
+        const newLocalTours = TOURS.filter(t => !existingIds.has(t.id));
+
+        if (newLocalTours.length === 0) {
+            alert("No new local tours found. Database is already up to date with local code.");
+            return;
+        }
+
+        const mergedTours = [...data.tours, ...newLocalTours];
+        const newData = { ...data, tours: mergedTours };
+        
         await saveData(newData);
         setData(newData);
-        alert("Tours synced successfully! The database now matches your code.");
+        alert(`Successfully added ${newLocalTours.length} new tours from local code.`);
     }
   };
 

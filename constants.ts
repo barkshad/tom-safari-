@@ -292,5 +292,24 @@ export const TOURS: Tour[] = [
     ],
     inclusions: ["Accommodation", "Transfers from Kilifi", "Breakfast", "Marine Park Fees"],
     exclusions: ["Lunch & Dinner (unless specified)", "Personal water sports", ...DEFAULT_EXCLUSIONS]
+  },
+  {
+    id: "malindi-marine-park-full-day",
+    name: "Full Day Marine Park",
+    durationDays: 1,
+    priceUsd: 95,
+    priceGbp: 75,
+    image: "https://images.unsplash.com/photo-1544551763-46a013bb70d5?q=80&w=2070",
+    category: "Coastal",
+    group: "Excursion",
+    featured: true,
+    shortDescription: "Snorkeling and glass-bottom boat adventure in Malindi Marine Park.",
+    fullDescription: "Experience the underwater wonders of Malindi Marine National Park. Famous for its coral gardens and diverse fish species, this full-day excursion includes a glass-bottom boat tour, snorkeling sessions, and a delicious beachside seafood lunch.",
+    highlights: ["Glass Bottom Boat", "Coral Gardens", "Snorkeling", "Seafood Lunch", "Beach Relaxation"],
+    itinerary: [
+      { day: 1, title: "Full Day Marine Exploration", description: "Pickup from your hotel after breakfast. Proceed to Malindi Marine Park. Board the glass-bottom boat for viewing and snorkeling. Break for a seafood lunch at a local restaurant. Afternoon relaxation on the beach before returning." }
+    ],
+    inclusions: ["Transport", "Park Fees", "Boat Ride", "Lunch", "Snorkeling Equipment"],
+    exclusions: ["Tips", "Drinks"]
   }
 ];
