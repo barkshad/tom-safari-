@@ -1,8 +1,9 @@
+
 // @ts-nocheck
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useData } from '../context/DataContext';
-import { ArrowLeft, CloudSun, CheckCircle, XCircle } from 'lucide-react';
+import { ArrowLeft, CloudSun, CheckCircle, XCircle, Lock } from 'lucide-react';
 import { Tour } from '../types';
 import { motion } from 'framer-motion';
 import PageTransition from '../components/PageTransition';
@@ -11,7 +12,7 @@ import EditTrigger from '../components/EditTrigger';
 
 const TourDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const { tours, convertPrice } = useData();
+  const { tours, convertPrice, isAuthenticated } = useData();
   const [tour, setTour] = useState<Tour | null>(null);
 
   useEffect(() => {
@@ -28,6 +29,22 @@ const TourDetails: React.FC = () => {
           <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 1 }} className="w-12 h-12 border-4 border-safari-emerald border-t-transparent rounded-full"></motion.div>
       </div>
   );
+
+  // Draft Protection
+  if (tour.hidden && !isAuthenticated) {
+      return (
+          <div className="h-screen flex flex-col items-center justify-center bg-safari-sand text-center p-4">
+              <div className="bg-white p-8 rounded-3xl shadow-xl max-w-md">
+                  <Lock className="w-12 h-12 text-stone-400 mx-auto mb-4" />
+                  <h1 className="text-2xl font-bold text-stone-800 mb-2">Tour Unavailable</h1>
+                  <p className="text-stone-500 mb-6">This tour is currently in draft mode or has been removed.</p>
+                  <Link to="/tours" className="px-6 py-3 bg-safari-emerald text-stone-900 font-bold rounded-full hover:bg-safari-leaf hover:text-white transition-colors">
+                      Browse Active Tours
+                  </Link>
+              </div>
+          </div>
+      );
+  }
 
   const price = convertPrice(tour.priceUsd);
   
@@ -75,6 +92,9 @@ const TourDetails: React.FC = () => {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.2 }}
               >
+                  {tour.hidden && (
+                      <span className="inline-block px-4 py-1 mb-4 mr-2 rounded-full bg-stone-500 text-white text-xs font-bold uppercase tracking-widest backdrop-blur-md border border-white/20">Draft Mode (Admin Only)</span>
+                  )}
                   {tour.category === 'Honeymoon' && (
                       <span className="inline-block px-4 py-1 mb-4 rounded-full bg-pink-500/80 text-white text-xs font-bold uppercase tracking-widest backdrop-blur-md">Romantic Getaway</span>
                   )}

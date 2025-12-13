@@ -1,5 +1,4 @@
 
-
 export interface BlogPost {
   id: string;
   slug: string;
@@ -27,6 +26,7 @@ export interface Tour {
   exclusions?: string[];
   itinerary: ItineraryDay[];
   featured: boolean;
+  hidden?: boolean; // New property for Draft Mode
   category: 'Safari' | 'Coastal' | 'Trek' | 'Day Trip' | 'Honeymoon' | 'International' | 'Weekend';
   group: 'Excursion' | 'Road Safari' | 'Flight Safari' | 'Trek' | 'Custom' | 'International' | 'Getaway';
   keywords?: string;

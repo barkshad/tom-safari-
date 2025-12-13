@@ -1,3 +1,4 @@
+
 // @ts-nocheck
 import React, { useRef } from 'react';
 import { Link } from 'react-router-dom';
@@ -11,7 +12,8 @@ import StructuredData from '../components/StructuredData';
 
 const Home: React.FC = () => {
   const { tours, companyInfo, pageContent } = useData();
-  const featuredTours = tours.filter(t => t.featured).slice(0, 6);
+  // Filter for featured AND visible tours
+  const featuredTours = tours.filter(t => t.featured && !t.hidden).slice(0, 6);
   const heroRef = useRef(null);
   
   const { scrollYProgress } = useScroll({ target: heroRef, offset: ["start start", "end start"] });
@@ -65,8 +67,11 @@ const Home: React.FC = () => {
   };
   
   const isVideo = (url) => url?.match(/\.(mp4|webm|ogg|mov)$/i) || url?.includes('/video/upload/');
-  
-  const firstTestimonial = pageContent.home.testimonials?.[0];
+
+  // Safe access to first testimonial
+  const firstTestimonial = Array.isArray(pageContent.home.testimonials) && pageContent.home.testimonials.length > 0 
+      ? pageContent.home.testimonials[0] 
+      : null;
 
   return (
     <PageTransition>
@@ -174,7 +179,7 @@ const Home: React.FC = () => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
               {pageContent.home.features.map((feature, idx) => (
                 <motion.div 
-                  key={feature.id || idx} 
+                  key={idx} 
                   initial={{ opacity: 0, y: 50, scale: 0.95 }} 
                   whileInView={{ opacity: 1, y: 0, scale: 1 }} 
                   viewport={{ once: true }} 
@@ -210,6 +215,7 @@ const Home: React.FC = () => {
         </section>
 
         {/* --- TESTIMONIAL --- */}
+        {firstTestimonial && (
         <section className="py-40 relative overflow-hidden flex items-center justify-center">
           <EditTrigger sectionName="Testimonials" className="top-4 right-4" />
           <div className="absolute inset-0 z-0">
@@ -217,22 +223,21 @@ const Home: React.FC = () => {
                <div className="absolute inset-0 bg-stone-900/60 backdrop-blur-sm"></div>
           </div>
           
-          {firstTestimonial && (
-            <motion.div 
-              initial={{ opacity: 0, scale: 0.9, y: 50 }} 
-              whileInView={{ opacity: 1, scale: 1, y: 0 }} 
-              viewport={{ once: true }} 
-              className="max-w-4xl mx-auto px-4 text-center relative z-10"
-            >
-              <div className="glass-dark p-12 md:p-16 rounded-[3rem] shadow-2xl relative">
-                <blockquote className="text-2xl md:text-4xl italic font-serif font-medium mb-10 leading-relaxed text-stone-200">
-                  "{firstTestimonial.content}"
-                </blockquote>
-                <cite className="font-bold not-italic text-stone-400 block text-lg tracking-wide uppercase">- {firstTestimonial.author}</cite>
-              </div>
-            </motion.div>
-          )}
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.9, y: 50 }} 
+            whileInView={{ opacity: 1, scale: 1, y: 0 }} 
+            viewport={{ once: true }} 
+            className="max-w-4xl mx-auto px-4 text-center relative z-10"
+          >
+            <div className="glass-dark p-12 md:p-16 rounded-[3rem] shadow-2xl relative">
+              <blockquote className="text-2xl md:text-4xl italic font-serif font-medium mb-10 leading-relaxed text-stone-200">
+                "{firstTestimonial.content}"
+              </blockquote>
+              <cite className="font-bold not-italic text-stone-400 block text-lg tracking-wide uppercase">- {firstTestimonial.author}</cite>
+            </div>
+          </motion.div>
         </section>
+        )}
       </div>
     </PageTransition>
   );
