@@ -78,6 +78,10 @@ const TourCard: React.FC<TourCardProps> = ({ tour }) => {
         scale: 1,
         transition: { type: "spring", bounce: 0.4, duration: 1 } 
       }}
+      whileHover={{ 
+        y: -10, 
+        transition: { type: "spring", stiffness: 300, damping: 20 } 
+      }}
       viewport={{ once: true, margin: "-10%" }}
       onViewportEnter={() => triggerHaptic('light')} // Vibrate on scroll enter
       className="group relative h-full cursor-pointer perspective-1000"
