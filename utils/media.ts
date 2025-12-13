@@ -23,14 +23,21 @@ export const getOptimizedMedia = (url: string | undefined, type: 'image' | 'vide
   if (type === 'video') {
     params.push('vc_auto'); // Video codec auto (h264/h265/vp9)
     params.push('br_auto'); // Bitrate auto
-  } else {
     // Image specific
+  } else {
     params.push('fl_lossy'); // Allow lossy compression for images
   }
 
   const transformationString = params.join(',');
+  let finalUrl = `${baseUrl}/upload/${transformationString}/${assetPath}`;
 
-  return `${baseUrl}/upload/${transformationString}/${assetPath}`;
+  // FORCE MP4 EXTENSION FOR VIDEOS
+  // Browsers get confused if the URL ends in .mov even if headers are correct
+  if (type === 'video') {
+      finalUrl = finalUrl.replace(/\.[^/.]+$/, ".mp4");
+  }
+
+  return finalUrl;
 };
 
 export const getPoster = (videoUrl: string | undefined) => {
@@ -38,7 +45,8 @@ export const getPoster = (videoUrl: string | undefined) => {
     // Generate a poster image URL from the video URL
     if (videoUrl.includes('cloudinary.com')) {
         // Optimize the source first, then change extension
-        const optimized = getOptimizedMedia(videoUrl, 'image', 600); // 600px width for thumbnails
+        // We use the original function but force image type to get image optimizations
+        const optimized = getOptimizedMedia(videoUrl, 'image', 600); 
         // Replace video extension with .jpg
         return optimized.replace(/\.[^/.]+$/, ".jpg");
     }

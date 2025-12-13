@@ -1,6 +1,6 @@
 
 // @ts-nocheck
-import React, { useRef } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Sun, Compass, Star } from 'lucide-react';
 import { useData } from '../context/DataContext';
@@ -16,6 +16,7 @@ const Home: React.FC = () => {
   // Filter for featured AND visible tours
   const featuredTours = tours.filter(t => t.featured && !t.hidden).slice(0, 6);
   const heroRef = useRef(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
   
   const { scrollYProgress } = useScroll({ target: heroRef, offset: ["start start", "end start"] });
   const scaleImg = useTransform(scrollYProgress, [0, 1], [1, 1.2]);
@@ -24,7 +25,7 @@ const Home: React.FC = () => {
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
 
-  const handleMouseMove = (e) => {
+  const handleMouseMove = (e: React.MouseEvent<HTMLElement>) => {
     const { clientX, clientY, currentTarget } = e;
     const { left, top, width, height } = currentTarget.getBoundingClientRect();
     const x = (clientX - left) / width - 0.5;
@@ -37,6 +38,15 @@ const Home: React.FC = () => {
     mouseX.set(0);
     mouseY.set(0);
   };
+  
+  // Fix Autoplay for Hero Video
+  useEffect(() => {
+    if (videoRef.current) {
+        videoRef.current.defaultMuted = true;
+        videoRef.current.muted = true;
+        videoRef.current.play().catch(e => console.log("Hero video autoplay prevented:", e));
+    }
+  }, []);
   
   const parallaxTextX = useTransform(mouseX, (v) => v * 0.5);
   const parallaxTextY = useTransform(mouseY, (v) => v * 0.5);
@@ -67,7 +77,7 @@ const Home: React.FC = () => {
     },
   };
   
-  const isVideo = (url) => url?.match(/\.(mp4|webm|ogg|mov)$/i) || url?.includes('/video/upload/');
+  const isVideo = (url: string) => url?.match(/\.(mp4|webm|ogg|mov)$/i) || url?.includes('/video/upload/');
 
   // Safe access to first testimonial
   const firstTestimonial = Array.isArray(pageContent.home.testimonials) && pageContent.home.testimonials.length > 0 
@@ -102,6 +112,7 @@ const Home: React.FC = () => {
           >
             {isVideo(pageContent.home.hero.image) ? (
                 <video 
+                    ref={videoRef}
                     src={heroMediaUrl}
                     poster={heroPoster}
                     className="w-full h-full object-cover" 
@@ -109,6 +120,7 @@ const Home: React.FC = () => {
                     loop 
                     muted 
                     playsInline
+                    webkit-playsinline="true"
                     preload="auto"
                 />
             ) : (

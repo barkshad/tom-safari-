@@ -1,6 +1,6 @@
 
 // @ts-nocheck
-import React, { useRef } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Star, PlayCircle, MapPin } from 'lucide-react';
 import { Tour } from '../types';
@@ -38,6 +38,15 @@ const TourCard: React.FC<TourCardProps> = ({ tour }) => {
   const glowX = useTransform(mouseX, [-0.5, 0.5], ["-20%", "20%"]);
   const glowY = useTransform(mouseY, [-0.5, 0.5], ["-20%", "20%"]);
 
+  // --- VIDEO PLAYBACK FIX ---
+  useEffect(() => {
+    if (videoRef.current) {
+        // Critical for autoplay policies: set muted property directly on the DOM element
+        videoRef.current.defaultMuted = true;
+        videoRef.current.muted = true;
+    }
+  }, []);
+
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!ref.current) return;
     
@@ -72,7 +81,8 @@ const TourCard: React.FC<TourCardProps> = ({ tour }) => {
       const playPromise = videoRef.current.play();
       if (playPromise !== undefined) {
         playPromise.catch(error => {
-          // Auto-play was prevented
+          // Auto-play was prevented - usually due to user interaction policies
+          // or because the video is not fully loaded.
           console.debug("Autoplay prevented", error);
         });
       }
@@ -138,7 +148,8 @@ const TourCard: React.FC<TourCardProps> = ({ tour }) => {
                 muted 
                 loop 
                 playsInline 
-                preload="none" // Critical for performance: don't load until necessary
+                webkit-playsinline="true"
+                preload="metadata" // Changed from 'none' to 'metadata' so it's ready to play instantly
              />
           ) : (
              <motion.img 

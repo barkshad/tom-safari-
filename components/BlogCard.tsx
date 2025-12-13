@@ -1,6 +1,6 @@
 
 // @ts-nocheck
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Calendar, PlayCircle, Volume2, VolumeX } from 'lucide-react';
 import { BlogPost } from '../types';
@@ -17,6 +17,14 @@ const BlogCard: React.FC<BlogCardProps> = ({ post }) => {
   const [isMuted, setIsMuted] = useState(true);
   const videoRef = useRef<HTMLVideoElement>(null);
 
+  // Enforce muted property on mount to allow autoplay/play-on-hover
+  useEffect(() => {
+    if (videoRef.current) {
+        videoRef.current.defaultMuted = true;
+        videoRef.current.muted = true;
+    }
+  }, []);
+
   const toggleMute = (e: React.MouseEvent) => {
     e.preventDefault(); // Prevent navigation
     e.stopPropagation();
@@ -29,7 +37,10 @@ const BlogCard: React.FC<BlogCardProps> = ({ post }) => {
 
   const handleMouseEnter = () => {
       if (videoRef.current) {
-          videoRef.current.play().catch(() => {});
+          const playPromise = videoRef.current.play();
+          if(playPromise !== undefined) {
+              playPromise.catch(e => {}); // Ignore abort errors
+          }
       }
   };
 
@@ -70,10 +81,11 @@ const BlogCard: React.FC<BlogCardProps> = ({ post }) => {
                  src={mediaUrl}
                  poster={posterUrl}
                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                 muted={isMuted}
+                 muted 
                  loop 
                  playsInline
-                 preload="none"
+                 webkit-playsinline="true"
+                 preload="metadata"
                />
             ) : (
                 <motion.img 
