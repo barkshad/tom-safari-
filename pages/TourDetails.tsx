@@ -1,6 +1,6 @@
 
 // @ts-nocheck
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useData } from '../context/DataContext';
 import { ArrowLeft, CloudSun, CheckCircle, XCircle, Lock } from 'lucide-react';
@@ -15,6 +15,7 @@ const TourDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const { tours, convertPrice, isAuthenticated } = useData();
   const [tour, setTour] = useState<Tour | null>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
     const foundTour = tours.find(t => t.id === id);
@@ -24,6 +25,15 @@ const TourDetails: React.FC = () => {
       document.title = `${foundTour.name} | Tom Safaris`;
     }
   }, [id, tours]);
+
+  // Fix Autoplay for Detail Header Video
+  useEffect(() => {
+    if (videoRef.current) {
+        videoRef.current.defaultMuted = true;
+        videoRef.current.muted = true;
+        videoRef.current.play().catch(e => console.log("Detail video autoplay deferred:", e));
+    }
+  }, [tour]);
 
   if (!tour) return (
       <div className="h-screen flex items-center justify-center bg-safari-sand">
@@ -80,6 +90,7 @@ const TourDetails: React.FC = () => {
           >
               {isVideo(tour.image) ? (
                  <video 
+                    ref={videoRef}
                     src={headerMediaUrl}
                     poster={headerPoster}
                     className="w-full h-full object-cover" 
@@ -87,6 +98,9 @@ const TourDetails: React.FC = () => {
                     muted 
                     loop 
                     playsInline 
+                    webkit-playsinline="true"
+                    preload="auto"
+                    onCanPlay={(e) => e.currentTarget.play().catch(() => {})}
                  />
               ) : (
                  <img src={headerMediaUrl} alt={tour.name} className="w-full h-full object-cover" loading="eager"/>

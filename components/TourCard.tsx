@@ -1,6 +1,6 @@
 
 // @ts-nocheck
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Star, PlayCircle, MapPin } from 'lucide-react';
 import { Tour } from '../types';
@@ -17,6 +17,7 @@ const isVideo = (url: string) => url?.match(/\.(mp4|webm|ogg|mov)$/i) || url?.in
 const TourCard: React.FC<TourCardProps> = ({ tour }) => {
   const { convertPrice } = useData();
   const price = convertPrice(tour.priceUsd);
+  const [isPlaying, setIsPlaying] = useState(false);
 
   // --- 3D TILT LOGIC ---
   const ref = useRef<HTMLDivElement>(null);
@@ -69,21 +70,29 @@ const TourCard: React.FC<TourCardProps> = ({ tour }) => {
     // Reset to center on leave
     x.set(0);
     y.set(0);
+    
     if (videoRef.current) {
-      videoRef.current.pause();
+      // Small timeout to prevent choppy behavior if user accidentally moves out for a millisecond
+      setTimeout(() => {
+          if (!ref.current?.matches(':hover') && videoRef.current) {
+             videoRef.current.pause();
+             setIsPlaying(false);
+          }
+      }, 100);
     }
   };
 
   const handleMouseEnter = () => {
     triggerHaptic('light');
     if (videoRef.current) {
-      // Small delay to ensure mouse is intent on staying
+      // Promise handling to avoid "The play() request was interrupted" errors
       const playPromise = videoRef.current.play();
       if (playPromise !== undefined) {
-        playPromise.catch(error => {
-          // Auto-play was prevented - usually due to user interaction policies
-          // or because the video is not fully loaded.
+        playPromise.then(() => {
+            setIsPlaying(true);
+        }).catch(error => {
           console.debug("Autoplay prevented", error);
+          setIsPlaying(false);
         });
       }
     }
@@ -92,7 +101,6 @@ const TourCard: React.FC<TourCardProps> = ({ tour }) => {
   // --- HAPTIC FEEDBACK ---
   const triggerHaptic = (intensity = 'light') => {
     if (typeof navigator !== 'undefined' && navigator.vibrate) {
-        // pattern for light feedback vs stronger interaction
         navigator.vibrate(intensity === 'light' ? 10 : 20);
     }
   };
@@ -140,17 +148,27 @@ const TourCard: React.FC<TourCardProps> = ({ tour }) => {
         {/* Image Container with Depth */}
         <div className="relative h-64 overflow-hidden bg-stone-900" style={{ transform: "translateZ(20px)" }}>
           {isVideo(tour.image) ? (
-             <video 
-                ref={videoRef}
-                src={mediaUrl}
-                poster={posterUrl}
-                className="w-full h-full object-cover transform transition-transform duration-700 group-hover:scale-105" 
-                muted 
-                loop 
-                playsInline 
-                webkit-playsinline="true"
-                preload="metadata" // Changed from 'none' to 'metadata' so it's ready to play instantly
-             />
+             <>
+               <video 
+                  ref={videoRef}
+                  src={mediaUrl}
+                  poster={posterUrl}
+                  className={`w-full h-full object-cover transform transition-transform duration-700 group-hover:scale-105 ${isPlaying ? 'opacity-100' : 'opacity-0'}`}
+                  muted 
+                  loop 
+                  playsInline 
+                  webkit-playsinline="true"
+                  preload="auto" 
+               />
+               {/* Fallback Image/Poster when video is loading or not hovering */}
+               {!isPlaying && (
+                   <img 
+                      src={posterUrl || mediaUrl} 
+                      className="absolute inset-0 w-full h-full object-cover" 
+                      alt={tour.name}
+                   />
+               )}
+             </>
           ) : (
              <motion.img 
                 src={mediaUrl} 

@@ -39,12 +39,21 @@ const Home: React.FC = () => {
     mouseY.set(0);
   };
   
-  // Fix Autoplay for Hero Video
+  // Robust Autoplay Logic
   useEffect(() => {
-    if (videoRef.current) {
-        videoRef.current.defaultMuted = true;
-        videoRef.current.muted = true;
-        videoRef.current.play().catch(e => console.log("Hero video autoplay prevented:", e));
+    const video = videoRef.current;
+    if (video) {
+        video.defaultMuted = true;
+        video.muted = true;
+        
+        // Attempt to play immediately
+        const attemptPlay = () => {
+            const playPromise = video.play();
+            if (playPromise !== undefined) {
+                playPromise.catch(e => console.log("Hero video autoplay deferred:", e));
+            }
+        };
+        attemptPlay();
     }
   }, []);
   
@@ -77,7 +86,7 @@ const Home: React.FC = () => {
     },
   };
   
-  const isVideo = (url: string) => url?.match(/\.(mp4|webm|ogg|mov)$/i) || url?.includes('/video/upload/');
+  const isVideo = (url) => url?.match(/\.(mp4|webm|ogg|mov)$/i) || url?.includes('/video/upload/');
 
   // Safe access to first testimonial
   const firstTestimonial = Array.isArray(pageContent.home.testimonials) && pageContent.home.testimonials.length > 0 
@@ -122,6 +131,7 @@ const Home: React.FC = () => {
                     playsInline
                     webkit-playsinline="true"
                     preload="auto"
+                    onCanPlay={(e) => e.currentTarget.play().catch(() => {})}
                 />
             ) : (
                 <img src={heroMediaUrl} alt="Safari Hero" className="w-full h-full object-cover" loading="eager" />

@@ -21,10 +21,15 @@ export const getOptimizedMedia = (url: string | undefined, type: 'image' | 'vide
 
   // Type specific optimizations
   if (type === 'video') {
-    params.push('vc_auto'); // Video codec auto (h264/h265/vp9)
-    params.push('br_auto'); // Bitrate auto
-    // Image specific
+    // FORCE COMPATIBILITY:
+    // vc_h264: Forces H.264 codec (plays on EVERYTHING)
+    // f_mp4: Forces MP4 container
+    // br_4m: Caps bitrate at 4Mbps to prevent huge file downloads
+    params.push('vc_h264'); 
+    params.push('f_mp4');   
+    params.push('br_4m');   
   } else {
+    // Image specific
     params.push('fl_lossy'); // Allow lossy compression for images
   }
 
@@ -34,7 +39,8 @@ export const getOptimizedMedia = (url: string | undefined, type: 'image' | 'vide
   // FORCE MP4 EXTENSION FOR VIDEOS
   // Browsers get confused if the URL ends in .mov even if headers are correct
   if (type === 'video') {
-      finalUrl = finalUrl.replace(/\.[^/.]+$/, ".mp4");
+      // Remove existing extension and add .mp4
+      finalUrl = finalUrl.replace(/\.[^/.]+$/, "") + ".mp4";
   }
 
   return finalUrl;
