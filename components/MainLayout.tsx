@@ -6,6 +6,7 @@ import Navbar from './Navbar';
 import Footer from './Footer';
 import { useData } from '../context/DataContext';
 import LoadingSpinner from './LoadingSpinner';
+import WhatsAppButton from './WhatsAppButton';
 
 const MainLayout: React.FC = () => {
   const { loading } = useData();
@@ -21,6 +22,7 @@ const MainLayout: React.FC = () => {
         <Outlet />
       </main>
       <Footer />
+      <WhatsAppButton />
     </>
   );
 };

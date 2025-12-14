@@ -86,7 +86,7 @@ const Home: React.FC = () => {
     },
   };
   
-  const isVideo = (url) => url?.match(/\.(mp4|webm|ogg|mov)$/i) || url?.includes('/video/upload/');
+  const isVideo = (url: string) => url?.match(/\.(mp4|webm|ogg|mov)$/i) || url?.includes('/video/upload/');
 
   // Safe access to first testimonial
   const firstTestimonial = Array.isArray(pageContent.home.testimonials) && pageContent.home.testimonials.length > 0 
@@ -153,10 +153,10 @@ const Home: React.FC = () => {
                 variants={sentence}
                 initial="hidden"
                 animate="visible"
-                className="text-6xl md:text-8xl lg:text-9xl font-serif font-black text-white mb-6 leading-[0.9] drop-shadow-2xl text-glow-gold flex flex-wrap justify-center"
+                className="text-5xl sm:text-6xl md:text-8xl lg:text-9xl font-serif font-black text-white mb-6 leading-[0.9] drop-shadow-2xl text-glow-gold flex flex-wrap justify-center"
               >
                 {pageContent.home.hero.title.split(" ").map((word, wordIndex) => (
-                  <span key={wordIndex} className="inline-block whitespace-nowrap mr-4 md:mr-6">
+                  <span key={wordIndex} className="inline-block whitespace-nowrap mr-2 md:mr-6">
                     {word.split("").map((char, charIndex) => (
                       <motion.span key={charIndex} variants={letter} className="inline-block">
                         {char}
@@ -165,16 +165,16 @@ const Home: React.FC = () => {
                   </span>
                 ))}
               </motion.h1>
-              <p className="text-lg md:text-2xl text-stone-200 mb-10 font-light max-w-3xl mx-auto drop-shadow-md leading-relaxed">
+              <p className="text-lg md:text-2xl text-stone-200 mb-10 font-light max-w-3xl mx-auto drop-shadow-md leading-relaxed px-4">
                 {pageContent.home.hero.subtitle}
               </p>
               
-              <div className="flex flex-col sm:flex-row justify-center gap-6">
+              <div className="flex flex-col sm:flex-row justify-center gap-6 px-8">
                 <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                  <Link to="/contact" className="px-8 py-4 bg-safari-emerald text-stone-900 font-bold rounded-full hover:bg-white transition-all shadow-[0_0_30px_rgba(0,196,154,0.5)] flex items-center justify-center uppercase tracking-wide">Start Adventure</Link>
+                  <Link to="/contact" className="px-8 py-4 bg-safari-emerald text-stone-900 font-bold rounded-full hover:bg-white transition-all shadow-[0_0_30px_rgba(0,196,154,0.5)] flex items-center justify-center uppercase tracking-wide w-full sm:w-auto">Start Adventure</Link>
                 </motion.div>
                 <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                  <Link to="/tours" className="glass-nav px-8 py-4 text-white font-bold rounded-full hover:bg-white/20 transition-all shadow-lg flex items-center justify-center uppercase tracking-wide">View All Tours</Link>
+                  <Link to="/tours" className="glass-nav px-8 py-4 text-white font-bold rounded-full hover:bg-white/20 transition-all shadow-lg flex items-center justify-center uppercase tracking-wide w-full sm:w-auto">View All Tours</Link>
                 </motion.div>
               </div>
             </motion.div>
