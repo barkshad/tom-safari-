@@ -1,3 +1,4 @@
+
 // @ts-nocheck
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { useData } from '../context/DataContext';
@@ -261,13 +262,12 @@ const DashboardView = ({ setActiveTab }: any) => {
     );
 };
 
+// ... (PageEditorView remains the same, included below for file consistency) ...
 const PageEditorView = ({ showToast }: any) => {
     const { pageContent, updatePageContent } = useData();
-    // LOCAL STATE BUFFER - This is the key fix. We edit this, not the global state directly.
     const [localContent, setLocalContent] = useState(pageContent);
     const [isSaving, setIsSaving] = useState(false);
 
-    // Sync from global if it changes externally
     useEffect(() => { setLocalContent(pageContent); }, [pageContent]);
 
     const hasChanges = JSON.stringify(localContent) !== JSON.stringify(pageContent);
@@ -376,7 +376,7 @@ const TestimonialsManagerView = ({ showToast }: any) => {
     return (
         <div className="bg-white rounded-2xl shadow-sm border border-stone-100 p-6">
              <div className="flex justify-between items-center mb-6">
-                <h2 className="text-xl font-bold text-stone-800">Client Testimonials</h2>
+                <h2 className="text-xl font-bold text-stone-800">Client Testimonials & Translations</h2>
                 <button onClick={handleAdd} className="bg-admin-blue text-white px-3 py-1.5 rounded-lg text-sm font-semibold flex items-center gap-1"><Plus size={14}/> Add New</button>
              </div>
              
@@ -384,9 +384,17 @@ const TestimonialsManagerView = ({ showToast }: any) => {
                  {testimonials.map((item: any, index: number) => (
                      <div key={item.id} className="border p-4 rounded-xl relative group bg-stone-50">
                          <button onClick={() => handleDelete(index)} className="absolute top-2 right-2 text-red-400 hover:text-red-600 opacity-0 group-hover:opacity-100 transition-opacity"><Trash2 size={16}/></button>
-                         <div className="grid gap-3">
-                             <StableTextArea label="Quote" value={item.content} onChange={(v: string) => handleUpdate(index, 'content', v)} rows={2} />
-                             <StableInput label="Author" value={item.author} onChange={(v: string) => handleUpdate(index, 'author', v)} />
+                         <div className="grid gap-4">
+                             <div>
+                                 <StableTextArea label="English Quote (Default)" value={item.content} onChange={(v: string) => handleUpdate(index, 'content', v)} rows={2} />
+                             </div>
+                             <div>
+                                 <StableTextArea label="Original Language Text (Optional)" value={item.nativeContent} onChange={(v: string) => handleUpdate(index, 'nativeContent', v)} rows={2} placeholder="e.g. Eine unvergessliche Erfahrung..." />
+                             </div>
+                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                 <StableInput label="Author" value={item.author} onChange={(v: string) => handleUpdate(index, 'author', v)} />
+                                 <StableInput label="Language Name" value={item.language} onChange={(v: string) => handleUpdate(index, 'language', v)} placeholder="e.g. German, Japanese" />
+                             </div>
                          </div>
                      </div>
                  ))}
@@ -397,6 +405,7 @@ const TestimonialsManagerView = ({ showToast }: any) => {
     );
 };
 
+// ... (Rest of Admin.tsx remains the same) ...
 const GlobalSettingsView = ({ showToast }: any) => {
     const { companyInfo, updateCompanyInfo } = useData();
     const [localInfo, setLocalInfo] = useState(companyInfo);

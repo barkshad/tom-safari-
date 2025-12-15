@@ -55,15 +55,15 @@ const ReviewCard: React.FC<{ review: TestimonialItem, index: number }> = ({ revi
 
             {hasTranslation && (
                 <button 
-                    onClick={() => setShowNative(!showNative)}
-                    className="mt-4 flex items-center gap-2 text-xs font-bold text-safari-emerald hover:text-safari-leaf transition-colors self-start uppercase tracking-wide"
+                    onClick={(e) => { e.stopPropagation(); setShowNative(!showNative); }}
+                    className="mt-6 flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold bg-safari-emerald/10 text-safari-emerald hover:bg-safari-emerald hover:text-white transition-all self-start uppercase tracking-wide border border-safari-emerald/20 shadow-sm"
                 >
                     <Languages size={14} />
                     {showNative ? "Translate to English" : `Show Original (${review.language})`}
                 </button>
             )}
 
-            <div className="mt-6 pt-6 border-t border-stone-100">
+            <div className="mt-6 pt-6 border-t border-stone-100 w-full">
                 <p className="font-bold text-stone-800 text-lg">{review.author}</p>
                 <p className="text-[10px] text-stone-400 uppercase tracking-widest mt-1">Verified Traveler</p>
             </div>
