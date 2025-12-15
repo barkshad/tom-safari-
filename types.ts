@@ -69,8 +69,10 @@ export interface PageSection {
 
 export interface TestimonialItem {
   id: string;
-  content: string;
+  content: string; // English version
   author: string;
+  nativeContent?: string; // Original Language version
+  language?: string; // e.g. "German", "Japanese"
 }
 
 export interface PageContent {

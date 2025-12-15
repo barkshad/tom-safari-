@@ -1,7 +1,7 @@
 
 import { Tour, PageContent, CurrencyConfig, CompanyInfo, BlogPost } from './types';
 
-export const DATA_VERSION = "6.9"; // Added Reviews Page Data
+export const DATA_VERSION = "6.10"; // Added International Testimonials
 
 export const COMPANY_INFO: CompanyInfo = {
   name: "Tom Safaris",
@@ -530,7 +530,51 @@ export const DEFAULT_PAGE_CONTENT: PageContent = {
       { id: "test2", content: "Saw the Big 5 in two days. Incredible guiding and the lodges were top tier. Highly recommend Cruse and his team.", author: "Hans, Germany" },
       { id: "test3", content: "We took our three kids on their first safari and Tom was amazing with them. Safe, educational, and fun!", author: "The Miller Family, USA" },
       { id: "test4", content: "Kilifi diving was spectacular. Professional instructors and beautiful reefs.", author: "Elena, Italy" },
-      { id: "test5", content: "A seamless experience from airport pickup to drop off. The deep sea fishing trip was the highlight!", author: "James, Australia" }
+      { id: "test5", content: "A seamless experience from airport pickup to drop off. The deep sea fishing trip was the highlight!", author: "James, Australia" },
+      
+      // International Testimonials
+      { 
+        id: "test-de", 
+        author: "Hans, Munich (Germany)", 
+        content: "An unforgettable experience. The guide knew exactly where the animals were.",
+        nativeContent: "Eine unvergessliche Erfahrung. Der Reiseführer wusste genau, wo die Tiere waren. Absolut empfehlenswert für jeden, der das echte Afrika sehen möchte.",
+        language: "German"
+      },
+      { 
+        id: "test-jp", 
+        author: "Yuki, Tokyo (Japan)", 
+        content: "It was a wonderful safari. I saw lions and elephants up close! Tom is very kind.",
+        nativeContent: "素晴らしいサファリでした。ライオンと象を間近で見ることができました！トムさんはとても親切で、最高のガイドです。",
+        language: "Japanese"
+      },
+      { 
+        id: "test-it", 
+        author: "Giulia, Rome (Italy)", 
+        content: "Incredible organization. We felt safe and pampered the whole time. The food was excellent.",
+        nativeContent: "Organizzazione incredibile. Ci siamo sentiti al sicuro e coccolati tutto il tempo. Il cibo era ottimo e i paesaggi mozzafiato.",
+        language: "Italian"
+      },
+      { 
+        id: "test-pl", 
+        author: "Marek, Warsaw (Poland)", 
+        content: "Great adventure! Professional service and beautiful views. I recommend it to everyone.",
+        nativeContent: "Wspaniała przygoda! Profesjonalna obsługa i piękne widoki. Polecam każdemu, kto chce przeżyć coś wyjątkowego.",
+        language: "Polish"
+      },
+      { 
+        id: "test-se", 
+        author: "Lars, Stockholm (Sweden)", 
+        content: "Very professional and knowledgeable guide. We learned so much about nature.",
+        nativeContent: "Mycket professionell och kunnig guide. Vi lärde oss så mycket om naturen. En resa vi aldrig kommer att glömma.",
+        language: "Swedish"
+      },
+      { 
+        id: "test-ru", 
+        author: "Olga, Moscow (Russia)", 
+        content: "We recommend Tom for safari. Everything was perfect, from the car to the hotel.",
+        nativeContent: "Мы рекомендуем Тома для сафари. Все было идеально, от машины до отеля. Мы видели большую пятерку!",
+        language: "Russian"
+      }
     ],
   },
   about: {
