@@ -35,7 +35,7 @@ const Footer: React.FC = () => {
              <Link to="/admin" className="p-2 bg-safari-sunset text-white rounded-full flex items-center gap-2 text-xs font-bold uppercase"><Edit2 className="w-3 h-3" /> Edit Footer</Link>
          </div>
       )}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 relative z-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-24 relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
           
           {/* Brand Column */}
