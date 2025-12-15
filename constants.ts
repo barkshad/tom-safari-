@@ -445,109 +445,44 @@ Diani has a vibrant culinary scene, from the famous Ali Barbour's Cave Restauran
 
 export const TOURS: Tour[] = [
   {
-    id: "tour-tsavo-east-1-day",
-    name: "Tsavo East Day Trip",
-    durationDays: 1,
-    priceUsd: 150,
-    priceGbp: 120,
-    image: "https://images.unsplash.com/photo-1516426122078-c23e76319801?q=80&w=2000",
-    shortDescription: "A quick but immersive safari experience from Mombasa/Diani.",
-    fullDescription: "Experience the thrill of the wild with a day trip to Tsavo East National Park. Depart early from your coastal hotel and drive along the Mombasa-Nairobi highway to the park gate. Enjoy game drives spotting 'Red Elephants', lions, and other wildlife before lunch at a lodge. Return to the coast by evening.",
-    highlights: ["Red Elephants", "Aruba Dam", "Big Five Spotting"],
-    itinerary: [
-      { day: 1, title: "Mombasa to Tsavo East", description: "Early morning pick up, game drive, lunch, and return." }
-    ],
-    featured: true,
-    category: 'Safari',
-    group: 'Road Safari',
-    inclusions: ["Park fees", "Transport", "Lunch", "Game drives"],
-    exclusions: ["Drinks", "Tips"],
-    gallery: ["https://images.unsplash.com/photo-1516426122078-c23e76319801?q=80&w=2000"]
-  },
-  {
-    id: "tour-tsavo-east-salt-lick-2-days",
-    name: "Tsavo East & Salt Lick Overnight",
-    durationDays: 2,
+    id: "tour-big-game-fishing-half",
+    name: "Big Game Fishing (Half Day)",
+    durationDays: 0.5,
     priceUsd: 350,
     priceGbp: 280,
-    image: "https://images.unsplash.com/photo-1547970810-dc1eac37d174?q=80&w=2071",
-    shortDescription: "Stay at the iconic stilted lodge and explore Taita Hills.",
-    fullDescription: "Combine Tsavo East with the private Taita Hills Sanctuary. Stay at the famous Salt Lick Safari Lodge, built on stilts overlooking waterholes where animals gather day and night.",
-    highlights: ["Salt Lick Lodge", "Night Game Drive", "Tsavo East"],
+    image: "https://images.unsplash.com/photo-1544551763-46a013bb70d5?q=80&w=2070",
+    shortDescription: "4-hour deep sea fishing adventure targeting Wahoo, Dorado, and Tuna.",
+    fullDescription: "Join us for an adrenaline-filled morning or afternoon of deep sea fishing. Our fully equipped boats and experienced crew will take you to the best spots to target pelagic game fish like Wahoo, Dorado (Mahi Mahi), Kingfish, and Yellowfin Tuna. Perfect for beginners and seasoned anglers alike.",
+    highlights: ["Deep Sea Trolling", "Professional Crew", "Refreshments Included", "All Tackle Provided"],
     itinerary: [
-      { day: 1, title: "Coast to Taita Hills", description: "Drive to Taita Hills, lunch at Taita Hills Lodge, afternoon game drive, dinner at Salt Lick." },
-      { day: 2, title: "Tsavo East to Coast", description: "Morning game drive in Tsavo East, then return to the coast." }
+      { day: 1, title: "Half Day Fishing", description: "Depart from the jetty, 4 hours of fishing in the Indian Ocean, return to shore." }
     ],
     featured: true,
-    category: 'Safari',
-    group: 'Road Safari',
-    inclusions: ["Accommodation", "All meals", "Park fees", "Transport"],
-    exclusions: ["Drinks", "Tips"],
-     gallery: ["https://images.unsplash.com/photo-1547970810-dc1eac37d174?q=80&w=2071"]
-  },
-  {
-    id: "tour-amboseli-3-days",
-    name: "Amboseli Kilimanjaro Safari",
-    durationDays: 3,
-    priceUsd: 550,
-    priceGbp: 440,
-    image: "https://images.unsplash.com/photo-1549320341-9426d03d45d6?q=80&w=2070",
-    shortDescription: "See majestic elephants against the backdrop of Mt. Kilimanjaro.",
-    fullDescription: "Amboseli is famous for its large herds of elephants and views of Mount Kilimanjaro. This 3-day safari gives you ample time to explore the park's swamps and observation hill.",
-    highlights: ["Mt. Kilimanjaro Views", "Large Elephant Herds", "Observation Hill"],
-    itinerary: [
-      { day: 1, title: "Travel to Amboseli", description: "Drive or take the train to Emali, transfer to Amboseli. Afternoon game drive." },
-      { day: 2, title: "Full Day Amboseli", description: "Morning and afternoon game drives. Optional Maasai village visit." },
-      { day: 3, title: "Return", description: "Morning game drive and return journey." }
-    ],
-    featured: false,
-    category: 'Safari',
-    group: 'Road Safari',
-    inclusions: ["Accommodation", "Meals", "Park fees"],
-    exclusions: ["Tips", "Drinks"],
-     gallery: ["https://images.unsplash.com/photo-1549320341-9426d03d45d6?q=80&w=2070"]
-  },
-  {
-    id: "tour-wasini-dolphin",
-    name: "Wasini Island Dolphin Tour",
-    durationDays: 1,
-    priceUsd: 90,
-    priceGbp: 75,
-    image: "https://images.unsplash.com/photo-1582967788606-a171f1080ca8?q=80&w=2070",
-    shortDescription: "Snorkel, see dolphins, and enjoy a seafood lunch.",
-    fullDescription: "A full day excursion to Kisite Mpunguti Marine Park. Swim with dolphins, snorkel in the coral garden, and enjoy a traditional Swahili seafood lunch on Wasini Island.",
-    highlights: ["Dolphins", "Snorkeling", "Seafood Lunch", "Dhow Cruise"],
-    itinerary: [
-      { day: 1, title: "Full Day Excursion", description: "Pick up, dhow cruise, snorkeling, lunch, and return." }
-    ],
-    featured: false,
-    category: 'Day Trip',
+    category: 'Coastal',
     group: 'Excursion',
-    inclusions: ["Marine Park Fees", "Lunch", "Snorkeling Gear", "Transport"],
-    exclusions: ["Drinks"],
-     gallery: ["https://images.unsplash.com/photo-1582967788606-a171f1080ca8?q=80&w=2070"]
+    inclusions: ["Boat Charter", "Fishing Gear & Bait", "Soft Drinks & Water", "Captain & Crew"],
+    exclusions: ["Tips", "Alcohol"],
+    gallery: ["https://images.unsplash.com/photo-1544551763-46a013bb70d5?q=80&w=2070"]
   },
-   {
-    id: "tour-masai-mara-flight",
-    name: "Maasai Mara Flight Safari",
-    durationDays: 3,
-    priceUsd: 1200,
-    priceGbp: 950,
-    image: "https://images.unsplash.com/photo-1516426122078-c23e76319801?q=80&w=2000",
-    shortDescription: "Fly directly into the action for the Big Five.",
-    fullDescription: "Maximize your time with a flight package to the world-famous Maasai Mara. Witness the Big Five and potentially the Great Migration (seasonal).",
-    highlights: ["Flight Experience", "Big Five", "Luxury Camp"],
+  {
+    id: "tour-big-game-fishing-full",
+    name: "Big Game Fishing (Full Day)",
+    durationDays: 1,
+    priceUsd: 700,
+    priceGbp: 560,
+    image: "https://images.unsplash.com/photo-1621683407982-b77823e59026?q=80&w=2070",
+    shortDescription: "8-hour expedition hunting for Marlin, Sailfish, and trophy Tuna.",
+    fullDescription: "A full day dedicated to the pursuit of the ocean's giants. We venture deeper to target Billfish (Sailfish, Black/Blue/Striped Marlin) and large Yellowfin Tuna. This charter gives you the time to try different techniques and maximize your chances of a trophy catch. Lunch and drinks are provided on board.",
+    highlights: ["Target Marlin & Sailfish", "Full Day Charter", "Deep Water Fishing", "Lunch On Board"],
     itinerary: [
-      { day: 1, title: "Flight to Mara", description: "Flight from Diani/Mombasa/Nairobi. Afternoon game drive." },
-      { day: 2, title: "Explore Mara", description: "Full day game viewing." },
-      { day: 3, title: "Return Flight", description: "Morning game drive and flight back." }
+      { day: 1, title: "Full Day Expedition", description: "Full day (8 hours) fishing charter targeting big game species." }
     ],
     featured: true,
-    category: 'Safari',
-    group: 'Flight Safari',
-    inclusions: ["Flights", "Accommodation", "Game Drives", "Park Fees"],
-    exclusions: ["Tips", "Drinks"],
-    gallery: ["https://images.unsplash.com/photo-1516426122078-c23e76319801?q=80&w=2000"]
+    category: 'Coastal',
+    group: 'Excursion',
+    inclusions: ["Boat Charter", "Heavy Tackle", "Lunch & Drinks", "Captain & Crew"],
+    exclusions: ["Tips", "Alcohol"],
+    gallery: ["https://images.unsplash.com/photo-1621683407982-b77823e59026?q=80&w=2070"]
   }
 ];
 
