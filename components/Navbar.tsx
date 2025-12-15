@@ -1,3 +1,4 @@
+
 // @ts-nocheck
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
@@ -32,6 +33,7 @@ const Navbar: React.FC = () => {
     { name: 'About', path: '/about' },
     { name: 'Tours', path: '/tours' },
     { name: 'Blog', path: '/blog' },
+    { name: 'Reviews', path: '/reviews' },
     { name: 'Contact', path: '/contact' },
   ];
 

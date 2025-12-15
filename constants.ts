@@ -1,7 +1,7 @@
 
 import { Tour, PageContent, CurrencyConfig, CompanyInfo, BlogPost } from './types';
 
-export const DATA_VERSION = "6.8"; // Added Scuba Diving Tour
+export const DATA_VERSION = "6.9"; // Added Reviews Page Data
 
 export const COMPANY_INFO: CompanyInfo = {
   name: "Tom Safaris",
@@ -526,8 +526,11 @@ export const DEFAULT_PAGE_CONTENT: PageContent = {
       { id: "feat3", title: "24/7 Support", text: "We are with you every step of the way, from booking to drop-off." },
     ],
     testimonials: [
-      { id: "test1", content: "The best safari experience we've ever had! Tom is a legend.", author: "Sarah & Mark, UK" },
-      { id: "test2", content: "Saw the Big 5 in two days. Incredible guiding.", author: "Hans, Germany" },
+      { id: "test1", content: "The best safari experience we've ever had! Tom is a legend in the bush. He knew exactly where the leopards were hiding.", author: "Sarah & Mark, UK" },
+      { id: "test2", content: "Saw the Big 5 in two days. Incredible guiding and the lodges were top tier. Highly recommend Cruse and his team.", author: "Hans, Germany" },
+      { id: "test3", content: "We took our three kids on their first safari and Tom was amazing with them. Safe, educational, and fun!", author: "The Miller Family, USA" },
+      { id: "test4", content: "Kilifi diving was spectacular. Professional instructors and beautiful reefs.", author: "Elena, Italy" },
+      { id: "test5", content: "A seamless experience from airport pickup to drop off. The deep sea fishing trip was the highlight!", author: "James, Australia" }
     ],
   },
   about: {

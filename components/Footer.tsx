@@ -67,6 +67,7 @@ const Footer: React.FC = () => {
             <ul className="space-y-3 text-sm font-medium">
               <li><Link to="/tours" className="hover:text-safari-gold transition-colors flex items-center gap-2"><span className="w-1.5 h-1.5 bg-safari-emerald rounded-full"></span>All Tours</Link></li>
               <li><Link to="/about" className="hover:text-safari-gold transition-colors flex items-center gap-2"><span className="w-1.5 h-1.5 bg-safari-emerald rounded-full"></span>About Us</Link></li>
+              <li><Link to="/reviews" className="hover:text-safari-gold transition-colors flex items-center gap-2"><span className="w-1.5 h-1.5 bg-safari-emerald rounded-full"></span>Guest Reviews</Link></li>
               <li><Link to="/blog" className="hover:text-safari-gold transition-colors flex items-center gap-2"><span className="w-1.5 h-1.5 bg-safari-emerald rounded-full"></span>Safari Blog</Link></li>
               <li><Link to="/contact" className="hover:text-safari-gold transition-colors flex items-center gap-2"><span className="w-1.5 h-1.5 bg-safari-emerald rounded-full"></span>Contact Us</Link></li>
             </ul>

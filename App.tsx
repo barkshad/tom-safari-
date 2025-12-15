@@ -16,6 +16,7 @@ const TourDetails = lazy(() => import('./pages/TourDetails'));
 const Blog = lazy(() => import('./pages/Blog'));
 const BlogPost = lazy(() => import('./pages/BlogPost'));
 const Contact = lazy(() => import('./pages/Contact'));
+const Reviews = lazy(() => import('./pages/Reviews'));
 const Admin = lazy(() => import('./pages/Admin'));
 const NotFound = lazy(() => import('./pages/NotFound'));
 
@@ -42,6 +43,7 @@ const AnimatedRoutes: React.FC = () => {
           <Route path="/tours/:id" element={<TourDetails />} />
           <Route path="/blog" element={<Blog />} />
           <Route path="/blog/:slug" element={<BlogPost />} />
+          <Route path="/reviews" element={<Reviews />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="*" element={<NotFound />} />
         </Route>
