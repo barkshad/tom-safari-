@@ -1,7 +1,7 @@
 
 import { Tour, PageContent, CurrencyConfig, CompanyInfo, BlogPost } from './types';
 
-export const DATA_VERSION = "6.7"; // Added 20+ Blog Posts
+export const DATA_VERSION = "6.8"; // Added Scuba Diving Tour
 
 export const COMPANY_INFO: CompanyInfo = {
   name: "Tom Safaris",
@@ -483,6 +483,29 @@ export const TOURS: Tour[] = [
     inclusions: ["Boat Charter", "Heavy Tackle", "Lunch & Drinks", "Captain & Crew"],
     exclusions: ["Tips", "Alcohol"],
     gallery: ["https://images.unsplash.com/photo-1621683407982-b77823e59026?q=80&w=2070"]
+  },
+  {
+    id: "tour-scuba-diving-kilifi",
+    name: "Scuba Diving & Training Kilifi",
+    durationDays: 1,
+    priceUsd: 150, 
+    priceGbp: 120,
+    image: "https://images.unsplash.com/photo-1544552866-d3ed42536cfd?q=80&w=2071",
+    shortDescription: "Certified scuba training (Open Water to Master) and Fun Dives in Kilifi with Shark Family & Diving School.",
+    fullDescription: "In collaboration with Shark Family and Diving School, Tom Safaris is proud to introduce international standard scuba diving training right here in Kilifi town.\n\nWe offer professional lessons at affordable rates, ensuring safety and quality. Our certified trainers guide you through every step, and trainees receive internationally recognized certificates upon completion.\n\nCourses Offered:\n1. Open Water Diving\n2. Advanced Dive\n3. Rescue Dive\n4. Master Dive\n\nSpecialty Courses:\n- Night Dive\n- Deep Dive\n- Recovery Dive\n\nWe also offer Fun Dives for certified divers or those looking for a casual underwater experience exploring the vibrant Kilifi creek and reefs.",
+    highlights: ["Certified PADI/SSI Training", "Open Water to Master Levels", "Night & Deep Dives", "Fun Dives", "Professional Instructors"],
+    itinerary: [
+      { day: 1, title: "Training or Dive Session", description: "Meet at Kilifi boat yard. Briefing by certified instructors. Proceed to dive site for training or fun dive session." }
+    ],
+    featured: true,
+    category: 'Coastal',
+    group: 'Excursion',
+    inclusions: ["Diving Equipment", "Instructor Fees", "Boat Transport", "Certificate (for courses)"],
+    exclusions: ["Swimwear", "Personal Insurance", "Lunch (unless specified)"],
+    gallery: [
+        "https://images.unsplash.com/photo-1544552866-d3ed42536cfd?q=80&w=2071",
+        "https://images.unsplash.com/photo-1682687220742-aba13b6e50ba?q=80&w=2070" 
+    ]
   }
 ];
 
