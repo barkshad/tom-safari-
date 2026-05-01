@@ -484,7 +484,7 @@ const SEOEditorView = ({ showToast }: any) => {
 };
 
 const SystemSettingsView = ({ showToast }: { showToast: (msg: string, type?: 'success' | 'error') => void }) => {
-    const { changePassword, resetData, syncLocalTours, localToursCount, tours } = useData();
+    const { changePassword, resetData, syncLocalTours, syncReviews, localToursCount, tours } = useData();
     const [newPassword, setNewPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
 
@@ -526,9 +526,14 @@ const SystemSettingsView = ({ showToast }: { showToast: (msg: string, type?: 'su
                         Mismatch detected! Your code has newer content than your database. Sync now to fix the "18 vs 7" tour count issue.
                     </div>
                 )}
-                <button onClick={syncLocalTours} className="bg-blue-600 hover:bg-blue-800 text-white px-6 py-3 rounded-lg font-bold flex items-center gap-2 transition-all">
-                    <Globe size={18}/> Push Local Tours to Live Database
-                </button>
+                <div className="flex flex-col sm:flex-row gap-4">
+                    <button onClick={syncLocalTours} className="bg-blue-600 hover:bg-blue-800 text-white px-6 py-3 rounded-lg font-bold flex items-center gap-2 transition-all">
+                        <Globe size={18}/> Push Local Tours
+                    </button>
+                    <button onClick={syncReviews} className="bg-safari-emerald hover:bg-opacity-90 text-white px-6 py-3 rounded-lg font-bold flex items-center gap-2 transition-all shadow-lg">
+                        <MessageSquare size={18}/> Sync 100+ Professional Reviews
+                    </button>
+                </div>
             </div>
 
             <div className="bg-white p-6 md:p-8 rounded-2xl shadow-sm border-2 border-red-50">

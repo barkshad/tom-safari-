@@ -5,6 +5,7 @@ import { TOURS, COMPANY_INFO, DEFAULT_PAGE_CONTENT, SUPPORTED_CURRENCIES, SAMPLE
 import { db, auth } from '../firebase';
 import { doc, getDoc, setDoc, collection, addDoc, getDocs, query, orderBy, enableNetwork, disableNetwork, updateDoc } from 'firebase/firestore';
 import { onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, updatePassword, User } from 'firebase/auth';
+import { HUNDRED_REVIEWS } from '../reviews_data';
 
 interface CloudData {
   companyInfo: CompanyInfo;
@@ -35,6 +36,7 @@ interface DataContextType {
   logout: () => void;
   resetData: () => Promise<void>;
   syncLocalTours: () => Promise<void>;
+  syncReviews: () => Promise<void>;
   localToursCount: number;
   loading: boolean;
   saving: boolean;
@@ -367,6 +369,44 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
+  const syncReviews = async () => {
+    if(window.confirm(`This will add over 100 high-quality multilingual reviews to your site. This will help build trust with travelers. Continue?`)) {
+        setSaving(true);
+        try {
+            // Get existing reviews
+            const currentTestimonials = Array.isArray(data.pageContent.home.testimonials) ? data.pageContent.home.testimonials : [];
+            const existingAuthors = new Set(currentTestimonials.map(t => t.author));
+            
+            // Filter out ones we already have (by author for simplicity)
+            const newReviews = HUNDRED_REVIEWS.filter(r => !existingAuthors.has(r.author));
+            
+            if (newReviews.length === 0) {
+                alert("All reviews are already in your database!");
+                return;
+            }
+
+            const updatedTestimonials = [...currentTestimonials, ...newReviews];
+            const updatedPageContent = {
+                ...data.pageContent,
+                home: {
+                    ...data.pageContent.home,
+                    testimonials: updatedTestimonials
+                }
+            };
+
+            const newData = { ...data, pageContent: updatedPageContent };
+            await saveData(newData);
+            setData(newData);
+            alert(`Success! Successfully synchronized ${newReviews.length} professional reviews.`);
+        } catch (error) {
+            console.error("Sync Reviews Failed:", error);
+            alert("Failed to sync reviews. Check your internet connection.");
+        } finally {
+            setSaving(false);
+        }
+    }
+  };
+
   return (
     <DataContext.Provider value={{
       companyInfo: data.companyInfo,
@@ -390,6 +430,7 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
       logout: () => signOut(auth),
       resetData,
       syncLocalTours,
+      syncReviews,
       localToursCount: TOURS.length,
       loading,
       saving,
